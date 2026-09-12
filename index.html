@@ -51,7 +51,7 @@ h1,h2,h3{margin:0;font-weight:600}
 #app>*{position:relative;z-index:1}
 
 header.top{display:flex;align-items:center;gap:12px;padding:calc(10px + var(--safe-t)) 18px 8px}
-header.top .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+header.top .brand{display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:10px;flex:1;min-width:0}
 header.top .brand svg{width:46px;height:46px;flex:none}
 header.top .wm{line-height:1}
 header.top .wm b{display:block;font-family:var(--serif);font-size:24px;font-weight:700;color:#fff;letter-spacing:.2px}
@@ -454,6 +454,58 @@ button.cam-match{text-align:left;font:inherit;color:inherit}
 .lb .r.me span:last-child{color:#fff}
 .ach>div.locked b{color:var(--mist)}
 @media (max-width:760px){input,select,textarea,select.chip{font-size:16px}}
+/* ---------- Design pass: layout, hierarchy, imagery ---------- */
+svg.chev{width:18px;height:18px;flex:none}
+.seg button svg{width:15px;height:15px;vertical-align:-3px;margin-right:3px}
+@media (max-width:380px){header.top .wm small{letter-spacing:.12em}}
+.page-h.std{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"t t" "s g";align-items:start;column-gap:14px}
+.page-h.std>div:first-child{display:contents}
+.page-h.std h1{grid-area:t}
+.page-h.std p{grid-area:s;margin-top:6px}
+.page-h.std .tag{grid-area:g;margin-top:8px}
+.page-h p,.centerh p{text-wrap:balance}
+.map-priv{margin:-6px 0 12px}
+.post .pic .pic-foot{position:absolute;left:12px;right:10px;bottom:10px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.post .pic .pic-foot .cap,.post .pic .pic-foot .mm{position:static}
+.post .pic .pic-foot .cap{min-width:0;flex:1}
+.post .pic .pic-foot .cap i{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post .pic .pic-foot .mm{flex:none}
+@media (max-width:440px){.standing{grid-template-columns:1fr}}
+.tile b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.2}
+.reg-head .lbl{margin-top:6px;line-height:1.1}
+.v-rowb>div{display:flex}
+.v-rowb .banner{flex:1}
+.v-rowb .banner.xp{justify-content:center}
+.v-reg>span{min-width:0}
+.v-reg a{white-space:nowrap}
+.verdict .hero.t-uncommon{border-color:rgba(61,220,132,.45)}
+.verdict .hero.t-rare{border-color:rgba(59,139,255,.55);box-shadow:0 18px 44px -18px rgba(59,139,255,.55)}
+.verdict .hero.t-epic{border-color:rgba(180,92,255,.6);box-shadow:0 18px 48px -16px rgba(180,92,255,.6)}
+.verdict .hero.t-legendary{border-color:rgba(242,182,74,.7);box-shadow:0 18px 52px -14px rgba(242,182,74,.6)}
+.th-card{padding:0;overflow:hidden}
+.th-img{position:relative;aspect-ratio:16/9;background:#0d2238}
+.th-img>span:first-child{display:block;width:100%;height:100%}
+.th-img>span:first-child>img,.th-img>span:first-child>svg{width:100%;height:100%;object-fit:cover;display:block}
+.th-img .tiertag{position:absolute;top:10px;left:10px}
+.th-pb{position:absolute;top:10px;right:10px;padding:5px 10px;border-radius:999px;background:rgba(7,17,29,.82);border:1px solid rgba(242,182,74,.55);color:#ffd985;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.th-body{padding:12px 16px 14px}
+.th-name{font-family:var(--serif);font-size:22px;font-weight:700;color:#fff;margin-top:4px;line-height:1.15}
+.th-body .mm{display:flex;align-items:center;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-size:13.5px;color:var(--ice)}
+.th-body .loc{color:var(--mist);font-size:12.5px;margin-top:4px}
+.nt-art{width:96px;height:64px;border-radius:12px;overflow:hidden;flex:none;border:1px solid var(--line-2)}
+.nt-art svg,.sd-art svg{width:100%;height:100%;display:block}
+.sd-art{aspect-ratio:16/9;background:#0b2233}
+.cam-top{order:0}.cam-title{order:1}.cam-match{order:2}
+.cam-frame{position:relative;inset:auto;order:3;flex:1;min-height:110px;margin:16px 9% 12px}
+.cam-frame i:nth-child(1){top:0;left:0}.cam-frame i:nth-child(2){top:0;right:0}.cam-frame i:nth-child(3){bottom:0;left:0}.cam-frame i:nth-child(4){bottom:0;right:0}
+.cam-hint{position:relative;left:auto;bottom:auto;transform:none;order:4;align-self:center;margin:0 0 12px}
+.cam-bottom{order:5;margin-top:0}
+.cam-opts button{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 10px 9px}
+.cam-opts b{line-height:1.2}
+.tiles{grid-template-columns:1fr}
+nav.bottom button{white-space:nowrap;font-size:11px}
+.reg-head .big{line-height:1.12}
+.no-cam .cam-frame,.no-cam .cam-hint{visibility:hidden}
 </style>
 </head>
 <body>
@@ -593,8 +645,8 @@ const SPECIES = [
  {id:'grayling',n:'Arctic Grayling',sci:'Thymallus arcticus',g:'other',w:'fresh',r:4,typ:12,tro:17,art:{s:'grayling',c:['#3a4b6e','#8a9bc4','#dfe5f2'],sp:'dark',st:null},tags:[]},
  {id:'largemouth',n:'Largemouth Bass',sci:'Micropterus salmoides',g:'bass',w:'fresh',r:1,typ:14,tro:22,art:{s:'bass',c:['#3f5e2a','#8fae5a','#e7edc9'],sp:'none',st:'#2a3a1a'},tags:['game']},
  {id:'smallmouth',n:'Smallmouth Bass',sci:'Micropterus dolomieu',g:'bass',w:'fresh',r:1,typ:13,tro:20,art:{s:'bass',c:['#5a4a1f','#a98b3f','#e8d8a0'],sp:'bars',st:null},tags:['game']},
- {id:'walleye',n:'Walleye',sci:'Sander vitreus',g:'walleye',w:'fresh',r:2,typ:18,tro:28,art:{s:'pike',c:['#5a5a2a','#c9b25a','#f0e6b8'],sp:'none',st:null},tags:['game']},
- {id:'perch',n:'Yellow Perch',sci:'Perca flavescens',g:'panfish',w:'fresh',r:1,typ:8,tro:13,art:{s:'panfish',c:['#4d5a2a','#e2b83a','#f5e6a0'],sp:'bars',st:null},tags:[]},
+ {id:'walleye',n:'Walleye',sci:'Sander vitreus',g:'walleye',w:'fresh',r:2,typ:18,tro:28,art:{s:'perch',c:['#5a5a2a','#c9b25a','#f0e6b8'],sp:'none',st:null},tags:['game']},
+ {id:'perch',n:'Yellow Perch',sci:'Perca flavescens',g:'panfish',w:'fresh',r:1,typ:8,tro:13,art:{s:'perch',c:['#4d5a2a','#e2b83a','#f5e6a0'],sp:'bars',st:null},tags:[]},
  {id:'bcrappie',n:'Black Crappie',sci:'Pomoxis nigromaculatus',g:'panfish',w:'fresh',r:1,typ:9,tro:14,art:{s:'panfish',c:['#3b4a3a','#9aa88a','#e6ecdc'],sp:'dark',st:null},tags:[]},
  {id:'wcrappie',n:'White Crappie',sci:'Pomoxis annularis',g:'panfish',w:'fresh',r:2,typ:9,tro:14,art:{s:'panfish',c:['#4c5a5a','#b7c4c0','#eef2f0'],sp:'bars',st:null},tags:[]},
  {id:'bluegill',n:'Bluegill',sci:'Lepomis macrochirus',g:'panfish',w:'fresh',r:1,typ:6,tro:10,art:{s:'panfish',c:['#2f4a5a','#7fa0a8','#e9c46a'],sp:'bars',st:null},tags:[]},
@@ -607,9 +659,9 @@ const SPECIES = [
  {id:'carp',n:'Common Carp',sci:'Cyprinus carpio',g:'carp',w:'fresh',r:1,typ:22,tro:34,art:{s:'carp',c:['#5a4a1a','#c99a3a','#f0d98a'],sp:'scale',st:null},tags:[]},
  {id:'wsturgeon',n:'White Sturgeon',sci:'Acipenser transmontanus',g:'sturgeon',w:'anadromous',r:5,typ:50,tro:90,art:{s:'sturgeon',c:['#4a5560','#9aa5ad','#e6eaee'],sp:'scute',st:null},tags:['trophy','native']},
  {id:'burbot',n:'Burbot',sci:'Lota lota',g:'other',w:'fresh',r:3,typ:20,tro:30,art:{s:'eel',c:['#3a3a20','#8a7a4a','#d9cfa0'],sp:'verm',st:null},tags:['native']},
- {id:'pikeminnow',n:'Northern Pikeminnow',sci:'Ptychocheilus oregonensis',g:'other',w:'fresh',r:1,typ:12,tro:20,art:{s:'pike',c:['#4a5a4a','#a0aa90','#e6ead8'],sp:'none',st:null},tags:['native']},
+ {id:'pikeminnow',n:'Northern Pikeminnow',sci:'Ptychocheilus oregonensis',g:'other',w:'fresh',r:1,typ:12,tro:20,art:{s:'salmon',c:['#4a5a4a','#a0aa90','#e6ead8'],sp:'none',st:null},tags:['native']},
  {id:'sucker',n:'Largescale Sucker',sci:'Catostomus macrocheilus',g:'other',w:'fresh',r:1,typ:14,tro:20,art:{s:'carp',c:['#4a4a3a','#9a9a7a','#e2e2cf'],sp:'scale',st:null},tags:['native']},
- {id:'shad',n:'American Shad',sci:'Alosa sapidissima',g:'other',w:'anadromous',r:2,typ:16,tro:22,art:{s:'panfish',c:['#3d5a6a','#b8ccd6','#f2f6f8'],sp:'few',st:null},tags:[]},
+ {id:'shad',n:'American Shad',sci:'Alosa sapidissima',g:'other',w:'anadromous',r:2,typ:16,tro:22,art:{s:'salmon',c:['#3d5a6a','#b8ccd6','#f2f6f8'],sp:'few',st:null},tags:[]},
  {id:'lamprey',n:'Pacific Lamprey',sci:'Entosphenus tridentatus',g:'other',w:'anadromous',r:4,typ:20,tro:28,art:{s:'eel',c:['#2a3a4a','#5a6a7a','#9aa8b8'],sp:'none',st:null},tags:['native']},
  {id:'searun',n:'Sea-Run Cutthroat',sci:'Oncorhynchus clarkii',g:'trout',w:'anadromous',r:3,typ:13,tro:20,art:{s:'trout',c:['#3f5a5a','#b9c8c0','#f1f5f0'],sp:'dark',st:'#e0a03a'},tags:['native']},
  {id:'lingcod',n:'Lingcod',sci:'Ophiodon elongatus',g:'bottom',w:'salt',r:2,typ:26,tro:45,art:{s:'pike',c:['#3a4a3a','#7a8a6a','#cfd8c0'],sp:'verm',st:null},tags:['game']},
@@ -622,7 +674,7 @@ const SPECIES = [
  {id:'vermilion',n:'Vermilion Rockfish',sci:'Sebastes miniatus',g:'rockfish',w:'salt',r:3,typ:18,tro:26,art:{s:'rockfish',c:['#8a1a1a','#d83a3a','#f5a0a0'],sp:'none',st:null},tags:[]},
  {id:'greenling',n:'Kelp Greenling',sci:'Hexagrammos decagrammus',g:'bottom',w:'salt',r:1,typ:12,tro:18,art:{s:'trout',c:['#3a4a2a','#7a8a4a','#d8e0b0'],sp:'light',st:null},tags:[]},
  {id:'cabezon',n:'Cabezon',sci:'Scorpaenichthys marmoratus',g:'bottom',w:'salt',r:2,typ:18,tro:28,art:{s:'rockfish',c:['#3a3a2a','#6a6a4a','#c0c0a0'],sp:'verm',st:null},tags:[]},
- {id:'pcod',n:'Pacific Cod',sci:'Gadus macrocephalus',g:'bottom',w:'salt',r:2,typ:24,tro:36,art:{s:'catfish',c:['#4a4a3a','#9a9a7a','#e8e8d8'],sp:'few',st:null},tags:[]},
+ {id:'pcod',n:'Pacific Cod',sci:'Gadus macrocephalus',g:'bottom',w:'salt',r:2,typ:24,tro:36,art:{s:'cod',c:['#4a4a3a','#9a9a7a','#e8e8d8'],sp:'few',st:null},tags:[]},
  {id:'albacore',n:'Albacore Tuna',sci:'Thunnus alalunga',g:'pelagic',w:'salt',r:3,typ:28,tro:40,art:{s:'tuna',c:['#1a2a4a','#5a7aa0','#f0f4f8'],sp:'none',st:null},tags:['game']},
  {id:'starry',n:'Starry Flounder',sci:'Platichthys stellatus',g:'flatfish',w:'salt',r:1,typ:14,tro:22,art:{s:'flat',c:['#4a4030','#8a7a5a','#e8dcc0'],sp:'bars',st:null},tags:[]},
  {id:'petrale',n:'Petrale Sole',sci:'Eopsetta jordani',g:'flatfish',w:'salt',r:2,typ:15,tro:22,art:{s:'flat',c:['#5a4a3a','#a08a6a','#eee4d0'],sp:'none',st:null},tags:[]},
@@ -749,50 +801,135 @@ async function hydratePhotos(root=document){
 }
 
 /* ---------- Fish art (SVG) ---------- */
+// Field-guide renderer: anatomical body plans, countershaded bodies with scale texture, species markings
+// clipped to the body, translucent rayed fins and real eyes. Every SVG is self-contained (unique ids),
+// so it also renders inside canvas share cards.
+const FISH_SHAPES={
+ salmon:{body:'M188 50C180 42 166 36 148 34C124 30 96 29 72 35C56 39 44 43 32 46L30 47L30 57L32 58C46 61 60 65 80 68C104 72 134 70 156 63C170 59 181 55 188 50Z',tail:'M33 46C24 42 14 34 5 28C8 40 12 46 18 52C12 58 8 64 5 76C14 70 24 62 33 58Z',dorsal:['M96 32C100 22 104 15 110 14C114 20 120 26 126 32Z'],adipose:'M50 41C53 36 58 35 60 39Z',pectoral:'M150 56C142 59 132 64 124 68C134 68 144 64 152 60Z',pelvic:'M104 69C98 74 92 78 86 81C94 81 102 77 108 70Z',anal:'M78 67C70 72 62 76 56 80C62 74 62 70 62 64Z',eye:[170,45,3.6],gill:'M156 38C162 46 162 56 156 63',mouth:'M188 50C182 52 176 53 170 52',lat:'M34 51C70 50 120 49 158 47',top:31,mid:50,bot:68,x0:32,x1:186},
+ trout:{body:'M186 52C181 43 168 36 150 33C126 28 98 27 74 33C58 37 46 42 34 46L32 47L32 58L34 59C48 63 62 67 82 70C106 74 136 72 158 65C172 61 181 57 186 52Z',tail:'M35 46C26 40 16 34 8 30C9 42 11 48 13 53C11 58 9 64 8 76C16 72 26 66 35 59Z',dorsal:['M94 30C98 20 103 13 109 12C114 18 120 25 126 30Z'],adipose:'M54 41C57 36 62 35 64 39Z',pectoral:'M150 58C142 62 132 67 124 71C134 71 144 67 152 62Z',pelvic:'M104 72C98 77 92 81 86 84C94 84 102 80 108 73Z',anal:'M78 70C70 75 62 79 56 83C62 77 62 73 62 67Z',eye:[166,46,3.8],gill:'M152 38C159 47 159 57 152 65',mouth:'M186 52C180 54 174 55 168 54',lat:'M36 53C72 52 120 50 156 48',top:29,mid:51,bot:70,x0:34,x1:184},
+ grayling:{body:'M186 52C181 43 168 36 150 33C126 28 98 27 74 33C58 37 46 42 34 46L32 47L32 58L34 59C48 63 62 67 82 70C106 74 136 72 158 65C172 61 181 57 186 52Z',tail:'M35 46C26 40 16 34 8 30C9 42 11 48 13 53C11 58 9 64 8 76C16 72 26 66 35 59Z',dorsal:['M66 32C72 16 84 6 100 4C116 5 128 12 136 24C138 28 138 30 136 32Z'],adipose:'M50 42C53 37 58 36 60 40Z',pectoral:'M150 58C142 62 132 67 124 71C134 71 144 67 152 62Z',pelvic:'M104 72C98 77 92 81 86 84C94 84 102 80 108 73Z',anal:'M78 70C70 75 62 79 56 83C62 77 62 73 62 67Z',eye:[166,46,3.6],gill:'M152 38C159 47 159 57 152 65',mouth:'M186 52C181 53 176 54 171 53',lat:'M36 53C72 52 120 50 156 48',top:29,mid:51,bot:70,x0:34,x1:184},
+ bass:{body:'M190 54C186 44 176 36 158 32C136 26 108 24 84 28C64 32 50 38 38 44L34 46L34 60L38 62C52 68 70 74 96 76C124 78 152 74 172 66C182 62 188 58 190 54Z',tail:'M37 45C28 38 18 32 10 30C12 42 13 48 14 53C13 60 12 66 10 76C18 72 28 66 37 61Z',dorsal:['M118 27C120 18 124 10 128 8L132 14L136 8L140 15L144 9L147 17L150 13L152 24L154 30Z','M72 32C76 20 84 14 94 13C104 14 110 20 114 27Z'],pectoral:'M152 58C144 62 136 68 128 72C138 72 148 68 156 62Z',pelvic:'M140 72C134 78 128 82 122 86C130 85 138 81 146 74Z',anal:'M80 74C74 80 66 84 58 86C64 80 66 76 66 70Z',eye:[170,44,4.2],gill:'M150 36C158 46 158 60 150 70',mouth:'M190 54C182 56 172 57 162 54',lat:'M38 55C74 52 124 48 164 44',top:26,mid:52,bot:74,x0:36,x1:188},
+ panfish:{body:'M184 52C180 40 168 28 146 22C120 16 90 18 70 26C54 32 44 40 38 46L36 48L36 58L38 60C46 68 58 78 76 84C100 90 132 88 154 78C170 70 181 62 184 52Z',tail:'M39 47C30 40 20 34 12 32C14 42 16 48 16 53C16 58 14 64 12 74C20 72 30 66 39 59Z',dorsal:['M66 26C74 12 86 6 100 4L108 10L114 5L120 12L126 8L130 16L136 14L140 22Z'],pectoral:'M150 58C142 62 134 66 126 70C136 70 146 66 154 60Z',pelvic:'M136 82C130 88 124 92 118 95C126 94 134 90 142 84Z',anal:'M74 84C68 90 60 94 50 94C56 86 58 80 58 74Z',eye:[160,40,4.4],gill:'M146 30C154 42 154 62 146 74',mouth:'M184 52C180 53 176 53 172 52',lat:'M40 53C80 46 120 38 150 34',top:20,mid:53,bot:84,x0:38,x1:182},
+ perch:{body:'M190 52C184 44 172 38 154 36C130 32 102 32 78 36C60 39 48 43 36 47L32 48L32 58L36 59C48 63 60 67 80 70C104 73 134 72 158 66C174 62 184 57 190 52Z',tail:'M35 47C26 41 16 34 8 30C10 42 12 48 15 53C12 58 10 64 8 76C16 72 26 66 35 59Z',dorsal:['M108 35L112 19L117 29L122 17L127 28L132 18L136 29L140 23L145 36Z','M64 38C68 28 76 22 86 21C94 22 100 27 102 34Z'],pectoral:'M156 58C148 62 140 66 132 69C142 69 152 65 160 60Z',pelvic:'M142 68C136 74 130 78 124 81C132 80 140 76 146 70Z',anal:'M78 70C72 76 66 80 58 82C62 76 64 72 64 66Z',eye:[170,46,4.4],gill:'M154 40C160 48 160 58 154 66',mouth:'M190 52C184 54 178 55 172 54',lat:'M34 52C70 51 120 50 160 48',top:34,mid:52,bot:69,x0:34,x1:188},
+ cod:{body:'M190 53C185 45 173 39 155 37C131 34 103 34 79 38C61 41 49 45 37 48L33 49L33 58L37 59C49 63 61 66 81 69C105 72 135 71 159 66C175 62 185 58 190 53Z',tail:'M36 48C27 44 18 40 10 38C10 46 10 51 10 54C10 57 10 62 10 70C18 68 27 64 36 59Z',dorsal:['M130 37C133 28 139 23 146 23C149 27 150 32 150 37Z','M98 35C101 26 108 21 116 21C120 25 122 30 122 35Z','M62 40C65 32 71 28 78 28C82 31 84 35 84 39Z'],pectoral:'M158 58C150 62 142 66 134 69C144 69 154 65 162 60Z',pelvic:'M162 64C160 70 157 74 153 77C157 76 162 72 166 66Z',anal:'M112 70C110 76 106 80 100 82C96 78 94 74 94 70Z M78 68C76 74 72 78 66 80C62 76 60 72 60 67Z',eye:[172,46,3.8],gill:'M158 40C164 48 164 58 158 65',mouth:'M190 53C186 55 181 56 176 55',lat:'M36 53C70 51 120 49 160 47',top:33,mid:52,bot:70,x0:35,x1:188,barbels:['M184 59C185 64 185 68 183 71']},
+ pike:{body:'M192 52C184 46 170 42 150 40C120 38 90 38 66 40C50 42 40 44 30 46L28 47L28 57L30 58C40 60 50 62 66 64C90 67 124 68 150 65C170 62 184 58 192 52Z',tail:'M31 46C22 40 13 33 5 30C8 41 11 47 15 52C11 57 8 63 5 74C13 71 22 64 31 58Z',dorsal:['M50 42C54 32 60 26 68 25C74 30 78 36 80 41Z'],pectoral:'M156 58C148 62 140 66 132 69C142 69 152 65 160 60Z',pelvic:'M110 66C104 71 98 75 92 78C100 78 108 74 114 68Z',anal:'M50 62C54 72 60 78 68 79C74 74 78 68 80 63Z',eye:[174,47,3.4],gill:'M160 42C166 49 166 57 160 63',mouth:'M192 52C182 53 172 54 164 53',lat:'M30 52C70 51 120 50 164 49',top:40,mid:52,bot:64,x0:30,x1:190},
+ catfish:{body:'M188 56C184 46 172 38 152 36C126 34 96 36 72 40C56 43 44 46 34 48L32 49L32 59L34 60C46 63 58 66 76 68C100 71 132 72 156 68C172 65 184 61 188 56Z',tail:'M35 48C26 42 16 36 8 33C10 44 13 50 17 54C13 58 10 64 8 76C16 72 26 66 35 60Z',dorsal:['M118 37C122 26 128 19 134 18C136 24 138 30 140 36Z'],adipose:'M60 43C64 37 72 36 76 41Z',pectoral:'M150 62C142 68 132 74 122 78C134 76 146 71 154 65Z',pelvic:'M100 70C94 76 88 80 82 83C90 82 98 78 104 72Z',anal:'M90 70C80 76 66 80 52 80C60 74 62 70 62 64Z',eye:[168,46,3],gill:'M156 40C162 48 162 58 156 66',mouth:'M188 56C182 58 174 59 166 58',lat:'M36 54C72 52 120 50 160 50',top:37,mid:53,bot:69,x0:34,x1:186,barbels:['M184 52C194 44 198 38 199 30','M186 58C196 62 199 70 198 78','M178 62C184 70 186 78 184 86','M176 50C182 42 186 36 188 30']},
+ carp:{body:'M186 54C182 44 170 36 150 32C126 26 96 25 72 30C56 34 44 40 36 46L34 47L34 59L36 60C46 66 58 72 78 75C104 79 134 76 156 68C172 63 182 59 186 54Z',tail:'M37 46C28 40 18 33 9 28C11 41 14 48 18 53C14 58 11 64 9 78C18 72 28 66 37 60Z',dorsal:['M70 31C78 20 90 16 104 16C118 17 128 22 132 28Z'],pectoral:'M150 60C142 64 134 70 126 74C136 73 146 68 154 62Z',pelvic:'M108 76C102 81 96 85 90 88C98 87 106 83 112 78Z',anal:'M72 74C66 80 60 84 54 86C58 80 60 76 60 70Z',eye:[168,44,3.4],gill:'M152 34C160 44 160 62 152 70',mouth:'M186 54C182 56 178 57 174 56',lat:'M36 54C72 52 122 49 160 46',top:28,mid:52,bot:74,x0:36,x1:184,barbels:['M180 58C184 64 184 68 182 72']},
+ sturgeon:{body:'M196 50C188 46 176 44 160 42C130 40 100 40 74 42C58 43 46 45 34 46L28 47L28 55L34 56C46 58 58 60 74 62C100 64 130 64 160 60C176 58 188 55 196 50Z',tail:'M31 46C22 42 12 34 2 22C6 38 10 46 16 51C12 56 10 60 8 66C16 62 24 58 31 55Z',dorsal:['M52 43C56 36 62 32 68 32C70 36 72 40 72 43Z'],pectoral:'M158 56C150 62 142 66 134 70C144 69 154 64 162 58Z',pelvic:'M92 62C88 66 84 69 80 71C86 71 92 68 96 63Z',anal:'M58 58C54 64 50 68 46 70C50 66 50 62 50 57Z',eye:[176,46,2.4],gill:'M162 44C167 49 167 55 162 59',mouth:'M178 56C174 58 170 58 166 57',lat:'M30 51C70 50 120 50 170 48',top:41,mid:51,bot:61,x0:30,x1:194,barbels:['M184 54L186 60','M180 55L181 61','M188 53L190 58']},
+ rockfish:{body:'M188 56C184 44 172 34 152 30C128 26 100 26 78 32C60 37 48 42 38 47L36 48L36 60L38 61C48 66 60 72 80 76C106 80 136 78 158 70C174 65 184 61 188 56Z',tail:'M39 47C30 42 20 38 12 36C12 46 12 52 12 55C12 60 12 66 12 74C20 72 30 68 39 61Z',dorsal:['M104 28L108 10L114 22L119 8L124 21L129 9L133 22L138 12L140 28Z','M62 36C66 26 74 20 84 19C92 20 98 24 102 29Z'],pectoral:'M146 60C136 66 124 74 112 78C124 80 138 76 150 66Z',pelvic:'M132 76C126 82 120 86 114 89C122 88 130 84 138 78Z',anal:'M78 76C72 82 64 86 56 88C60 82 62 78 62 72Z',eye:[166,44,5.2],gill:'M146 34C154 46 154 64 146 74',mouth:'M188 56C182 58 174 59 166 57',lat:'M40 56C76 52 120 46 156 42',top:28,mid:52,bot:76,x0:38,x1:186},
+ flat:{body:'M186 50C184 38 170 26 146 22C118 18 88 20 66 28C50 34 40 42 34 48L32 49L32 55L34 56C40 62 50 70 66 76C88 84 118 86 146 82C170 78 184 64 186 50Z',tail:'M35 49C26 44 16 40 8 38C9 46 10 50 10 52C10 54 9 58 8 66C16 64 26 60 35 55Z',dorsal:['M150 22C120 12 86 12 60 22C48 28 40 36 36 44C44 36 54 30 66 26C88 18 118 16 146 20Z'],pectoral:'M150 50C144 52 138 54 132 56C138 57 144 56 152 53Z',anal:'M150 82C120 92 86 92 60 82C48 76 40 68 36 60C44 68 54 74 66 78C88 86 118 88 146 84Z',eyes:[[164,40,3],[172,48,3]],gill:'M154 30C160 44 160 60 154 72',mouth:'M186 50C184 52 182 53 179 53',lat:'M36 52C80 52 130 52 172 50',top:22,mid:52,bot:82,x0:34,x1:184},
+ shark:{body:'M196 54C188 46 174 42 154 40C124 37 94 38 70 42C54 45 42 48 30 50L26 51L26 55L30 56C42 58 54 60 70 62C94 66 124 68 154 66C174 64 188 60 196 54Z',tail:'M29 50C20 44 10 32 2 16C4 34 8 46 14 53C10 58 8 62 6 70C14 66 22 60 29 56Z',dorsal:['M116 40C120 28 126 18 134 14C136 22 138 32 140 40Z','M56 45C58 38 62 34 66 33C68 37 70 41 70 45Z'],pectoral:'M150 62C138 72 124 82 110 88C124 88 142 80 156 66Z',pelvic:'M84 64C80 70 76 74 70 76C76 76 82 72 88 66Z',eye:[176,48,2.6],gill:'M148 45C150 50 150 56 148 60',mouth:'M186 58C180 60 174 60 168 59',lat:'M28 53C70 52 120 51 170 50',top:40,mid:53,bot:65,x0:28,x1:194,gillslits:['M152 46V56','M156 45V57','M160 45V57','M164 46V56']},
+ eel:{body:'M194 50C186 44 172 42 150 42C116 42 80 44 50 46C34 47 22 48 10 50C8 51 6 52 6 53C6 54 8 55 10 56C22 58 34 59 50 60C80 62 116 63 150 62C172 61 186 58 194 50Z',tail:'M8 48C4 50 2 52 2 53C2 54 4 56 8 58Z',dorsal:['M150 42C120 34 80 34 40 40C28 42 16 45 8 49C18 44 30 42 44 41C80 38 120 38 150 44Z'],pectoral:'M162 54C156 58 150 60 144 62C150 62 158 60 164 56Z',anal:'M150 62C120 68 80 68 40 64C28 62 16 59 8 56C18 60 30 62 44 63C80 66 120 66 150 61Z',eye:[178,47,2.6],gill:'M166 46C169 50 169 55 166 58',mouth:'M194 50C188 52 182 53 176 52',lat:'M10 53C60 52 120 52 176 50',top:43,mid:52,bot:61,x0:10,x1:192,barbels:['M188 55C189 60 188 63 186 66']},
+ tuna:{body:'M192 52C186 44 172 36 150 32C122 28 92 30 68 36C52 41 40 46 30 49L24 50L24 54L30 55C40 58 52 63 68 67C92 73 122 74 150 70C172 66 186 60 192 52Z',tail:'M27 50C18 42 10 30 4 18C8 34 12 44 16 52C12 60 8 70 4 86C10 74 18 62 27 54Z',dorsal:['M122 31C126 22 132 16 138 14C140 20 140 26 140 32Z','M78 34C82 26 88 22 94 22C94 26 94 30 94 34Z'],pectoral:'M156 56C136 60 110 64 84 66C108 68 138 66 160 60Z',pelvic:'M140 70C136 74 132 77 126 79C132 79 138 76 144 72Z',anal:'M80 68C82 74 86 78 92 80C94 76 94 72 94 68Z',eye:[172,46,3.6],gill:'M158 38C164 46 164 58 158 66',mouth:'M192 52C186 54 180 54 174 53',lat:'M26 52C70 50 120 47 164 45',top:31,mid:52,bot:71,x0:26,x1:190,finlets:'M44 45l4-3 1 4Z M52 43l4-3 1 4Z M60 41l4-3 1 4Z M44 59l4 3 1-4Z M52 61l4 3 1-4Z M60 63l4 3 1-4Z'}
+};
+function hashStr(t){let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function rng(seed){let t=seed>>>0;return()=>{t=(t+0x6D2B79F5)>>>0;let r=Math.imul(t^(t>>>15),1|t);r=(r+Math.imul(r^(r>>>7),61|r))^r;return((r^(r>>>14))>>>0)/4294967296}}
+function mixHex(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),Bc=p(b);return '#'+A.map((v,i)=>Math.round(v+(Bc[i]-v)*t).toString(16).padStart(2,'0')).join('')}
+const idSafe=t=>String(t).replace(/[^a-z0-9]/gi,'');
 function fishSVG(sp,opts={}){
   if(!sp)return '';
-  const a=sp.art||{s:'salmon',c:['#334','#889','#eee']};const sil=opts.sil;const [c0,c1,c2]=sil?['#0b1a2b','#0f2236','#132a40']:a.c;
-  const id='g'+sp.id+(opts.k||'');
-  let body,tail,fins,extra='';
-  switch(a.s){
-    case 'pike': body='M18 52 C40 34 110 30 150 42 C165 46 172 50 176 52 C172 54 165 58 150 62 C110 74 40 70 18 52Z';tail='M18 52 L4 36 L10 52 L4 68Z';fins='M60 63 L70 78 L84 66Z M120 63 L128 76 L138 64Z M110 38 L122 26 L134 40Z';break;
-    case 'bass': body='M22 52 C40 22 100 18 140 34 C160 42 170 50 176 52 C170 56 158 66 140 72 C100 86 40 82 22 52Z';tail='M22 52 L6 34 L12 52 L6 70Z';fins='M56 38 L64 14 L72 20 L84 16 L96 22 L108 18 L118 30Z M60 70 L70 86 L86 72Z M112 70 L120 84 L130 70Z';break;
-    case 'panfish': body='M28 52 C40 20 100 14 136 34 C156 44 166 50 172 52 C166 56 156 64 136 72 C100 90 40 84 28 52Z';tail='M28 52 L14 38 L18 52 L14 66Z';fins='M56 34 L64 8 L78 14 L92 10 L104 16 L116 26Z M64 74 L74 92 L92 76Z';break;
-    case 'trout': body='M20 52 C40 32 100 28 146 40 C162 45 172 50 176 52 C172 55 162 60 146 66 C100 78 40 72 20 52Z';tail='M20 52 L4 38 L8 52 L4 66Z';fins='M76 38 L86 24 L100 38Z M56 64 L64 78 L78 66Z M108 64 L116 76 L126 64Z M140 44 L146 38 L150 45Z';break;
-    case 'catfish': body='M22 52 C40 34 100 30 146 40 C162 45 172 50 176 52 C172 56 162 62 146 66 C100 76 40 72 22 52Z';tail='M22 52 L8 40 L10 52 L8 64Z';fins='M70 36 L80 20 L92 36Z M56 66 L64 80 L76 66Z';extra=`<path d="M150 48 L186 30 M152 56 L188 66 M160 44 L184 42" stroke="${c1}" stroke-width="2" fill="none" stroke-linecap="round"/>`;break;
-    case 'carp': body='M22 52 C40 26 100 22 144 36 C160 42 170 49 176 52 C170 56 160 66 144 72 C100 84 40 80 22 52Z';tail='M22 52 L6 34 L12 52 L6 70Z';fins='M66 32 L76 12 L98 22 L110 34Z M60 70 L70 88 L86 72Z';break;
-    case 'sturgeon': body='M14 52 C34 42 90 38 140 44 C160 46 172 50 184 52 C172 54 160 58 140 60 C90 66 34 62 14 52Z';tail='M14 52 L2 40 L6 52 L2 64Z';fins='M60 62 L68 76 L82 63Z M120 62 L128 74 L138 62Z M96 40 L104 30 L112 41Z';extra=`<path d="M40 44 L60 42 L80 41 L100 41 L120 42 L140 44" stroke="${c2}" stroke-width="3" stroke-dasharray="4 5" fill="none"/>`;break;
-    case 'rockfish': body='M28 52 C40 24 96 16 132 30 C152 38 166 48 172 52 C166 56 152 68 132 76 C96 90 40 82 28 52Z';tail='M28 52 L12 38 L18 52 L12 66Z';fins='M52 30 L58 6 L66 20 L74 4 L82 18 L90 6 L98 20 L108 10 L116 26Z M60 74 L70 92 L90 76Z M118 72 L124 86 L136 72Z';break;
-    case 'flat': body='M20 52 C30 30 80 18 120 24 C150 28 172 42 176 52 C172 62 150 76 120 80 C80 86 30 74 20 52Z';tail='M20 52 L8 40 L10 52 L8 64Z';fins=`<path d="M30 40 C60 20 120 16 170 44" stroke="${c1}" stroke-width="3" fill="none"/><path d="M30 64 C60 84 120 88 170 60" stroke="${c1}" stroke-width="3" fill="none"/>`;break;
-    case 'shark': body='M16 52 C36 40 90 34 140 40 C160 44 172 49 180 52 C172 55 160 60 140 64 C90 70 36 64 16 52Z';tail='M16 52 L4 30 L10 52 L4 68Z';fins='M84 40 L96 16 L112 40Z M70 62 L76 76 L90 64Z M130 62 L136 72 L146 62Z';break;
-    case 'eel': body='M10 52 C40 44 90 44 140 46 C160 47 172 50 180 52 C172 54 160 57 140 58 C90 60 40 60 10 52Z';tail='M10 52 L4 46 L4 58Z';fins=`<path d="M40 45 C80 38 130 38 170 46" stroke="${c1}" stroke-width="3" fill="none"/><path d="M40 59 C80 66 130 66 170 58" stroke="${c1}" stroke-width="3" fill="none"/>`;break;
-    case 'tuna': body='M18 52 C40 30 100 24 146 36 C164 42 174 50 178 52 C174 54 164 62 146 68 C100 80 40 74 18 52Z';tail='M18 52 L2 32 L12 52 L2 72Z';fins='M84 36 L96 16 L110 38Z M60 66 L68 80 L82 66Z M120 66 L128 76 L138 66Z';break;
-    case 'grayling': body='M20 52 C40 34 100 30 146 40 C162 45 172 50 176 52 C172 55 162 60 146 66 C100 78 40 72 20 52Z';tail='M20 52 L4 38 L8 52 L4 66Z';fins='M60 38 L66 6 L80 10 L94 4 L106 12 L116 30Z M60 64 L68 78 L82 66Z';break;
-    default: body='M18 52 C40 30 100 26 146 38 C162 44 172 50 176 52 C172 55 162 60 146 66 C100 78 40 74 18 52Z';tail='M18 52 L2 36 L8 52 L2 68Z';fins='M78 36 L88 22 L102 38Z M56 66 L64 80 L78 66Z M110 66 L118 78 L128 66Z M140 44 L146 38 L150 45Z';
+  const a=sp.art||{s:'salmon',c:['#334455','#889aa0','#eeeeee'],sp:'none'};
+  const S=FISH_SHAPES[a.s]||FISH_SHAPES.salmon;
+  const u='f'+idSafe(sp.id+(opts.k||''));
+  const size=opts.size?'width="200" height="100"':'';
+  const adip=S.adipose&&(['salmon','trout','char'].includes(sp.g)||['whitefish','grayling','channelcat','bullhead'].includes(sp.id));
+  const barb=S.barbels&&(a.s!=='carp'||['carp','tench'].includes(sp.id))&&(a.s!=='eel'||sp.id==='burbot');
+  const wrap=inner=>`<svg viewBox="0 0 200 100" ${size} xmlns="http://www.w3.org/2000/svg" class="fish" aria-hidden="true">${inner}</svg>`;
+  const flip=opts.flip?' transform="translate(200 0) scale(-1 1)"':'';
+  if(opts.sil){
+    const f='#050d15';
+    const parts=[S.tail,S.pelvic,S.anal,...S.dorsal,adip?S.adipose:null,S.body,S.pectoral].filter(Boolean).map(d=>`<path d="${d}" fill="${f}"/>`).join('');
+    return wrap(`<defs><linearGradient id="${u}r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9cc2e4" stop-opacity=".42"/><stop offset=".3" stop-color="#9cc2e4" stop-opacity="0"/></linearGradient></defs><g${flip}>${parts}<path d="${S.body}" fill="url(#${u}r)"/><path d="${S.body}" fill="none" stroke="#8fb4d6" stroke-opacity=".32" stroke-width=".8"/></g>`);
   }
-  const finsSVG = fins.startsWith('<')?fins:`<path d="${fins}" fill="${c1}" opacity=".85"/>`;
-  let spots='';
-  if(!sil){
-    const sp=a.sp;
-    if(sp==='dark'||sp==='few'){const n=sp==='few'?7:16;for(let i=0;i<n;i++){const x=50+((i*37)%96),y=40+((i*23)%22);spots+=`<circle cx="${x}" cy="${y}" r="${1.6+(i%3)*.5}" fill="${c0}" opacity=".7"/>`}}
-    if(sp==='red'){for(let i=0;i<10;i++){const x=54+((i*41)%92),y=42+((i*29)%20);spots+=`<circle cx="${x}" cy="${y}" r="2.2" fill="#d33" opacity=".85"/>`}}
-    if(sp==='light'){for(let i=0;i<14;i++){const x=50+((i*37)%96),y=40+((i*23)%22);spots+=`<circle cx="${x}" cy="${y}" r="1.8" fill="${c2}" opacity=".8"/>`}}
-    if(sp==='bars'){for(let i=0;i<6;i++){const x=48+i*18;spots+=`<path d="M${x} 34 Q${x+4} 52 ${x} 70" stroke="${c0}" stroke-width="5" fill="none" opacity=".45"/>`}}
-    if(sp==='stripes'){for(let i=0;i<5;i++){spots+=`<path d="M30 ${42+i*5} Q100 ${40+i*5} 170 ${44+i*5}" stroke="${c0}" stroke-width="1.6" fill="none" opacity=".6"/>`}}
-    if(sp==='verm'){for(let i=0;i<8;i++){const x=44+i*16;spots+=`<path d="M${x} 40 q6 6 0 12 t0 12" stroke="${c0}" stroke-width="2.2" fill="none" opacity=".55"/>`}}
-    if(sp==='scale'){for(let r=0;r<3;r++)for(let i=0;i<9;i++){const x=48+i*13+(r%2)*6,y=42+r*8;spots+=`<path d="M${x} ${y} q5 6 10 0" stroke="${c0}" stroke-width="1.4" fill="none" opacity=".5"/>`}}
-    if(sp==='scute'){for(let i=0;i<7;i++){spots+=`<path d="M${44+i*18} 50 l4 -5 4 5z" fill="${c2}"/>`}}
+  const [back,side,belly]=a.c;const R=rng(hashStr(sp.id));const rand=(lo,hi)=>lo+(hi-lo)*R();
+  const deep=mixHex(back,'#000000',.55),light=mixHex(belly,'#ffffff',.4);
+  const finA=mixHex(back,side,.5),finB=mixHex(side,belly,.4);
+  const iris={salmon:'#cfc8a8',trout:'#e0b85a',char:'#e0b85a',bass:'#c08a2a',walleye:'#efe6b8',pike:'#dcb450',rockfish:'#e8a83a',panfish:'#b07a3a'}[sp.g]||'#c9c3aa';
+  const scaly=!['catfish','eel','shark','sturgeon'].includes(a.s);
+  let defs=`<linearGradient id="${u}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${deep}"/><stop offset=".16" stop-color="${back}"/><stop offset=".5" stop-color="${side}"/><stop offset=".8" stop-color="${belly}"/><stop offset="1" stop-color="${mixHex(belly,back,.3)}"/></linearGradient>`+
+    `<linearGradient id="${u}h" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".3"/><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset=".72" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient>`+
+    `<linearGradient id="${u}l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`+
+    `<linearGradient id="${u}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${finA}" stop-opacity=".96"/><stop offset="1" stop-color="${finB}" stop-opacity=".62"/></linearGradient>`+
+    `<radialGradient id="${u}i"><stop offset="0" stop-color="${mixHex(iris,'#ffffff',.35)}"/><stop offset="1" stop-color="${mixHex(iris,'#000000',.4)}"/></radialGradient>`+
+    `<radialGradient id="${u}g"><stop offset="0" stop-color="#000" stop-opacity=".5"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>`+
+    `<clipPath id="${u}c"><path d="${S.body}"/></clipPath><clipPath id="${u}t"><path d="${S.tail}"/></clipPath>`+
+    `<pattern id="${u}s" width="5" height="4" patternUnits="userSpaceOnUse"><path d="M0 4Q2.5 .5 5 4" fill="none" stroke="#fff" stroke-opacity=".17" stroke-width=".5"/></pattern>`+
+    `<pattern id="${u}v" width="2.4" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(16)"><path d="M0 0V8" stroke="#000" stroke-opacity=".24" stroke-width=".5"/></pattern>`+
+    `<pattern id="${u}w" width="8" height="2.4" patternUnits="userSpaceOnUse"><path d="M0 0H8" stroke="#000" stroke-opacity=".22" stroke-width=".5"/></pattern>`;
+  if(a.sp==='scale')defs+=`<pattern id="${u}k" width="9" height="7" patternUnits="userSpaceOnUse"><path d="M0 7Q4.5 .8 9 7" fill="none" stroke="${deep}" stroke-opacity=".5" stroke-width=".8"/></pattern>`;
+  const {top,mid,bot,x0,x1}=S;
+  let marks='',tailMarks='';
+  const spots=(n,ylo,yhi,rlo,rhi,col,op,xl=x0+8,xr=x1-26)=>{let o='';for(let i=0;i<n;i++){const x=rand(xl,xr),y=rand(ylo,yhi),r=rand(rlo,rhi);o+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${r.toFixed(2)}" ry="${(r*.82).toFixed(2)}" fill="${col}" opacity="${op}"/>`}return o};
+  switch(a.sp){
+    case 'dark':marks=spots(40,top+1,mid+5,.6,1.8,deep,.78);tailMarks=spots(12,26,78,.6,1.4,deep,.7,2,34);break;
+    case 'few':marks=spots(14,top+1,mid-2,.8,1.7,deep,.62);tailMarks=spots(5,32,72,.6,1.2,deep,.55,6,30);break;
+    case 'red':marks=spots(18,top+2,mid+4,.8,1.7,deep,.72);for(let i=0;i<12;i++){const x=rand(x0+14,x1-32).toFixed(1),y=rand(mid-9,mid+8).toFixed(1);marks+=`<circle cx="${x}" cy="${y}" r="2.5" fill="#efe2c8" opacity=".5"/><circle cx="${x}" cy="${y}" r="1.45" fill="#c3312a"/>`}break;
+    case 'light':marks=spots(36,top+1,mid+9,.8,1.8,light,.72);break;
+    case 'bars':for(let i=0;i<7;i++){const x=x0+18+i*((x1-x0-44)/6);const d=`M${(x-3).toFixed(1)} ${top-6}C${(x+2).toFixed(1)} ${mid-6} ${(x-2).toFixed(1)} ${mid+6} ${(x+3).toFixed(1)} ${bot+6}`;marks+=`<path d="${d}" stroke="${deep}" stroke-width="8" stroke-linecap="round" fill="none" opacity=".2"/><path d="${d}" stroke="${deep}" stroke-width="3.6" stroke-linecap="round" fill="none" opacity=".26"/>`}break;
+    case 'stripes':for(let i=0;i<6;i++){const y=top+7+i*((bot-top-12)/6);marks+=`<path d="M${x0} ${(y+1.5).toFixed(1)}C${x0+60} ${(y-1).toFixed(1)} ${x1-60} ${(y-1).toFixed(1)} ${x1-18} ${(y-2).toFixed(1)}" stroke="${deep}" stroke-width="1.3" fill="none" opacity=".6"/>`}break;
+    case 'verm':for(let i=0;i<10;i++){const y=rand(top+2,mid+2).toFixed(1),x=rand(x0+8,x1-52).toFixed(1);marks+=`<path d="M${x} ${y}q4 -3 8 0t8 0t8 0" stroke="${deep}" stroke-width="1.4" fill="none" opacity=".48"/>`}break;
+    case 'scale':marks=`<rect width="200" height="100" fill="url(#${u}k)"/>`;break;
+    case 'scute':for(const y of [top+2,mid,bot-3])for(let x=x0+10;x<x1-22;x+=9)marks+=`<path d="M${x} ${y}l2.6 -2.6 2.6 2.6 -2.6 2.6z" fill="${light}" opacity=".75" stroke="${deep}" stroke-width=".4"/>`;break;
   }
-  const stripe = (!sil&&a.st)?`<path d="M28 52 C70 48 120 48 168 52" stroke="${a.st}" stroke-width="7" fill="none" opacity=".7" stroke-linecap="round"/>`:'';
-  const eye = sil?'':`<circle cx="152" cy="46" r="4.2" fill="#fff"/><circle cx="153" cy="46" r="2.4" fill="#111"/>`;
-  const gill = sil?'':`<path d="M140 40 q8 12 0 24" stroke="${c0}" stroke-width="1.8" fill="none" opacity=".6"/>`;
-  return `<svg viewBox="0 0 190 104" ${opts.size?'width="190" height="104"':''} xmlns="http://www.w3.org/2000/svg" class="fish" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c0}"/><stop offset=".5" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
-  <g transform="${opts.flip?'translate(190 0) scale(-1 1)':''}"><path d="${tail}" fill="${c1}"/>${finsSVG}<path d="${body}" fill="url(#${id})"/>${spots}${stripe}${gill}${eye}</g></svg>`;
+  if(a.st)marks+=`<path d="${S.lat}" stroke="${a.st}" stroke-width="10" fill="none" opacity=".22" stroke-linecap="round"/><path d="${S.lat}" stroke="${a.st}" stroke-width="4.8" fill="none" opacity=".42" stroke-linecap="round"/>`;
+  const fin=(d,pat)=>d?`<path d="${d}" fill="url(#${u}f)"/><path d="${d}" fill="url(#${u}${pat})"/><path d="${d}" fill="none" stroke="${deep}" stroke-opacity=".3" stroke-width=".5"/>`:'';
+  const eyeList=S.eyes||[S.eye];
+  const eyes=eyeList.map(([ex,ey,er])=>`<circle cx="${ex}" cy="${ey}" r="${(er+.9).toFixed(2)}" fill="${deep}" opacity=".45"/><circle cx="${ex}" cy="${ey}" r="${er}" fill="url(#${u}i)"/><circle cx="${ex}" cy="${ey}" r="${(er*.5).toFixed(2)}" fill="#07090b"/><circle cx="${(ex-er*.32).toFixed(2)}" cy="${(ey-er*.34).toFixed(2)}" r="${(er*.24).toFixed(2)}" fill="#fff" opacity=".9"/>`).join('');
+  const headX=eyeList[0][0];
+  const shadow=opts.shadow?`<ellipse cx="${((x0+x1)/2).toFixed(1)}" cy="${Math.min(97,bot+16)}" rx="${((x1-x0)*.44).toFixed(1)}" ry="5" fill="url(#${u}g)"/>`:'';
+  return wrap(`<defs>${defs}</defs><g${flip}>${shadow}`+
+    fin(S.tail,'w')+fin(S.pelvic,'v')+fin(S.anal,'v')+
+    `<path d="${S.body}" fill="url(#${u}b)"/>`+
+    `<g clip-path="url(#${u}c)">${scaly?`<rect width="200" height="100" fill="url(#${u}s)"/>`:''}${marks}`+
+      `<ellipse cx="${((x0+x1)/2+8).toFixed(1)}" cy="${(top+(mid-top)*.55).toFixed(1)}" rx="${((x1-x0)*.36).toFixed(1)}" ry="${((mid-top)*.45).toFixed(1)}" fill="url(#${u}l)"/>`+
+      `<path d="${S.lat}" transform="translate(0 -8)" stroke="#fff" stroke-opacity=".1" stroke-width="2.4" fill="none" stroke-linecap="round"/>`+
+      `<ellipse cx="${headX-6}" cy="${mid+2}" rx="17" ry="${((bot-top)*.46).toFixed(1)}" fill="#000" opacity=".1"/>`+
+      `<rect width="200" height="100" fill="url(#${u}h)"/></g>`+
+    `<path d="${S.body}" fill="none" stroke="${deep}" stroke-opacity=".38" stroke-width=".7"/>`+
+    `<path d="${S.lat}" stroke="#fff" stroke-opacity=".3" stroke-width=".6" fill="none"/>`+
+    `<path d="${S.gill}" stroke="${deep}" stroke-opacity=".55" stroke-width="1.1" fill="none" stroke-linecap="round"/>`+
+    (S.gillslits?S.gillslits.map(d=>`<path d="${d}" stroke="${deep}" stroke-opacity=".6" stroke-width="1" fill="none" stroke-linecap="round"/>`).join(''):'')+
+    (tailMarks?`<g clip-path="url(#${u}t)">${tailMarks}</g>`:'')+
+    S.dorsal.map(d=>fin(d,'v')).join('')+(adip?fin(S.adipose,'v'):'')+fin(S.pectoral,'w')+
+    (S.finlets?`<path d="${S.finlets}" fill="${finA}" opacity=".85"/>`:'')+
+    `<path d="${S.mouth}" stroke="${mixHex(deep,'#000000',.5)}" stroke-opacity=".75" stroke-width="1" fill="none" stroke-linecap="round"/>`+
+    eyes+(barb?S.barbels.map(d=>`<path d="${d}" stroke="${mixHex(side,deep,.5)}" stroke-width="1.1" fill="none" stroke-linecap="round"/>`).join(''):'')+
+    `</g>`);
 }
-// "photo" scene for demo catches: water backdrop + fish
+// Registry plate: the species on an underwater card background (fresh, salt and sea-run waters read differently).
+function fishPlate(sp,opts={}){
+  if(!sp)return '';
+  const u='p'+idSafe(sp.id+(opts.k||''));const sil=!!opts.sil;
+  const pal=sil?['#24506e','#183a55','#0d2336']:sp.w==='salt'?['#1f5f86','#0f3a5a','#071f33']:sp.w==='anadromous'?['#1d5a73','#0e3550','#071d30']:['#285a58','#123a42','#081f2a'];
+  const R=rng(hashStr(sp.id+'plate'));let motes='';
+  for(let i=0;i<14;i++)motes+=`<circle cx="${(R()*240).toFixed(1)}" cy="${(R()*150).toFixed(1)}" r="${(.4+R()*1.1).toFixed(2)}" fill="#fff" opacity="${(.06+R()*.2).toFixed(2)}"/>`;
+  return `<svg viewBox="0 0 240 180" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" class="plate" aria-hidden="true"><defs>`+
+    `<linearGradient id="${u}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${pal[0]}"/><stop offset=".55" stop-color="${pal[1]}"/><stop offset="1" stop-color="${pal[2]}"/></linearGradient>`+
+    `<linearGradient id="${u}r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8f6ff" stop-opacity="${sil?.1:.16}"/><stop offset="1" stop-color="#e8f6ff" stop-opacity="0"/></linearGradient>`+
+    `<radialGradient id="${u}v" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></radialGradient></defs>`+
+    `<rect width="240" height="180" fill="url(#${u}w)"/><path d="M40 0L78 0L60 180L10 180Z M120 0L146 0L170 180L118 180Z M190 0L214 0L240 120L240 180L214 180Z" fill="url(#${u}r)"/>${motes}`+
+    `<path d="M0 158C30 146 58 150 84 156C112 162 140 150 172 152C200 154 222 160 240 156L240 180L0 180Z" fill="#04101a" opacity=".55"/>`+
+    `<g transform="translate(32 46) scale(.88)">${fishSVG(sp,{sil,k:u,size:true,shadow:!sil})}</g><rect width="240" height="180" fill="url(#${u}v)"/></svg>`;
+}
+// "Photo" for demo catches: an underwater still of the fish, lit from the surface.
 function fishScene(sp,k=''){
-  const g='s'+(k||'x').replace(/[^a-z0-9]/gi,'');
-  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb7d8"/><stop offset=".35" stop-color="#2f6390"/><stop offset="1" stop-color="#0b2238"/></linearGradient></defs><rect width="400" height="300" fill="url(#${g})"/><path d="M0 120 L60 70 L110 100 L170 55 L230 95 L290 60 L350 100 L400 75 L400 130 L0 130Z" fill="#183a55" opacity=".8"/><path d="M0 130 L400 130 L400 300 L0 300Z" fill="#12314b" opacity=".6"/><g stroke="#cfe6ff" stroke-opacity=".18" stroke-width="2"><path d="M20 180h60M120 205h90M240 190h70M300 240h60M60 250h50"/></g><g transform="translate(40 90) scale(1.7)">${fishSVG(sp,{k:g,size:true})}</g></svg>`;
+  if(!sp)return '';
+  const u='s'+idSafe(sp.id+k);
+  const pal=sp.w==='salt'?['#2f7fae','#145078','#082740']:sp.w==='anadromous'?['#3a8aa6','#175466','#08263a']:['#4f8f86','#1d5552','#0a2a30'];
+  const R=rng(hashStr(sp.id+k+'scene'));let bokeh='',pebbles='';
+  for(let i=0;i<22;i++)bokeh+=`<circle cx="${(R()*400).toFixed(1)}" cy="${(R()*300).toFixed(1)}" r="${(1+R()*5).toFixed(1)}" fill="#dff4ff" opacity="${(.04+R()*.14).toFixed(2)}"/>`;
+  const stone=['#3a3a2e','#4a4636','#2c2e28','#5a5646'];
+  for(let i=0;i<26;i++)pebbles+=`<ellipse cx="${(R()*400).toFixed(1)}" cy="${(262+R()*38).toFixed(1)}" rx="${(4+R()*12).toFixed(1)}" ry="${(2+R()*5).toFixed(1)}" fill="${stone[i%4]}" opacity="${(.35+R()*.4).toFixed(2)}"/>`;
+  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>`+
+    `<linearGradient id="${u}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${pal[0]}"/><stop offset=".5" stop-color="${pal[1]}"/><stop offset="1" stop-color="${pal[2]}"/></linearGradient>`+
+    `<linearGradient id="${u}r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2fbff" stop-opacity=".28"/><stop offset=".7" stop-color="#f2fbff" stop-opacity="0"/></linearGradient>`+
+    `<linearGradient id="${u}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eaf8ff" stop-opacity=".55"/><stop offset="1" stop-color="#eaf8ff" stop-opacity="0"/></linearGradient>`+
+    `<linearGradient id="${u}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2a26" stop-opacity="0"/><stop offset="1" stop-color="#101814" stop-opacity=".9"/></linearGradient>`+
+    `<radialGradient id="${u}v" cx=".5" cy=".45" r=".8"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient></defs>`+
+    `<rect width="400" height="300" fill="url(#${u}w)"/><path d="M0 0H400V26C360 34 330 18 290 26C250 34 220 20 180 28C140 36 110 20 70 28C40 34 20 26 0 30Z" fill="url(#${u}s)"/>`+
+    `<path d="M70 0L118 0L88 300L20 300Z M190 0L224 0L250 300L186 300Z M300 0L336 0L400 210L400 300L352 300Z" fill="url(#${u}r)"/>`+
+    `<rect y="210" width="400" height="90" fill="url(#${u}b)"/>${pebbles}${bokeh}`+
+    `<g transform="translate(54 76) rotate(-4 146 73) scale(1.46)">${fishSVG(sp,{k:u,size:true,shadow:true})}</g><rect width="400" height="300" fill="url(#${u}v)"/></svg>`;
 }
 
 /* ---------- Engine: tiers, XP, levels ---------- */
@@ -950,7 +1087,7 @@ document.addEventListener('click',e=>{
 <script>
 /* ===================== Fish Hunt — screens ===================== */
 const tagline = `<div class="page-h"><div><h1 id="ph"></h1><p id="pp"></p></div><div class="tag">More fish.<br>Brighter days.</div></div>`;
-function pageH(t,p,tag=true){return `<div class="page-h"><div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div>${tag?'<div class="tag">More fish.<br>Brighter days.</div>':''}</div>`}
+function pageH(t,p,tag=true){return `<div class="page-h std"><div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div>${tag?'<div class="tag">More fish.<br>Brighter days.</div>':''}</div>`}
 function quote(){return `<div class="hero-quote">More fish. Brighter days.<i></i></div>`}
 
 /* ---------- Home ---------- */
@@ -970,7 +1107,7 @@ ROUTES.home = ()=>{
     </div>
     ${next?`<div class="card" data-go="species/${next.id}" aria-label="Next target: ${esc(next.n)}, ${TIERS[TIER_ORDER[next.r-1]].n}, plus ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery" style="cursor:pointer">
       <div class="split"><span class="eyebrow">Next target</span>${tierTag(TIER_ORDER[next.r-1])}</div>
-      <div class="row" style="margin-top:10px"><div style="width:96px;height:60px;border-radius:12px;overflow:hidden;background:#0d2238;flex:none">${fishSVG(next,{k:'nt'})}</div><div class="grow"><b style="font-size:18px;color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div><div class="small" style="margin-top:4px;color:#5cf0a0;font-weight:600">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery</div></div>${I.chev.replace('class="chev"','style="width:20px;height:20px;color:#fff"')}</div>
+      <div class="row" style="margin-top:10px"><div class="nt-art">${fishPlate(next,{k:'nt',sil:true})}</div><div class="grow"><b style="font-size:18px;color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div><div class="small" style="margin-top:4px;color:#5cf0a0;font-weight:600">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery</div></div>${I.chev.replace('class="chev"','style="width:20px;height:20px;color:#fff"')}</div>
     </div>`:''}
     ${chal?`<div class="card" data-go="challenges" aria-label="Current challenge: ${esc(chal.ch.n)}, ${chal.p} of ${chal.ch.sp.length}" style="cursor:pointer">
       <div class="split"><span class="eyebrow">Current challenge</span><span class="small b" style="color:#fff">${chal.p} / ${chal.ch.sp.length}</span></div>
@@ -978,9 +1115,9 @@ ROUTES.home = ()=>{
       <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${chal.ch.sp.map(id=>`<span class="pill" style="${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.7'}">${have.has(id)?'✓ ':''}${esc(SP[id].n.replace(' Salmon','').replace(' Trout',''))}</span>`).join('')}</div>
       <div class="prog green" style="margin-top:12px"><i style="width:${Math.round(chal.p/chal.ch.sp.length*100)}%"></i></div>
     </div>`:''}
-    ${recent?`<div class="card" data-go="catch/${recent.id}" aria-label="Recent trophy: ${esc(SP[recent.sp].n)}, ${TIERS[recent.tier].n}${recent.len?', '+num(recent.len)+' inches':''}" style="cursor:pointer;padding:12px">
-      <div class="split" style="margin-bottom:10px"><span class="eyebrow">Recent trophy</span>${tierTag(recent.tier)}</div>
-      <div class="catchrow" style="background:transparent;border:0;padding:0"><div class="im" data-photo="${recent.id}"></div><div><div class="sp" style="margin-top:0">${esc(SP[recent.sp].n)}</div><div class="mm">${recent.len?`<span>${I.ruler.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.len)} in</span>`:''}${recent.wt?`<span>${I.scale.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.wt)} lb</span>`:''}</div><div class="loc">${esc(locLine(recent))}</div><div class="loc">${fmtDate(recent.ts)}${recent.pb?' · <span style="color:#ffd985">Personal best</span>':''}</div></div></div>
+    ${recent?`<div class="card th-card" data-go="catch/${recent.id}" aria-label="Recent trophy: ${esc(SP[recent.sp].n)}, ${TIERS[recent.tier].n}${recent.len?', '+num(recent.len)+' inches':''}${recent.pb?', personal best':''}" style="cursor:pointer">
+      <div class="th-img"><span data-photo="${recent.id}"></span><span class="tiertag">${tierTag(recent.tier)}</span>${recent.pb?'<span class="th-pb">Personal best</span>':''}</div>
+      <div class="th-body"><span class="eyebrow">Recent trophy</span><div class="th-name">${esc(SP[recent.sp].n)}</div><div class="mm">${recent.len?`<span>${I.ruler.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.len)} in</span>`:''}${recent.wt?`<span>${I.scale.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.wt)} lb</span>`:''}<span>${fmtDate(recent.ts)}</span></div><div class="loc">${esc(locLine(recent))}</div></div>
     </div>`:`<div class="card" style="text-align:center;padding:26px 16px"><div style="width:64px;height:64px;margin:0 auto 10px;color:#fff">${I.cam}</div><b style="font-size:18px;color:#fff">Record your first catch</b><p class="muted" style="margin:6px 0 14px">Take a photo. Get the verdict. Start the collection.</p><button class="btn" data-nav="capture">${I.cam} Open camera</button></div>`}
     <div class="card level-card" data-go="profile" aria-label="Level ${li.L}, ${esc(li.title)}, ${li.cur.toLocaleString()} of ${li.need.toLocaleString()} XP" style="cursor:pointer">
       ${hexBadge(li.L)}
@@ -1032,7 +1169,7 @@ ROUTES.registry = ()=>{
 function regCard(s,got){
   const pb=got?pbFor(s.id):null;const first=got?[...S.catches].filter(c=>c.sp===s.id).sort((a,b)=>a.ts-b.ts)[0]:null;
   const bestTier=got?S.catches.filter(c=>c.sp===s.id).map(c=>c.tier).sort((a,b)=>TIER_ORDER.indexOf(b)-TIER_ORDER.indexOf(a))[0]:TIER_ORDER[s.r-1];
-  return `<div class="fcard ${got?'':'sil'}" data-go="species/${s.id}" aria-label="${esc(s.n)}, ${got?'caught':'not yet caught'}, ${TIERS[bestTier].n}${pb?', personal best '+num(pb.len)+' inches':''}${first?', first caught '+fmtDate(first.ts):''}"><div class="art">${fishSVG(s,{sil:!got,k:'r'})}${got?`<span class="chk">${I.check}</span>`:''}</div><div class="body"><div class="name">${esc(s.n)}</div><div style="margin-top:6px">${tierTag(bestTier)}</div><div class="meta">${got?`<span>${I.ruler}${pb?num(pb.len)+' in':'—'}</span><span>${I.cal}${first?fmtDate(first.ts):''}</span>`:'<span>Not yet caught</span>'}</div></div></div>`;
+  return `<div class="fcard ${got?'':'sil'}" data-go="species/${s.id}" aria-label="${esc(s.n)}, ${got?'caught':'not yet caught'}, ${TIERS[bestTier].n}${pb?', personal best '+num(pb.len)+' inches':''}${first?', first caught '+fmtDate(first.ts):''}"><div class="art">${fishPlate(s,{sil:!got,k:'r'})}${got?`<span class="chk">${I.check}</span>`:''}</div><div class="body"><div class="name">${esc(s.n)}</div><div style="margin-top:6px">${tierTag(bestTier)}</div><div class="meta">${got?`<span>${I.ruler}${pb?num(pb.len)+' in':'—'}</span><span>${I.cal}${first?new Date(first.ts).toLocaleDateString('en-US',{month:'short',year:'numeric'}):''}</span>`:'<span>Not yet caught</span>'}</div></div></div>`;
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-rf]');if(b){regFilter=b.dataset.rf;render()}if(e.target.closest('#regSort')){regSort=regSort==='default'?'az':regSort==='az'?'rarity':'default';toast('Sorted: '+({default:'Registry order',az:'A → Z',rarity:'Rarity'}[regSort]));render()}});
 
@@ -1044,7 +1181,7 @@ ROUTES.species = ({id})=>{
   const bestTier=got?mine.map(c=>c.tier).sort((a,b)=>TIER_ORDER.indexOf(b)-TIER_ORDER.indexOf(a))[0]:null;
   const inCh=CHALLENGES.filter(ch=>ch.sp.includes(id));
   return `<div class="centerh"><button class="back" data-go="registry">${I.back}</button><h1>${esc(s.n)}</h1><p style="font-style:italic">${esc(s.sci)}</p></div>
-  <div class="card" style="padding:0;overflow:hidden"><div style="aspect-ratio:16/9;background:linear-gradient(180deg,#1b4468,#0d2238)">${fishSVG(s,{sil:!got,k:'d'})}</div>
+  <div class="card" style="padding:0;overflow:hidden"><div class="sd-art">${fishPlate(s,{sil:!got,k:'d'})}</div>
     <div style="padding:14px 16px"><div class="split"><span class="eyebrow">Status</span>${got?`<span class="pill" style="border-color:rgba(61,220,132,.6);color:#5cf0a0">${I.check} Discovered</span>`:`<span class="pill" style="opacity:.8">${I.lock} Not yet caught</span>`}</div>
     <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="pill">${GROUP_LABEL[s.g]}</span><span class="pill">${s.w==='fresh'?'Freshwater':s.w==='salt'?'Saltwater':'Anadromous'}</span>${tierTag(TIER_ORDER[s.r-1])}${s.tags.includes('protected')?'<span class="pill" style="border-color:rgba(255,93,108,.5);color:#ff8c98">Release only</span>':''}${s.tags.includes('native')?'<span class="pill">Native</span>':''}</div>
     <p class="muted small" style="margin:12px 0 0">Typical ${s.typ} in · Trophy ${s.tro}+ in. ${s.r>=4?'A hard-to-find species — any verified catch starts at Rare or better.':'Size drives the tier: a fish past the trophy mark can reach Epic or Legendary.'}</p></div></div>
@@ -1063,7 +1200,7 @@ ROUTES.trophy = ()=>{
   const filters=[['all','All'],['salmon','Salmon'],['trout','Trout'],['fresh','Freshwater'],['salt','Saltwater'],['fav','Favorites']];
   const list=S.catches.filter(c=>{const s=SP[c.sp];switch(trFilter){case 'salmon':return s.g==='salmon';case 'trout':return ['trout','char'].includes(s.g);case 'fresh':return s.w!=='salt';case 'salt':return s.w==='salt';case 'fav':return c.fav;default:return true}});
   return `${pageH('Trophy Room','Your catches. Your story.')}
-  <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species</span></div><div>${I.trophy.replace('<svg','<svg style="color:var(--gold)"')}<b>${pbs(S)}</b><span>Personal Bests</span></div><div style="padding:14px 10px"><div class="row" style="justify-content:center;gap:6px"><span class="xpc" style="color:#5cf0a0">XP</span><b style="font-size:20px">Lv ${li.L}</b></div><div class="prog green" style="margin:8px 0 5px;height:6px"><i style="width:${li.pct}%"></i></div><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span></div></div>
+  <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species</span></div><div>${I.trophy.replace('<svg','<svg style="color:var(--gold)"')}<b>${pbs(S)}</b><span>Personal Bests</span></div><div style="padding:14px 10px"><div class="row" style="justify-content:center;gap:6px"><span class="xpc" style="color:#5cf0a0">XP</span><b style="font-size:20px">Lv ${li.L}</b></div><div class="prog green" style="margin:8px 0 5px;height:6px"><i style="width:${li.pct}%"></i></div><span style="white-space:nowrap">${li.cur.toLocaleString()} / ${li.need.toLocaleString()}</span></div></div>
   <div class="chips" style="margin-top:12px">${filters.map(([k,n])=>`<button class="chip ${trFilter===k?'on':''}" data-tf="${k}">${k==='fav'?I.heart:k==='all'?'':I.fish}${n}</button>`).join('')}</div>
   ${list.length?`<div class="grid2">${list.map(c=>trophyCard(c)).join('')}</div>`:`<div class="card" style="text-align:center;padding:30px 16px"><b style="color:#fff;font-size:17px">${S.catches.length?'Nothing here yet':'Your trophy room is empty'}</b><p class="muted" style="margin:6px 0 14px">${S.catches.length?'Try another filter.':'The first fish you record lands here.'}</p>${S.catches.length?'':`<button class="btn" data-nav="capture">${I.cam} Record a catch</button>`}</div>`}`;
 };
@@ -1095,7 +1232,7 @@ document.addEventListener('click',async e=>{
 ROUTES.challenges = ()=>{
   const have=speciesCaught();
   return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Challenges</h1><p>A reason to go back out.</p></div>
-  <div class="stack">${CHALLENGES.map(ch=>{const p=challengeProgress(ch);const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}</span><b style="display:block;color:#fff;font-size:18px;margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:20px">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600">+${ch.xp.toLocaleString()} XP</div></div></div>
+  <div class="stack">${CHALLENGES.map(ch=>{const p=challengeProgress(ch);const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}</span><b style="display:block;color:#fff;font-size:18px;margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:20px">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600;white-space:nowrap">+${ch.xp.toLocaleString()} XP</div></div></div>
   <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${ch.sp.map(id=>`<span class="pill" data-go="species/${id}" aria-label="${esc(SP[id].n)}, ${have.has(id)?'caught':'not yet caught'}" style="cursor:pointer;${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.65'}">${have.has(id)?'✓ ':''}${esc(SP[id].n)}</span>`).join('')}</div>
   <div class="prog ${done?'gold':'green'}" style="margin-top:12px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div>
   <div class="split" style="margin-top:8px"><span class="small muted">Reward: ${esc(ch.badge)} badge</span>${done?`<span class="pill" style="border-color:rgba(242,182,74,.6);color:#ffd985">${I.trophy} Complete</span>`:''}</div></div>`}).join('')}</div>`;
@@ -1117,7 +1254,7 @@ ROUTES.feed = ()=>{
   <p class="faint tiny" style="text-align:center;padding:8px 0 0">Community posts are a local preview. Your own catches appear here only when their privacy is set above Private.</p></div>`;
 };
 function post(p){const s=SP[p.sp];const liked=!!S.likes[p.id];const fol=!!S.follows[p.user];return `<article class="post"><div class="ph"><div class="av">${p.mine?avatarLetter():esc(p.user[0])}</div><div class="grow"><b>${esc(p.user)}</b><small>${esc(p.ago)} • ${I.pin.replace('<svg','<svg style="width:11px;height:11px;vertical-align:-1px"')} ${esc(p.region)}</small></div>${p.mine?'':`<button class="follow ${fol?'on':''}" data-follow="${esc(p.user)}" aria-label="${fol?'Following':'Follow'} ${esc(p.user)}">${fol?'Following':'Follow'}</button>`}</div>
-  <div class="pic">${p.mine?`<span data-photo="${p.cid}" style="display:block;width:100%;height:100%"></span>`:fishScene(s,'f'+p.id)}<span class="scrim" aria-hidden="true"></span><span class="tiertag" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;border-radius:12px;background:rgba(7,17,29,.75);border:1px solid var(--line-2)">${tierTag(p.tier)}<span style="color:var(--gold);font-size:12px;letter-spacing:1px">${'★'.repeat(TIERS[p.tier].stars)}</span></span><div class="cap"><b>${esc(s.n.toUpperCase())}</b><i>${esc(s.sci)}</i></div><div class="mm">${p.len?`<span>${num(p.len)} in</span>`:''}${p.wt?`<span>${num(p.wt)} lb</span>`:''}</div></div>
+  <div class="pic">${p.mine?`<span data-photo="${p.cid}" style="display:block;width:100%;height:100%"></span>`:fishScene(s,'f'+p.id)}<span class="scrim" aria-hidden="true"></span><span class="tiertag" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;border-radius:12px;background:rgba(7,17,29,.75);border:1px solid var(--line-2)">${tierTag(p.tier)}<span style="color:var(--gold);font-size:12px;letter-spacing:1px">${'★'.repeat(TIERS[p.tier].stars)}</span></span><div class="pic-foot"><div class="cap"><b>${esc(s.n.toUpperCase())}</b><i>${esc(s.sci)}</i></div><div class="mm">${p.len?`<span>${num(p.len)} in</span>`:''}${p.wt?`<span>${num(p.wt)} lb</span>`:''}</div></div></div>
   ${p.txt||p.tags.length?`<div class="txt">${esc(p.txt)}${p.tags.length?`<div class="h">${p.tags.map(t=>'#'+esc(t)).join(' ')}</div>`:''}</div>`:''}
   <div class="acts"><button class="${liked?'liked':''}" data-like="${p.id}" aria-pressed="${liked}" aria-label="Like, ${p.likes+(liked?1:0)} likes">${I.heart} ${p.likes+(liked?1:0)}</button><button data-cmt aria-label="Comments, ${p.comments}">${I.comment} ${p.comments}</button><button class="share" ${p.mine?`data-share="${p.cid}"`:'data-cmt'}>${I.share} Share</button></div></article>`}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-ft]');if(t){feedTab=t.dataset.ft;render();return}const l=e.target.closest('[data-like]');if(l){S.likes[l.dataset.like]=!S.likes[l.dataset.like];save();render();return}const f=e.target.closest('[data-follow]');if(f){S.follows[f.dataset.follow]=!S.follows[f.dataset.follow];save();render();return}if(e.target.closest('[data-cmt]')){toast('Comments arrive with the community release')}});
@@ -1140,7 +1277,7 @@ ROUTES.profile = ()=>{
   return `<div class="page-h"><div><h1>Profile</h1></div><button class="sub-h lnk" data-go="settings" style="padding:0;color:#fff;font-size:14px;display:inline-flex;gap:6px;align-items:center">${I.edit.replace('<svg','<svg style="width:18px;height:18px"')} Edit Profile</button></div>
   <div class="row" style="gap:16px;padding:4px 2px 14px"><div style="width:96px;height:96px;border-radius:50%;background:var(--navy-600);border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-family:var(--serif);font-size:40px;font-weight:700;color:#fff;flex:none">${avatarLetter()}</div><div class="grow"><div class="serif" style="font-size:30px;font-weight:700;color:#fff;line-height:1">${esc(S.name||'Angler')}</div><div class="row small" style="margin-top:6px;color:#fff;gap:6px">${I.pin.replace('<svg','<svg style="width:15px;height:15px"')} ${esc(S.homeRegion)}, WA</div><div class="muted small" style="font-style:italic;margin-top:4px">“Chasing fish and good days.”</div></div><div class="tag script" style="font-size:18px;color:#fff;transform:rotate(-4deg);text-align:right">More fish.<br>Brighter days.</div></div>
   <div class="card"><span class="eyebrow">Angler level</span><div class="level-card" style="margin-top:6px">${hexBadge(li.L)}<div class="lvl"><h3>Level ${li.L}</h3><div class="title">${esc(li.title)}</div><div class="xp"><span></span><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span></div><div class="prog"><i style="width:${li.pct}%"></i></div></div></div>
-    <div class="grid2" style="margin-top:12px"><div class="tile"><div class="ic">${I.mtn}</div><div><b>Pacific Northwest</b><span>Region</span></div></div><div class="tile" data-go="settings" style="cursor:pointer"><div class="ic">${I.tree}</div><div class="grow"><b>${esc(S.homeWaters||S.homeRegion)}</b><span>Home waters</span></div>${I.chev}</div></div></div>
+    <div class="grid2 tiles" style="margin-top:12px"><div class="tile"><div class="ic">${I.mtn}</div><div><b>Pacific Northwest</b><span>Region</span></div></div><div class="tile" data-go="settings" style="cursor:pointer"><div class="ic">${I.tree}</div><div class="grow"><b>${esc(S.homeWaters||S.homeRegion)}</b><span>Home waters</span></div>${I.chev}</div></div></div>
   <div class="sub-h"><h2>My Stats</h2><a data-go="trophy" href="#trophy">View All Stats ${I.arrow.replace('<svg','<svg style="width:15px;height:15px"')}</a></div>
   <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species Discovered</span></div><div>${I.ruler}<b>${longest?num(longest)+' in':'—'}</b><span>Longest Fish</span></div><div>${I.trophy}<b>${pbs(S)}</b><span>Personal Bests</span></div></div>
   <div class="card" style="margin-top:14px"><div class="split"><h2 class="serif" style="font-size:22px;color:#fff">Standing</h2><span class="small b" style="color:#fff">${profLB} leaderboard</span></div>
@@ -1225,11 +1362,11 @@ ROUTES.capture = ()=>{
     <button type="button" class="cam-match" id="camMatch"><span class="mini">${fishSVG(SP.coho,{k:'m'})}</span><span class="cm-txt"><small>${S.apiKey?'AI species ID after the shot':'Demo mode — confirm the species after the shot'}</small><b id="camMatchName">Choose species</b></span>${I.chev}</button>
     <div class="cam-hint">${I.target}<div><b>Align fish within the frame</b><span>Best results in good light</span></div>${I.info.replace('<svg','<svg style="width:18px;height:18px;color:var(--mist)"')}</div>
     <div class="cam-bottom">
-      <div class="cam-opts"><button type="button" id="optAuto" data-copt="auto">${I.scan}<div><b>Auto-detect size</b><span id="optAutoLbl"></span></div></button><button type="button" id="optLen" data-copt="len">${I.ruler}<div><b>Add length</b><span id="optLenLbl">Optional</span></div></button><button type="button" id="optWt" data-copt="wt">${I.scale}<div><b>Add weight</b><span id="optWtLbl">Optional</span></div></button></div>
+      <div class="cam-opts"><button type="button" id="optAuto" data-copt="auto">${I.scan}<div><b>Auto size</b><span id="optAutoLbl"></span></div></button><button type="button" id="optLen" data-copt="len">${I.ruler}<div><b>Add length</b><span id="optLenLbl">Optional</span></div></button><button type="button" id="optWt" data-copt="wt">${I.scale}<div><b>Add weight</b><span id="optWtLbl">Optional</span></div></button></div>
       <div class="cam-ctl"><button class="ib" id="btnGallery"><span class="sq">${I.image}</span>Gallery</button><button type="button" class="ib" id="btnFlash" disabled aria-pressed="false"><span class="sq">${I.bolt}</span>Flash<small id="flashLbl">Checking…</small></button><button class="shutter" id="btnShutter" aria-label="Take photo"><i></i></button><span></span><button class="ib" data-go="registry"><span class="sq">${I.book}</span>Species Guide</button></div>
       <div class="cam-mode" aria-hidden="true"><div><span class="on">PHOTO</span><span class="off" title="Video capture is not available yet">VIDEO</span></div></div>
     </div>
-    <div id="camFallback" class="hide" style="position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,#1b4468,#0d2238);z-index:1;text-align:center;padding:24px"><div><div style="width:64px;height:64px;margin:0 auto 12px;color:#fff">${I.cam}</div><b style="color:#fff;font-size:18px">Camera not available here</b><p class="muted" style="margin:6px 0 0">Use Gallery to import a photo, or open Fish Hunt on your phone.</p></div></div>
+    <div id="camFallback" class="hide" style="position:absolute;inset:0;display:grid;place-items:start center;background:linear-gradient(180deg,#1b4468,#0d2238);z-index:1;text-align:center;padding:calc(240px + var(--safe-t)) 24px 24px"><div><div style="width:64px;height:64px;margin:0 auto 12px;color:#fff">${I.cam}</div><b style="color:#fff;font-size:18px">Camera not available here</b><p class="muted" style="margin:6px 0 0">Use Gallery to import a photo, or open Fish Hunt on your phone.</p></div></div>
   </div>`;
 };
 async function startCamera(){
@@ -1243,7 +1380,7 @@ async function startCamera(){
     getPosition().then(p=>{if(p&&CUR.draft){CUR.draft.lat=p.lat;CUR.draft.lng=p.lng;CUR.draft.region=regionFrom(p.lat,p.lng)}});
   }catch(e){
     if(CUR.route!=='capture')return;
-    $('#camFallback')?.classList.remove('hide');setFlashState('unavailable');
+    $('#camFallback')?.classList.remove('hide');$('.cam-wrap')?.classList.add('no-cam');setFlashState('unavailable');
     const sh=$('#btnShutter');const had=document.activeElement===sh||document.activeElement===document.body;if(sh)sh.disabled=true;
     if(had)$('#btnGallery')?.focus({preventScroll:true});
   }
@@ -1383,12 +1520,12 @@ ROUTES.verdict = ({id})=>{
   CUR.after=()=>{revealSequence(V);};
   return `<div class="verdict">
   <div class="centerh"><button class="back" data-go="home">${I.back}</button><h1>Verdict</h1><p>Here's what you caught!</p><span class="right small muted" style="top:14px">1 / 1</span></div>
-  <div class="hero v-reveal" id="vr0"><span data-photo="${c.id}" style="display:block;width:100%;height:100%"></span><button class="pill vp" data-go="catch/${c.id}">${I.image} View Photo</button></div>
+  <div class="hero v-reveal t-${tier}" id="vr0"><span data-photo="${c.id}" style="display:block;width:100%;height:100%"></span><button class="pill vp" data-go="catch/${c.id}">${I.image} View Photo</button></div>
   <div class="v-species"><div class="v-reveal" id="vr1"><span class="eyebrow">Species</span><h2>${esc(sp.n)}</h2><div class="sci">${esc(sp.sci)}</div><div style="margin-top:8px"><span class="pill">${I.fish} ${GROUP_LABEL[sp.g]}${sp.tags.includes('game')?' · Game fish':''}</span></div></div>
     <div class="v-tier ${tier} v-reveal" id="vr2"><div class="nm tc-${tier}">${T.ico}${T.n.toUpperCase()}</div><div class="stars">${'★'.repeat(T.stars)}</div><div class="why">${T.why}</div></div></div>
   <div class="v-stats v-reveal" id="vr3"><div><div class="k">${I.ruler} LENGTH</div><div class="v">${c.len?num(c.len)+' in':'—'}</div></div><div><div class="k">${I.scale} WEIGHT</div><div class="v">${c.wt?num(c.wt)+' lb':'—'}</div></div><div><div class="k">${I.chart} PERCENTILE</div><div class="v">${pct?'Top '+pct+'%':'—'}</div><div class="s">${pct?'of registered '+esc(sp.n.split(' ')[0]):'add a length'}</div></div></div>
-  <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Logged to your registry</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span> +<span id="xpNum">0</span> XP</span></div></div>
-  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}Species Registry: <b>#${spIdx}</b> <span class="muted">· ${reg[0]} / ${reg[1]}</span></span><a data-go="species/${sp.id}" href="#species/${sp.id}">View Species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+  <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Logged to your registry</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span><span class="xpv">+<span id="xpNum">0</span> XP</span></span></div></div>
+  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}Species Registry: <b>${V.newSpecies?'#':''}${reg[0]} / ${reg[1]}</b>${V.newSpecies?' <span class="muted">new</span>':''}</span><a data-go="species/${sp.id}" href="#species/${sp.id}">View species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
     ${V.chal.length?`<div class="stack" style="margin-top:12px">${V.chal.map(({ch,p})=>`<div class="card" style="padding:12px 14px" data-go="challenges"><div class="split"><b style="color:#fff">${esc(ch.n)}</b><span class="small b" style="color:#fff">${p} / ${ch.sp.length}</span></div><div class="prog green" style="margin-top:8px;height:6px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div></div>`).join('')}</div>`:''}
     ${V.newAch.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Achievement unlocked</span>${V.newAch.map(a=>`<div class="row" style="margin-top:8px"><div style="width:44px">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8')}</div><div><b style="color:#fff">${esc(a.n)}</b><div class="muted small">${esc(a.d)}</div></div></div>`).join('')}</div>`:''}
     ${V.chDone.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Challenge complete</span>${V.chDone.map(ch=>`<b style="display:block;color:#fff;margin-top:6px">${esc(ch.n)} · +${ch.xp.toLocaleString()} XP</b>`).join('')}</div>`:''}
@@ -1460,7 +1597,7 @@ ROUTES.map = ()=>{
     if(b.length>1)m.fitBounds(b,{padding:[30,30]});
     $('#mapLocate').onclick=async()=>{const p=await getPosition();if(p)m.setView([p.lat,p.lng],11);else toast('Location unavailable')};
   };
-  return `<div class="page-h" style="align-items:flex-start"><div><h1>Catch Map</h1><p>Your waters. Your history.</p></div><div class="pill" style="flex-direction:column;align-items:flex-end;gap:2px;padding:8px 12px"><span class="row" style="gap:6px">${I.lock} Private spot protection: <b style="color:#5cf0a0">ON</b></span></div></div>
+  return `${pageH('Catch Map','Your waters. Your history.',false)}<div class="map-priv"><span class="pill">${I.lock} Private spot protection: <b style="color:#5cf0a0">ON</b></span></div>
   <div class="chips"><select class="chip" id="mapSp" aria-label="Filter by species" style="appearance:none">${['all',...new Set(S.catches.map(c=>c.sp))].map(id=>`<option value="${id}" ${mapSpecies===id?'selected':''}>${id==='all'?'All Species':SP[id].n}</option>`).join('')}</select><select class="chip" id="mapDays" aria-label="Time range" style="appearance:none">${[[0,'All time'],[30,'Last 30 days'],[90,'Last 90 days'],[365,'Last year']].map(([d,n])=>`<option value="${d}" ${mapDays===d?'selected':''}>${n}</option>`).join('')}</select></div>
   <div id="map"><button id="mapLocate" class="ico" aria-label="Center the map on my location" style="position:absolute;right:12px;top:12px;z-index:500;width:44px;height:44px;border-radius:50%;background:var(--navy-900);border:1px solid var(--line-2);color:#fff;display:grid;place-items:center">${I.nav.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
   <div class="sub-h"><h2>${mapSpecies==='all'&&!mapDays?'Your Catches':'Filtered Catches'}</h2><span class="small muted">${list.length} catch${list.length===1?'':'es'} · ${waters.size} waters</span></div>
