@@ -1,0 +1,1381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1a2b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Fish Hunt — catch, explore, collect. Every fish you catch becomes part of your collection.">
+<title>Fish Hunt</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#07111d; --navy-900:#0b1a2b; --navy-800:#10233a; --navy-700:#16304c; --navy-600:#1e3f63;
+  --water:#1f7ae0; --water-2:#3ba0ff; --teal:#22c1c3; --ice:#e8f2ff; --mist:#a9bdd6; --fog:#6f86a3;
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
+  --glass:rgba(13,29,48,.72); --glass-2:rgba(16,35,58,.86);
+  --common:#8a97a8; --uncommon:#3ddc84; --rare:#3b8bff; --epic:#b45cff; --legendary:#f2b64a;
+  --common-bg:rgba(138,151,168,.16); --uncommon-bg:rgba(61,220,132,.14); --rare-bg:rgba(59,139,255,.16); --epic-bg:rgba(180,92,255,.18); --legendary-bg:rgba(242,182,74,.18);
+  --gold:#f2b64a; --danger:#ff5d6c; --ok:#3ddc84;
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif; --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --script:"Caveat","Bradley Hand","Segoe Script",cursive;
+  --r:18px; --r-sm:12px; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --nav-h:76px; --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--navy-950);color:var(--ice);font-family:var(--sans);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased}
+body{overscroll-behavior-y:none;min-height:100dvh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+a{color:var(--water-2);text-decoration:none}
+img{display:block;max-width:100%}
+h1,h2,h3{margin:0;font-weight:600}
+.serif{font-family:var(--serif)}
+.script{font-family:var(--script);font-weight:600}
+.hide{display:none!important}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- App shell ---------- */
+#app{max-width:520px;margin:0 auto;min-height:100dvh;position:relative;background:transparent;display:flex;flex-direction:column}
+#scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#scene .sky{position:absolute;inset:0;background:
+  radial-gradient(120% 60% at 50% -10%, #cfe3f5 0%, #8fb4d6 22%, #35608a 46%, var(--navy-900) 70%, var(--navy-950) 100%)}
+#scene svg{position:absolute;left:50%;transform:translateX(-50%);top:0;width:max(100%,900px);height:auto;opacity:.95}
+#scene .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,17,29,.08) 0%,rgba(7,17,29,.35) 22%,rgba(7,17,29,.82) 40%,var(--navy-950) 60%)}
+#app>*{position:relative;z-index:1}
+
+header.top{display:flex;align-items:center;gap:12px;padding:calc(10px + var(--safe-t)) 18px 8px}
+header.top .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+header.top .brand svg{width:46px;height:46px;flex:none}
+header.top .wm{line-height:1}
+header.top .wm b{display:block;font-family:var(--serif);font-size:24px;font-weight:700;color:#fff;letter-spacing:.2px}
+header.top .wm small{display:block;font-size:9px;letter-spacing:.17em;white-space:nowrap;color:var(--ice);opacity:.85;margin-top:3px;font-weight:500}
+header.top .ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;position:relative}
+header.top .ico svg{width:22px;height:22px}
+header.top .ico .dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--water-2);border:2px solid var(--navy-900)}
+header.top .avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.7);background:var(--navy-700);display:grid;place-items:center;font-weight:700;font-size:15px}
+header.top .avatar img{width:100%;height:100%;object-fit:cover}
+
+main#view{flex:1;padding:4px 16px calc(var(--nav-h) + var(--safe-b) + 24px);animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+nav.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:520px;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(7,17,29,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;z-index:50}
+nav.bottom button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 0 10px;color:var(--mist);font-size:11.5px;font-weight:500;position:relative}
+nav.bottom button svg{width:24px;height:24px}
+nav.bottom button.on{color:#fff}
+nav.bottom button.on::after{content:"";position:absolute;bottom:4px;width:22px;height:3px;border-radius:3px;background:var(--water-2)}
+nav.bottom .rec{transform:translateY(-16px)}
+nav.bottom .rec .cam{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5cb3ff,#1f7ae0 60%,#155cb0);box-shadow:0 8px 24px rgba(31,122,224,.55),0 0 0 6px rgba(31,122,224,.18);display:grid;place-items:center}
+nav.bottom .rec .cam svg{width:28px;height:28px;color:#fff}
+nav.bottom .rec span{margin-top:-2px}
+
+/* ---------- Common blocks ---------- */
+.page-h{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:10px 2px 14px}
+.page-h h1{font-family:var(--serif);font-size:32px;font-weight:700;color:#fff;letter-spacing:.2px;line-height:1.05}
+.page-h p{margin:6px 0 0;color:var(--ice);opacity:.85;font-size:14px}
+.page-h .tag{font-family:var(--script);font-size:20px;color:#fff;text-align:right;line-height:1;opacity:.95;transform:rotate(-4deg);white-space:nowrap}
+.sub-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 2px 10px}
+.sub-h h2{font-family:var(--serif);font-size:22px;color:#fff}
+.sub-h h2.sans{font-family:var(--sans);font-size:19px;font-weight:600}
+.sub-h a,.sub-h button.lnk{color:#fff;font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.sub-h a svg,.sub-h button.lnk svg{width:16px;height:16px}
+.back{display:inline-flex;align-items:center;gap:6px;color:#fff;font-weight:500;font-size:14px;padding:6px 0}
+.back svg{width:20px;height:20px}
+.centerh{text-align:center;padding:6px 0 14px;position:relative}
+.centerh h1{font-family:var(--serif);font-size:26px;color:#fff}
+.centerh p{margin:4px 0 0;color:var(--ice);opacity:.85;font-size:14px}
+.centerh .back{position:absolute;left:0;top:8px}
+.centerh .right{position:absolute;right:0;top:8px}
+
+.card{background:var(--glass);border:1px solid var(--line-2);border-radius:var(--r);padding:16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.card.solid{background:var(--glass-2)}
+.card+.card{margin-top:12px}
+.stack>*+*{margin-top:12px}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+.muted{color:var(--mist)}
+.faint{color:var(--fog)}
+.small{font-size:12.5px}
+.tiny{font-size:11px}
+.b{font-weight:600}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line-2);background:rgba(255,255,255,.06);color:#fff;white-space:nowrap}
+.pill svg{width:13px;height:13px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);background:rgba(255,255,255,.06);color:#fff;font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:7px}
+.chip svg{width:15px;height:15px}
+.chip.on{background:linear-gradient(180deg,#3b8fe6,#1f6fd0);border-color:transparent;box-shadow:0 4px 14px rgba(31,122,224,.4)}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px 18px;border-radius:14px;font-weight:600;font-size:16px;color:#fff;background:linear-gradient(180deg,#3b8fe6,#1f6fd0);box-shadow:0 8px 22px rgba(31,122,224,.35);transition:transform .12s}
+.btn:active{transform:scale(.985)}
+.btn svg{width:20px;height:20px}
+.btn.ghost{background:rgba(255,255,255,.05);border:1px solid var(--line-2);box-shadow:none}
+.btn.gold{background:linear-gradient(180deg,#f3c161,#d8961f);color:#2b1a00}
+.btn.danger{background:rgba(255,93,108,.14);border:1px solid rgba(255,93,108,.4);color:#ff8c98;box-shadow:none}
+.btn.sm{padding:10px 14px;font-size:14px;width:auto;border-radius:11px}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.prog{height:9px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden}
+.prog i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#3ba0ff,#1f7ae0);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.prog.green i{background:linear-gradient(90deg,#3ddc84,#1fb36a)}
+.prog.gold i{background:linear-gradient(90deg,#f6cf7a,#d8961f)}
+
+/* tier */
+.tier{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid}
+.tier svg{width:13px;height:13px}
+.tier.common{color:#c9d3df;background:var(--common-bg);border-color:rgba(138,151,168,.45)}
+.tier.uncommon{color:var(--uncommon);background:var(--uncommon-bg);border-color:rgba(61,220,132,.45)}
+.tier.rare{color:#7fb2ff;background:var(--rare-bg);border-color:rgba(59,139,255,.5)}
+.tier.epic{color:#d3a3ff;background:var(--epic-bg);border-color:rgba(180,92,255,.5)}
+.tier.legendary{color:#ffd985;background:var(--legendary-bg);border-color:rgba(242,182,74,.55)}
+.tc-common{color:var(--common)}.tc-uncommon{color:var(--uncommon)}.tc-rare{color:var(--rare)}.tc-epic{color:var(--epic)}.tc-legendary{color:var(--legendary)}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--glass);border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden}
+.stats>div{padding:16px 6px 14px;text-align:center;border-right:1px solid var(--line)}
+.stats>div:last-child{border-right:0}
+.stats svg{width:26px;height:26px;color:#fff;margin-bottom:6px}
+.stats b{display:block;font-size:22px;font-weight:700;color:#fff;line-height:1;white-space:nowrap}
+.stats span{display:block;font-size:12px;color:var(--mist);margin-top:5px;line-height:1.15}
+
+/* fish cards */
+.fcard{position:relative;border-radius:16px;overflow:hidden;background:var(--navy-800);border:1px solid var(--line-2);display:flex;flex-direction:column}
+.fcard .art{aspect-ratio:1/1;position:relative;background:linear-gradient(180deg,#1b4468,#0d2238)}
+.fcard .art svg,.fcard .art img{width:100%;height:100%;object-fit:cover;display:block}
+.fcard .art .chk{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--ok);display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.fcard .art .chk svg{width:14px;height:14px;color:#062}
+.fcard .art .tiertag{position:absolute;top:8px;left:8px}
+.fcard .art .fav{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:rgba(7,17,29,.55);display:grid;place-items:center;color:#fff}
+.fcard .art .fav svg{width:18px;height:18px}
+.fcard .art .fav.on{color:#ff4d5e}
+.fcard .body{padding:10px 11px 11px}
+.fcard .name{font-weight:600;font-size:14px;color:#fff;line-height:1.2}
+.fcard .name.caps{text-transform:uppercase;letter-spacing:.02em;font-size:13.5px}
+.fcard .meta{display:flex;align-items:center;gap:6px 8px;margin-top:6px;color:var(--mist);font-size:11px;flex-wrap:wrap}
+.fcard .tier{font-size:9.5px;padding:3px 7px;letter-spacing:.04em;max-width:100%}
+.fcard .tier svg{display:none}
+.fcard .meta svg{width:12px;height:12px;vertical-align:-2px;margin-right:3px}
+.fcard .arrow{position:absolute;right:10px;bottom:12px;color:#fff;opacity:.8}
+.fcard .arrow svg{width:18px;height:18px}
+.fcard.sil .art{filter:saturate(.5)}
+.fcard.sil .name{color:var(--ice)}
+.fcard.sil .meta{color:var(--fog)}
+
+/* forms */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12.5px;font-weight:600;color:var(--mist)}
+.inp{width:100%;padding:13px 14px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line-2);color:#fff;outline:none}
+.inp:focus{border-color:var(--water-2)}
+select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#fff 50%),linear-gradient(135deg,#fff 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
+textarea.inp{min-height:80px;resize:vertical}
+.seg{display:flex;background:rgba(255,255,255,.06);border:1px solid var(--line-2);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:13px;font-weight:600;color:var(--mist)}
+.seg button.on{background:#1f7ae0;color:#fff}
+.toggle{width:52px;height:30px;border-radius:30px;background:rgba(255,255,255,.14);position:relative;transition:.2s;flex:none}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}
+.toggle.on{background:#2fc06a}
+.toggle.on::after{left:25px}
+.listrow{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.listrow:last-child{border-bottom:0}
+.listrow .ic{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.07);display:grid;place-items:center;color:#fff;flex:none}
+.listrow .ic svg{width:20px;height:20px}
+.listrow .t{font-weight:600;color:#fff;font-size:14.5px}
+.listrow .s{color:var(--mist);font-size:12.5px;margin-top:2px}
+.listrow>svg.chev{width:18px;height:18px;color:var(--mist)}
+
+/* sheet / modal */
+.sheet-bg{position:fixed;inset:0;background:rgba(3,9,16,.6);backdrop-filter:blur(4px);z-index:80;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+.sheet{width:100%;max-width:520px;max-height:88dvh;overflow:auto;background:var(--navy-900);border-radius:22px 22px 0 0;border:1px solid var(--line-2);padding:10px 18px calc(18px + var(--safe-b));animation:up .25s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheet .grab{width:44px;height:5px;border-radius:5px;background:rgba(255,255,255,.25);margin:4px auto 14px}
+.sheet h3{font-family:var(--serif);font-size:20px;color:#fff;margin-bottom:10px}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--safe-b) + 16px);transform:translateX(-50%);background:#eaf3ff;color:#0b1a2b;padding:11px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:90;box-shadow:var(--shadow);animation:up .25s;max-width:90%;text-align:center}
+
+/* home */
+.hero-quote{font-family:var(--script);font-size:22px;color:#fff;text-align:center;opacity:.95;padding:6px 0 4px}
+.hero-quote i{display:block;width:34px;height:2px;background:#fff;margin:4px auto 0;opacity:.7}
+.level-card{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.badge-hex{width:74px;height:82px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.badge-hex svg.shape{position:absolute;inset:0;width:100%;height:100%}
+.badge-hex .n{position:relative;font-family:var(--serif);font-weight:700;font-size:24px;color:#fff;line-height:1}
+.badge-hex .f{position:relative;color:#fff;width:20px;height:20px;display:block}
+.lvl h3{font-size:26px;font-weight:700;color:#fff;line-height:1}
+.lvl .title{font-style:italic;color:var(--mist);margin-top:2px}
+.lvl .xp{display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px;font-size:12.5px;color:var(--ice)}
+.tile{border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line-2);padding:12px;display:flex;align-items:center;gap:12px}
+.tile .ic{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.08);display:grid;place-items:center;color:#fff;flex:none}
+.tile .ic svg{width:22px;height:22px}
+.tile{min-width:0}.tile>div{min-width:0}.tile>svg.chev{width:18px;height:18px;flex:none;color:#fff}.tile b{display:block;color:#fff;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile span{display:block;font-size:11px;color:var(--mist);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+
+/* registry */
+.reg-head{display:grid;grid-template-columns:1fr auto;gap:12px}
+.reg-head .big{font-family:var(--serif);font-size:44px;font-weight:700;color:#fff;line-height:1}
+.reg-head .big small{font-size:26px;opacity:.8}
+.reg-head .lbl{font-size:22px;color:var(--ice);margin-top:-2px}
+.reg-head .chal{width:150px;border:1px solid var(--line-2);border-radius:14px;background:rgba(255,255,255,.05);padding:12px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.reg-head .chal .hexi{width:56px;height:62px}
+.reg-head .chal b{font-size:14.5px;color:#fff;line-height:1.2}
+.reg-head .chal span{font-size:13px;color:var(--ice)}
+.reg-head .chal svg.chev{position:absolute;right:8px;bottom:8px;width:16px;height:16px;color:#fff}
+
+/* verdict */
+.verdict .hero{border-radius:20px;overflow:hidden;position:relative;aspect-ratio:4/3;background:#0d2238;border:1px solid var(--line-2)}
+.verdict .hero>img,.verdict .hero>svg,.verdict .hero>span>img,.verdict .hero>span>svg{width:100%;height:100%;object-fit:cover}
+.verdict .hero .vp{position:absolute;top:12px;right:12px}
+.v-reveal{opacity:0;transform:translateY(14px) scale(.98);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.v-reveal.in{opacity:1;transform:none}
+.v-species{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:stretch;margin-top:14px}
+.v-species h2{font-family:var(--serif);font-size:30px;font-weight:700;color:#fff;line-height:1.05;text-transform:uppercase;letter-spacing:.01em}
+.v-species .sci{font-style:italic;color:var(--mist);margin-top:4px}
+.v-tier{min-width:150px;border-radius:16px;padding:14px 12px;text-align:center;border:1px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;overflow:hidden}
+.v-tier.common{background:linear-gradient(180deg,rgba(138,151,168,.22),rgba(138,151,168,.08));border-color:rgba(138,151,168,.5)}
+.v-tier.uncommon{background:linear-gradient(180deg,rgba(61,220,132,.24),rgba(61,220,132,.06));border-color:rgba(61,220,132,.5)}
+.v-tier.rare{background:linear-gradient(180deg,rgba(59,139,255,.28),rgba(59,139,255,.08));border-color:rgba(59,139,255,.55)}
+.v-tier.epic{background:linear-gradient(180deg,rgba(180,92,255,.32),rgba(180,92,255,.08));border-color:rgba(180,92,255,.6)}
+.v-tier.legendary{background:linear-gradient(180deg,rgba(242,182,74,.34),rgba(242,182,74,.08));border-color:rgba(242,182,74,.65)}
+.v-tier .nm{font-size:19px;font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.v-tier .nm svg{width:22px;height:22px}
+.v-tier .stars{color:var(--gold);font-size:18px;letter-spacing:2px}
+.v-tier .why{font-size:12px;color:var(--ice);opacity:.9}
+.v-tier.legendary::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0 70%,rgba(255,255,255,.35) 80%,transparent 90%);animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.v-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px;background:var(--glass);border:1px solid var(--line-2);border-radius:16px;overflow:hidden}
+.v-stats>div{padding:14px 10px;border-right:1px solid var(--line)}
+.v-stats>div:last-child{border-right:0}
+.v-stats .k{font-size:10.5px;letter-spacing:.12em;color:var(--mist);font-weight:600;display:flex;align-items:center;gap:6px}
+.v-stats .k svg{width:14px;height:14px}
+.v-stats .v{font-size:22px;font-weight:700;color:#fff;margin-top:6px;line-height:1}
+.v-stats .s{font-size:11px;color:var(--mist);margin-top:4px}
+.v-rowb{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:12px}
+.banner{display:inline-flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1px solid;font-weight:700;letter-spacing:.06em;font-size:13px;text-transform:uppercase}
+.banner.gold{background:rgba(242,182,74,.14);border-color:rgba(242,182,74,.5);color:#ffd985}
+.banner.xp{background:rgba(61,220,132,.12);border-color:rgba(61,220,132,.5);color:#5cf0a0;letter-spacing:0;font-size:16px}
+.banner svg{width:20px;height:20px}
+.xpc{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:2px solid currentColor;font-size:9px;font-weight:800}
+.v-reg{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 2px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:14px;color:var(--ice)}
+.v-reg svg{width:20px;height:20px;vertical-align:-4px;margin-right:8px}
+.v-reg a{color:#fff;font-weight:500}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
+.confetti i{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;animation:drop 1.8s ease-in forwards}
+@keyframes drop{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+
+/* camera */
+.cam-wrap{position:fixed;inset:0;background:#000;z-index:60;display:flex;flex-direction:column;max-width:520px;margin:0 auto}
+.cam-wrap video,.cam-wrap canvas.prev,.cam-wrap img.prev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam-top{position:relative;z-index:2;padding:calc(12px + var(--safe-t)) 16px 8px;background:linear-gradient(180deg,rgba(0,0,0,.6),transparent);display:flex;align-items:center;gap:10px}
+.cam-top .brand{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}
+.cam-top .brand svg{width:34px;height:34px}
+.cam-top .brand b{font-family:var(--serif);font-size:20px;color:#fff}
+.cam-top .x{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;color:#fff}
+.cam-top .x svg{width:20px;height:20px}
+.cam-title{position:relative;z-index:2;text-align:center;color:#fff;padding:0 16px}
+.cam-title h1{font-family:var(--serif);font-size:26px}
+.cam-title p{margin:2px 0 0;opacity:.9;font-size:14px}
+.cam-match{position:relative;z-index:2;margin:12px 16px 0;background:rgba(7,17,29,.78);border:1px solid var(--line-2);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(10px)}
+.cam-match .mini{width:64px;height:40px;border-radius:8px;overflow:hidden;background:#123;flex:none}
+.cam-match .mini svg{width:100%;height:100%}
+.cam-match small{display:block;color:var(--mist);font-size:12px}
+.cam-match b{font-size:18px;color:#fff}
+.cam-match b em{font-style:normal;color:var(--water-2);margin-left:8px}
+.cam-match svg.chev{width:18px;height:18px;color:#fff;margin-left:auto}
+.cam-frame{position:absolute;inset:0;z-index:1;pointer-events:none}
+.cam-frame i{position:absolute;width:34px;height:34px;border:3px solid #fff;opacity:.9}
+.cam-frame i:nth-child(1){top:33%;left:8%;border-right:0;border-bottom:0;border-radius:6px 0 0 0}
+.cam-frame i:nth-child(2){top:33%;right:8%;border-left:0;border-bottom:0;border-radius:0 6px 0 0}
+.cam-frame i:nth-child(3){bottom:34%;left:8%;border-right:0;border-top:0;border-radius:0 0 0 6px}
+.cam-frame i:nth-child(4){bottom:34%;right:8%;border-left:0;border-top:0;border-radius:0 0 6px 0}
+.cam-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:31%;z-index:2;background:rgba(7,17,29,.72);border:1px solid var(--line-2);border-radius:999px;padding:9px 16px;display:flex;align-items:center;gap:10px;color:#fff;white-space:nowrap}
+.cam-hint svg{width:20px;height:20px}
+.cam-hint b{display:block;font-size:13.5px}
+.cam-hint span{display:block;font-size:11.5px;color:var(--mist)}
+.cam-bottom{margin-top:auto;position:relative;z-index:2;background:linear-gradient(180deg,transparent,rgba(7,17,29,.92) 30%,#07111d);padding:26px 16px calc(16px + var(--safe-b))}
+.cam-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.cam-opts button{background:rgba(255,255,255,.06);border:1px solid var(--line-2);border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;text-align:left}
+.cam-opts button.ok{border-color:rgba(61,220,132,.5)}
+.cam-opts svg{width:22px;height:22px;color:#fff;flex:none}
+.cam-opts b{display:block;font-size:12.5px;color:#fff}
+.cam-opts span{display:block;font-size:11px;color:var(--mist)}
+.cam-opts button.ok span{color:var(--uncommon)}
+.cam-ctl{display:grid;grid-template-columns:1fr 1fr auto 1fr 1fr;align-items:center;gap:6px}
+.cam-ctl .ib{display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;font-size:12px}
+.cam-ctl .ib .sq{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid var(--line-2);display:grid;place-items:center}
+.cam-ctl .ib svg{width:22px;height:22px}
+.cam-ctl .ib small{color:var(--mist);font-size:11px}
+.shutter{width:78px;height:78px;border-radius:50%;border:5px solid #fff;display:grid;place-items:center;background:transparent;margin:0 8px}
+.shutter i{width:58px;height:58px;border-radius:50%;background:#fff;transition:transform .1s}
+.shutter:active i{transform:scale(.88)}
+.cam-mode{display:flex;justify-content:center;margin-top:14px}
+.cam-mode div{background:rgba(255,255,255,.08);border-radius:999px;padding:4px;display:flex}
+.cam-mode span{padding:7px 22px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--mist)}
+.cam-mode span.on{background:rgba(31,122,224,.35);color:#8ec6ff}
+.review-photo{border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:#0d2238;border:1px solid var(--line-2)}
+.review-photo img{width:100%;height:100%;object-fit:cover}
+.spinner{width:22px;height:22px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin .8s linear infinite;display:inline-block}
+
+/* feed */
+.post{border-radius:18px;background:var(--glass);border:1px solid var(--line-2);overflow:hidden}
+.post .ph{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.post .ph .av{width:42px;height:42px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-weight:700;color:#fff;overflow:hidden}
+.post .ph .av img{width:100%;height:100%;object-fit:cover}
+.post .ph b{display:block;color:#fff;font-size:15px}
+.post .ph small{color:var(--mist);font-size:12px}
+.post .ph .follow{padding:7px 14px;border-radius:999px;border:1px solid var(--water-2);color:#8ec6ff;font-weight:600;font-size:13px}
+.post .ph .follow.on{background:#1f7ae0;color:#fff;border-color:transparent}
+.post .pic{position:relative;aspect-ratio:4/3;margin:0 10px;border-radius:14px;overflow:hidden;background:#0d2238}
+.post .pic>img,.post .pic>svg,.post .pic>span>img,.post .pic>span>svg{width:100%;height:100%;object-fit:cover}
+.post .pic .tiertag{position:absolute;top:10px;right:10px}
+.post .pic .cap{position:absolute;left:12px;bottom:12px;color:#fff}
+.post .pic .cap b{display:block;font-size:20px;letter-spacing:.02em;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.post .pic .cap i{font-size:13px;opacity:.9;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.post .pic .mm{position:absolute;right:10px;bottom:10px;display:flex;gap:6px}
+.post .pic .mm span{background:rgba(7,17,29,.72);border:1px solid var(--line-2);padding:6px 10px;border-radius:10px;font-weight:600;font-size:13px;color:#fff}
+.post .txt{padding:12px 14px 4px;color:#fff;font-size:14px}
+.post .txt .h{color:#8ec6ff}
+.post .acts{display:flex;align-items:center;gap:20px;padding:10px 14px 12px;border-top:1px solid var(--line);margin-top:8px;color:#fff;font-size:14px}
+.post .acts button{display:inline-flex;align-items:center;gap:7px;color:#fff}
+.post .acts button svg{width:20px;height:20px}
+.post .acts button.liked svg{color:#ff4d5e;fill:#ff4d5e}
+.post .acts .share{margin-left:auto}
+
+/* map */
+#map{height:52vh;min-height:320px;border-radius:18px;border:1px solid var(--line-2);overflow:hidden;background:#0d2238;position:relative;z-index:1}
+.leaflet-container{background:#0d2238;font-family:var(--sans)}
+.leaflet-tile{filter:brightness(.78) saturate(.85) contrast(1.05)}
+.fpin{width:36px;height:36px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#0b1a2b;border:2px solid #fff;display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.fpin svg{width:18px;height:18px;transform:rotate(45deg);color:#fff}
+.fpin.epic{border-color:var(--epic)}.fpin.legendary{border-color:var(--legendary)}.fpin.rare{border-color:var(--rare)}.fpin.uncommon{border-color:var(--uncommon)}
+.leaflet-popup-content-wrapper{background:var(--navy-900);color:#fff;border-radius:12px;border:1px solid var(--line-2)}
+.leaflet-popup-tip{background:var(--navy-900)}
+.leaflet-popup-content{margin:10px 12px;font-size:13px}
+.catchrow{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--glass);border:1px solid var(--line-2);border-radius:16px;padding:10px;position:relative}
+.catchrow .im{border-radius:12px;overflow:hidden;aspect-ratio:1/1;background:#0d2238}
+.catchrow .im img,.catchrow .im svg{width:100%;height:100%;object-fit:cover}
+.catchrow .w{font-weight:600;color:#fff;font-size:15px;display:flex;justify-content:space-between;gap:6px}
+.catchrow .w small{font-weight:400;color:var(--mist);font-size:12px}
+.catchrow .loc{color:var(--mist);font-size:12px;margin-top:2px}
+.catchrow .sp{color:#fff;font-weight:600;font-size:15px;margin-top:5px}
+.catchrow .mm{display:flex;align-items:center;gap:10px;margin-top:6px;font-size:13px;color:var(--ice);flex-wrap:wrap}
+
+/* achievements */
+.ach{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ach>div{background:var(--glass);border:1px solid var(--line-2);border-radius:16px;padding:12px 8px;text-align:center;position:relative}
+.ach .shield{width:70px;height:78px;margin:0 auto 8px}
+.ach b{display:block;font-size:13px;color:#fff;line-height:1.2}
+.ach span{display:block;font-size:11px;color:var(--mist);margin-top:3px;line-height:1.2}
+.ach .chk{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--ok);display:grid;place-items:center}
+.ach .chk svg{width:13px;height:13px;color:#062}
+.ach.locked>div,.ach>div.locked{opacity:.55;filter:grayscale(.6)}
+.ach>div.locked .shield{filter:grayscale(1) brightness(.6)}
+
+/* standing */
+.standing{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.standing .medal{display:flex;align-items:center;gap:10px}
+.standing .medal svg{width:64px;height:76px;flex:none}
+.standing .pct{font-family:var(--serif);font-size:34px;font-weight:700;color:#fff;line-height:1}
+.standing .pct small{display:block;font-family:var(--sans);font-size:15px;font-weight:600;margin-top:2px}
+.lb{border:1px solid var(--line-2);border-radius:14px;background:rgba(255,255,255,.04);overflow:hidden}
+.lb .seg{margin:8px;padding:3px}
+.lb .seg button{padding:7px 4px;font-size:12.5px}
+.lb .r{display:grid;grid-template-columns:22px 28px 1fr auto;align-items:center;gap:8px;padding:7px 10px;font-size:12.5px;color:#fff}
+.lb .r .av{width:26px;height:26px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-size:10px;font-weight:700}
+.lb .r.me{background:#1f6fd0;font-weight:700}
+.lb .r span:last-child{color:var(--ice);font-size:12px}
+
+/* onboarding */
+.onb{min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 22px calc(22px + var(--safe-b))}
+.onb h1{font-family:var(--serif);font-size:38px;color:#fff;line-height:1.05}
+.onb p{color:var(--ice);opacity:.9;font-size:16px;margin:10px 0 0}
+.onb .logo{width:96px;height:96px;margin-bottom:auto}
+.dots{display:flex;gap:6px;margin:18px 0}
+.dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}
+.dots i.on{background:#fff;width:22px;border-radius:8px}
+.loop{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px}
+.loop span{padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);font-size:12.5px;font-weight:600;color:#fff;background:rgba(255,255,255,.06)}
+.loop svg{width:14px;height:14px;color:var(--mist)}
+
+.split{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kv>div{background:rgba(255,255,255,.05);border:1px solid var(--line-2);border-radius:13px;padding:11px 12px}
+.kv .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);font-weight:600}
+.kv .v{font-size:17px;font-weight:700;color:#fff;margin-top:4px}
+.verify{display:flex;flex-direction:column;gap:6px}
+.verify div{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ice)}
+.verify svg{width:16px;height:16px;color:var(--ok)}
+.verify .no svg{color:var(--fog)}
+.verify .no{color:var(--fog)}
+.shot-photo{border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:#0d2238;border:1px solid var(--line-2);position:relative}
+.shot-photo>img,.shot-photo>svg,.shot-photo>span>img,.shot-photo>span>svg{width:100%;height:100%;object-fit:cover}
+.shot-photo .tiertag{position:absolute;top:12px;left:12px}
+.shot-photo .fav{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;background:rgba(7,17,29,.6);display:grid;place-items:center;color:#fff}
+.shot-photo .fav svg{width:20px;height:20px}
+.shot-photo .fav.on{color:#ff4d5e}
+.shot-photo .fav.on svg{fill:#ff4d5e}
+.hist{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
+.hist::-webkit-scrollbar{display:none}
+.hist .h{flex:none;width:110px;border-radius:12px;overflow:hidden;background:var(--navy-800);border:1px solid var(--line-2)}
+.hist .h .im{aspect-ratio:1/1;background:#0d2238}
+.hist .h .im img,.hist .h .im svg{width:100%;height:100%;object-fit:cover}
+.hist .h div.t{padding:7px 8px;font-size:12px;color:#fff}
+.hist .h div.t small{display:block;color:var(--mist);font-size:11px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="scene" aria-hidden="true">
+  <div class="sky"></div>
+  <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMin slice">
+    <defs>
+      <linearGradient id="mtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9f1f8"/><stop offset=".25" stop-color="#9fb8d0"/><stop offset="1" stop-color="#2f4f70"/></linearGradient>
+      <linearGradient id="mtn2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d9bbb"/><stop offset="1" stop-color="#1e3a58"/></linearGradient>
+      <linearGradient id="trees" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b3a3d"/><stop offset="1" stop-color="#0d2131"/></linearGradient>
+      <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d5f8a"/><stop offset="1" stop-color="#0b1a2b"/></linearGradient>
+    </defs>
+    <path d="M0 250 L120 120 L190 170 L260 90 L330 160 L400 70 L470 150 L540 100 L620 180 L700 110 L780 190 L860 130 L900 170 L900 420 L0 420Z" fill="url(#mtn)"/>
+    <path d="M120 120 L150 150 L170 135 L190 170 L160 160 Z M400 70 L430 105 L455 95 L470 150 L420 120 Z M700 110 L730 150 L750 140 L780 190 L720 150 Z" fill="#fff" opacity=".85"/>
+    <path d="M0 290 L80 210 L160 260 L240 200 L320 270 L420 190 L520 265 L610 215 L700 275 L800 220 L900 270 L900 420 L0 420Z" fill="url(#mtn2)"/>
+    <g fill="url(#trees)">
+      <path d="M0 420 L0 330 L20 300 L40 330 L60 290 L80 335 L100 300 L120 340 L140 305 L160 340 L180 300 L200 345 L220 310 L240 345 L260 300 L280 340 L300 310 L320 345 L340 305 L360 345 L380 300 L400 340 L420 310 L440 345 L460 300 L480 340 L500 305 L520 345 L540 300 L560 340 L580 310 L600 345 L620 300 L640 340 L660 305 L680 345 L700 300 L720 340 L740 310 L760 345 L780 300 L800 340 L820 305 L840 345 L860 300 L880 340 L900 310 L900 420Z"/>
+    </g>
+    <rect x="0" y="345" width="900" height="80" fill="url(#lake)"/>
+    <g stroke="#9fd0ff" stroke-opacity=".25" stroke-width="1.5"><path d="M120 362h60M300 375h90M520 358h70M700 380h60M400 395h50"/></g>
+  </svg>
+  <div class="veil"></div>
+</div>
+
+<div id="app">
+  <header class="top" id="topbar">
+    <button class="brand" data-go="home" aria-label="Fish Hunt home">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M6 44 L20 18 L30 32 L38 14 L58 44 Z" fill="#dfe9f3"/>
+        <path d="M20 18 L24 26 L28 22 L30 32 L23 28Z M38 14 L42 24 L46 20 L50 30 L43 26Z" fill="#fff"/>
+        <path d="M6 44 L20 18 L30 32 L38 14 L58 44 Z" fill="none" stroke="#3a5f83" stroke-width="2"/>
+        <path d="M4 52 L10 40 L16 52Z M14 54 L21 38 L28 54Z M26 54 L32 42 L38 54Z M40 54 L47 38 L54 54Z M52 52 L57 42 L62 52Z" fill="#1f4b62"/>
+        <path d="M6 56h52" stroke="#1f4b62" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span class="wm"><b>Fish Hunt</b><small>CATCH · EXPLORE · COLLECT</small></span>
+    </button>
+    <button class="ico" data-go="inbox" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot" id="inboxDot" hidden></i></button>
+    <button class="avatar" data-go="profile" aria-label="Profile" id="avatarBtn">D</button>
+  </header>
+  <main id="view" aria-live="polite"></main>
+  <nav class="bottom" id="nav">
+    <button data-nav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
+    <button data-nav="explore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5a2 2 0 0 1 2-2h4a4 4 0 0 1 4 4 4 4 0 0 1 4-4h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4a4 4 0 0 0-4 2 4 4 0 0 0-4-2H4a2 2 0 0 1-2-2zM12 7v14"/></svg><span>Explore</span></button>
+    <button data-nav="capture" class="rec" aria-label="Record a catch"><span class="cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span>Record</span></button>
+    <button data-nav="trophy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 5M17 6h3a3 3 0 0 1-3 5"/></svg><span>Trophy Room</span></button>
+    <button data-nav="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>More</span></button>
+  </nav>
+</div>
+<div id="overlay"></div>
+<input type="file" id="fileGallery" accept="image/*" hidden>
+<input type="file" id="fileCamera" accept="image/*" capture="environment" hidden>
+<input type="file" id="fileImport" accept="application/json" hidden>
+<script>
+/* ===================== Fish Hunt — data ===================== */
+'use strict';
+const I = { // inline icons (24px stroke)
+  fish:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-6 10-6c4 0 7 2.5 9 6-2 3.5-5 6-9 6-6 0-10-6-10-6z"/><path d="M2 12l-1-5 4 3M2 12l-1 5 4-3"/><circle cx="16" cy="11" r="1" fill="currentColor"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5a2 2 0 0 1 2-2h4a4 4 0 0 1 4 4 4 4 0 0 1 4-4h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4a4 4 0 0 0-4 2 4 4 0 0 0-4-2H4a2 2 0 0 1-2-2zM12 7v14"/></svg>',
+  ruler:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="20" rx="1.5"/><path d="M9 6h3M9 10h2M9 14h3M9 18h2"/></svg>',
+  scale:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9h12l1.5 11H4.5zM9 9V7a3 3 0 0 1 6 0v2"/></svg>',
+  trophy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 5M17 6h3a3 3 0 0 1-3 5"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.2 5 6.8 5c2 0 3.5 1.1 5.2 3 1.7-1.9 3.2-3 5.2-3 3.6 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21z"/></svg>',
+  cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  gem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 3h10l4 6-9 12L3 9zM3 9h18M9 3l3 6 3-6M12 9l-4 12M12 9l4 12"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.2 1.3-6.6L2.5 9.4l6.6-.8z"/></svg>',
+  crown:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-9 6-15 16-16-1 10-7 16-16 16zM4 20l9-9"/></svg>',
+  circle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg>',
+  flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h12l-2 4 2 4H5"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4.5-6.2"/></svg>',
+  share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg>',
+  comment:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16zM13 7l4 4"/></svg>',
+  image:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 9"/></svg>',
+  bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+  target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+  scan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><circle cx="12" cy="12" r="3.5"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  tree:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2 6 11h3l-4 6h5v5h4v-5h5l-4-6h3z"/></svg>',
+  mtn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 9 8l3 5 2-3 7 10z"/><path d="M9 8l1.5 2.5L12 9"/></svg>',
+  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+  settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+  save:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15H5zM8 3v5h7V3M8 21v-7h8v7"/></svg>',
+  wave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 8c3 0 3-2 5-2s2 2 5 2 3-2 5-2 2 2 5 2M2 13c3 0 3-2 5-2s2 2 5 2 3-2 5-2 2 2 5 2M2 18c3 0 3-2 5-2s2 2 5 2 3-2 5-2 2 2 5 2"/></svg>',
+  sort:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M4 12h7M4 18h4M17 4v16M14 17l3 3 3-3"/></svg>',
+  nav:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3 3 10.5l8 2.5 2.5 8z"/></svg>',
+  release:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3 0 3-2 6-2s3 2 6 2 3-2 6-2M8 11c2-4 6-6 12-5-1 4-4 6-8 6-2 0-3-.5-4-1z"/></svg>',
+  medal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="5"/><path d="M8.5 11 6 3h4l2 5 2-5h4l-2.5 8"/></svg>'
+};
+const TIERS = {
+  common:{n:'Common',ico:I.circle,c:'var(--common)',stars:1,why:'A solid catch.',xp:0},
+  uncommon:{n:'Uncommon',ico:I.leaf,c:'var(--uncommon)',stars:2,why:'Nice one!',xp:100},
+  rare:{n:'Rare',ico:I.star,c:'var(--rare)',stars:3,why:'A standout catch.',xp:500},
+  epic:{n:'Epic',ico:I.gem,c:'var(--epic)',stars:4,why:'A remarkable catch!',xp:850},
+  legendary:{n:'Legendary',ico:I.crown,c:'var(--legendary)',stars:5,why:'One for the ages.',xp:1500}
+};
+const TIER_ORDER = ['common','uncommon','rare','epic','legendary'];
+const XP = { catch:50, newSpecies:250, pb:300, challenge:5000 };
+const LEVEL_TITLES = [[1,'Greenhorn'],[3,'Weekend Angler'],[6,'Regular'],[9,'Seasoned Angler'],[12,'Dedicated Angler'],[16,'Veteran'],[20,'Expert Angler'],[25,'Master Angler'],[30,'Legend of the Water']];
+const PRIVACY = {private:'Private',region:'Region only',waterbody:'Waterbody',exact:'Exact location'};
+
+// group: salmon trout char bass panfish walleye pike catfish carp sturgeon other rockfish flatfish bottom pelagic shark
+// water: fresh | salt | anadromous ; r = base rarity 1-5 ; typ/trophy in inches
+// art: shape, colors [back, side, belly], spots, stripe
+const SPECIES = [
+ {id:'chinook',n:'Chinook Salmon',sci:'Oncorhynchus tshawytscha',g:'salmon',w:'anadromous',r:3,typ:30,tro:45,art:{s:'salmon',c:['#2e4b5e','#9fb3bf','#e6edf1'],sp:'dark',st:null},tags:['game']},
+ {id:'coho',n:'Coho Salmon',sci:'Oncorhynchus kisutch',g:'salmon',w:'anadromous',r:2,typ:24,tro:32,art:{s:'salmon',c:['#2f5568','#b7c7d1','#f0f4f6'],sp:'few',st:'#c65b7c'},tags:['game']},
+ {id:'sockeye',n:'Sockeye Salmon',sci:'Oncorhynchus nerka',g:'salmon',w:'anadromous',r:3,typ:22,tro:28,art:{s:'salmon',c:['#4d7a2a','#c8302f','#d94d3a'],sp:'none',st:null},tags:['game']},
+ {id:'pink',n:'Pink Salmon',sci:'Oncorhynchus gorbuscha',g:'salmon',w:'anadromous',r:1,typ:20,tro:26,art:{s:'salmon',c:['#3f5a6a','#c2ced6','#f2f5f7'],sp:'dark',st:null},tags:['game']},
+ {id:'chum',n:'Chum Salmon',sci:'Oncorhynchus keta',g:'salmon',w:'anadromous',r:1,typ:26,tro:34,art:{s:'salmon',c:['#3a5b4a','#9db2a8','#e4ece7'],sp:'bars',st:'#7a4c7c'},tags:['game']},
+ {id:'steelhead',n:'Steelhead',sci:'Oncorhynchus mykiss',g:'trout',w:'anadromous',r:3,typ:26,tro:34,art:{s:'salmon',c:['#3c5f74','#c5d3db','#f4f7f9'],sp:'few',st:'#d67f9a'},tags:['game']},
+ {id:'rainbow',n:'Rainbow Trout',sci:'Oncorhynchus mykiss',g:'trout',w:'fresh',r:1,typ:13,tro:22,art:{s:'trout',c:['#4a6e5a','#b9c7b0','#eef2ea'],sp:'dark',st:'#e07a9a'},tags:['game']},
+ {id:'cutthroat',n:'Coastal Cutthroat Trout',sci:'Oncorhynchus clarkii clarkii',g:'trout',w:'fresh',r:2,typ:12,tro:18,art:{s:'trout',c:['#5a6a3a','#c9b87a','#f1e9c8'],sp:'dark',st:'#e0a03a'},tags:['native']},
+ {id:'westslope',n:'Westslope Cutthroat',sci:'Oncorhynchus clarkii lewisi',g:'trout',w:'fresh',r:2,typ:12,tro:18,art:{s:'trout',c:['#4f6b3d','#d1b56a','#f3e7b5'],sp:'dark',st:'#e59a2f'},tags:['native']},
+ {id:'brown',n:'Brown Trout',sci:'Salmo trutta',g:'trout',w:'fresh',r:2,typ:14,tro:24,art:{s:'trout',c:['#5c4a24','#c9a34d','#f1dc9a'],sp:'red',st:null},tags:[]},
+ {id:'brook',n:'Brook Trout',sci:'Salvelinus fontinalis',g:'char',w:'fresh',r:1,typ:9,tro:15,art:{s:'trout',c:['#2f4a3a','#7a8f5a','#e8743a'],sp:'light',st:null},tags:[]},
+ {id:'bull',n:'Bull Trout',sci:'Salvelinus confluentus',g:'char',w:'fresh',r:4,typ:18,tro:28,art:{s:'trout',c:['#3f5a4d','#8fa08c','#f2e6c8'],sp:'light',st:null},tags:['native','protected']},
+ {id:'lake',n:'Lake Trout',sci:'Salvelinus namaycush',g:'char',w:'fresh',r:3,typ:22,tro:34,art:{s:'trout',c:['#3d4d55','#8e9aa0','#dfe6e8'],sp:'light',st:null},tags:[]},
+ {id:'dolly',n:'Dolly Varden',sci:'Salvelinus malma',g:'char',w:'anadromous',r:3,typ:14,tro:22,art:{s:'trout',c:['#3b5a55','#93a89a','#f1dcc0'],sp:'light',st:null},tags:['native']},
+ {id:'kokanee',n:'Kokanee',sci:'Oncorhynchus nerka',g:'salmon',w:'fresh',r:1,typ:12,tro:18,art:{s:'salmon',c:['#3d6a8a','#c9d6df','#f5f8fa'],sp:'none',st:null},tags:[]},
+ {id:'golden',n:'Golden Trout',sci:'Oncorhynchus aguabonita',g:'trout',w:'fresh',r:4,typ:8,tro:13,art:{s:'trout',c:['#7a6a2a','#f0c14a','#f7e08a'],sp:'dark',st:'#e0533a'},tags:[]},
+ {id:'tiger',n:'Tiger Trout',sci:'Salmo trutta × Salvelinus fontinalis',g:'trout',w:'fresh',r:3,typ:14,tro:22,art:{s:'trout',c:['#4a4a2a','#b8a45a','#eddc9a'],sp:'verm',st:null},tags:[]},
+ {id:'whitefish',n:'Mountain Whitefish',sci:'Prosopium williamsoni',g:'other',w:'fresh',r:1,typ:12,tro:18,art:{s:'salmon',c:['#5d6b70','#c4ccce','#eff2f3'],sp:'none',st:null},tags:['native']},
+ {id:'grayling',n:'Arctic Grayling',sci:'Thymallus arcticus',g:'other',w:'fresh',r:4,typ:12,tro:17,art:{s:'grayling',c:['#3a4b6e','#8a9bc4','#dfe5f2'],sp:'dark',st:null},tags:[]},
+ {id:'largemouth',n:'Largemouth Bass',sci:'Micropterus salmoides',g:'bass',w:'fresh',r:1,typ:14,tro:22,art:{s:'bass',c:['#3f5e2a','#8fae5a','#e7edc9'],sp:'none',st:'#2a3a1a'},tags:['game']},
+ {id:'smallmouth',n:'Smallmouth Bass',sci:'Micropterus dolomieu',g:'bass',w:'fresh',r:1,typ:13,tro:20,art:{s:'bass',c:['#5a4a1f','#a98b3f','#e8d8a0'],sp:'bars',st:null},tags:['game']},
+ {id:'walleye',n:'Walleye',sci:'Sander vitreus',g:'walleye',w:'fresh',r:2,typ:18,tro:28,art:{s:'pike',c:['#5a5a2a','#c9b25a','#f0e6b8'],sp:'none',st:null},tags:['game']},
+ {id:'perch',n:'Yellow Perch',sci:'Perca flavescens',g:'panfish',w:'fresh',r:1,typ:8,tro:13,art:{s:'panfish',c:['#4d5a2a','#e2b83a','#f5e6a0'],sp:'bars',st:null},tags:[]},
+ {id:'bcrappie',n:'Black Crappie',sci:'Pomoxis nigromaculatus',g:'panfish',w:'fresh',r:1,typ:9,tro:14,art:{s:'panfish',c:['#3b4a3a','#9aa88a','#e6ecdc'],sp:'dark',st:null},tags:[]},
+ {id:'wcrappie',n:'White Crappie',sci:'Pomoxis annularis',g:'panfish',w:'fresh',r:2,typ:9,tro:14,art:{s:'panfish',c:['#4c5a5a','#b7c4c0','#eef2f0'],sp:'bars',st:null},tags:[]},
+ {id:'bluegill',n:'Bluegill',sci:'Lepomis macrochirus',g:'panfish',w:'fresh',r:1,typ:6,tro:10,art:{s:'panfish',c:['#2f4a5a','#7fa0a8','#e9c46a'],sp:'bars',st:null},tags:[]},
+ {id:'pumpkinseed',n:'Pumpkinseed',sci:'Lepomis gibbosus',g:'panfish',w:'fresh',r:1,typ:5,tro:9,art:{s:'panfish',c:['#3a5a3a','#c9a13a','#f2d66a'],sp:'light',st:null},tags:[]},
+ {id:'rockbass',n:'Rock Bass',sci:'Ambloplites rupestris',g:'panfish',w:'fresh',r:2,typ:7,tro:11,art:{s:'panfish',c:['#4a3a20','#a58a4a','#dcc89a'],sp:'dark',st:null},tags:[]},
+ {id:'pike',n:'Northern Pike',sci:'Esox lucius',g:'pike',w:'fresh',r:2,typ:26,tro:40,art:{s:'pike',c:['#2f4a2a','#6f8f4a','#d9e2b0'],sp:'light',st:null},tags:['game']},
+ {id:'tigermuskie',n:'Tiger Muskie',sci:'Esox lucius × masquinongy',g:'pike',w:'fresh',r:4,typ:36,tro:50,art:{s:'pike',c:['#3a4a2a','#9aa86a','#e8ecc9'],sp:'bars',st:null},tags:['game']},
+ {id:'channelcat',n:'Channel Catfish',sci:'Ictalurus punctatus',g:'catfish',w:'fresh',r:1,typ:18,tro:30,art:{s:'catfish',c:['#3f4a55','#8a95a0','#e3e8ec'],sp:'few',st:null},tags:[]},
+ {id:'bullhead',n:'Brown Bullhead',sci:'Ameiurus nebulosus',g:'catfish',w:'fresh',r:1,typ:10,tro:15,art:{s:'catfish',c:['#3a3020','#7a6a4a','#d6c9a8'],sp:'none',st:null},tags:[]},
+ {id:'carp',n:'Common Carp',sci:'Cyprinus carpio',g:'carp',w:'fresh',r:1,typ:22,tro:34,art:{s:'carp',c:['#5a4a1a','#c99a3a','#f0d98a'],sp:'scale',st:null},tags:[]},
+ {id:'wsturgeon',n:'White Sturgeon',sci:'Acipenser transmontanus',g:'sturgeon',w:'anadromous',r:5,typ:50,tro:90,art:{s:'sturgeon',c:['#4a5560','#9aa5ad','#e6eaee'],sp:'scute',st:null},tags:['trophy','native']},
+ {id:'burbot',n:'Burbot',sci:'Lota lota',g:'other',w:'fresh',r:3,typ:20,tro:30,art:{s:'eel',c:['#3a3a20','#8a7a4a','#d9cfa0'],sp:'verm',st:null},tags:['native']},
+ {id:'pikeminnow',n:'Northern Pikeminnow',sci:'Ptychocheilus oregonensis',g:'other',w:'fresh',r:1,typ:12,tro:20,art:{s:'pike',c:['#4a5a4a','#a0aa90','#e6ead8'],sp:'none',st:null},tags:['native']},
+ {id:'sucker',n:'Largescale Sucker',sci:'Catostomus macrocheilus',g:'other',w:'fresh',r:1,typ:14,tro:20,art:{s:'carp',c:['#4a4a3a','#9a9a7a','#e2e2cf'],sp:'scale',st:null},tags:['native']},
+ {id:'shad',n:'American Shad',sci:'Alosa sapidissima',g:'other',w:'anadromous',r:2,typ:16,tro:22,art:{s:'panfish',c:['#3d5a6a','#b8ccd6','#f2f6f8'],sp:'few',st:null},tags:[]},
+ {id:'lamprey',n:'Pacific Lamprey',sci:'Entosphenus tridentatus',g:'other',w:'anadromous',r:4,typ:20,tro:28,art:{s:'eel',c:['#2a3a4a','#5a6a7a','#9aa8b8'],sp:'none',st:null},tags:['native']},
+ {id:'searun',n:'Sea-Run Cutthroat',sci:'Oncorhynchus clarkii',g:'trout',w:'anadromous',r:3,typ:13,tro:20,art:{s:'trout',c:['#3f5a5a','#b9c8c0','#f1f5f0'],sp:'dark',st:'#e0a03a'},tags:['native']},
+ {id:'lingcod',n:'Lingcod',sci:'Ophiodon elongatus',g:'bottom',w:'salt',r:2,typ:26,tro:45,art:{s:'pike',c:['#3a4a3a','#7a8a6a','#cfd8c0'],sp:'verm',st:null},tags:['game']},
+ {id:'halibut',n:'Pacific Halibut',sci:'Hippoglossus stenolepis',g:'flatfish',w:'salt',r:3,typ:36,tro:70,art:{s:'flat',c:['#4a4a3a','#8a8a6a','#e8e8d8'],sp:'few',st:null},tags:['trophy','game']},
+ {id:'blackrock',n:'Black Rockfish',sci:'Sebastes melanops',g:'rockfish',w:'salt',r:1,typ:15,tro:22,art:{s:'rockfish',c:['#2a2f3a','#5a6270','#b8bfc8'],sp:'few',st:null},tags:[]},
+ {id:'copperrock',n:'Copper Rockfish',sci:'Sebastes caurinus',g:'rockfish',w:'salt',r:2,typ:14,tro:20,art:{s:'rockfish',c:['#5a3a2a','#b87a4a','#f0d8b8'],sp:'bars',st:null},tags:[]},
+ {id:'yelloweye',n:'Yelloweye Rockfish',sci:'Sebastes ruberrimus',g:'rockfish',w:'salt',r:4,typ:22,tro:32,art:{s:'rockfish',c:['#8a2a1a','#e0602a','#f7b06a'],sp:'none',st:null},tags:['protected']},
+ {id:'canary',n:'Canary Rockfish',sci:'Sebastes pinniger',g:'rockfish',w:'salt',r:3,typ:16,tro:24,art:{s:'rockfish',c:['#a04a1a','#f08a3a','#fbd08a'],sp:'none',st:null},tags:[]},
+ {id:'quillback',n:'Quillback Rockfish',sci:'Sebastes maliger',g:'rockfish',w:'salt',r:2,typ:13,tro:19,art:{s:'rockfish',c:['#3a2a1a','#8a6a3a','#e8c880'],sp:'bars',st:null},tags:[]},
+ {id:'vermilion',n:'Vermilion Rockfish',sci:'Sebastes miniatus',g:'rockfish',w:'salt',r:3,typ:18,tro:26,art:{s:'rockfish',c:['#8a1a1a','#d83a3a','#f5a0a0'],sp:'none',st:null},tags:[]},
+ {id:'greenling',n:'Kelp Greenling',sci:'Hexagrammos decagrammus',g:'bottom',w:'salt',r:1,typ:12,tro:18,art:{s:'trout',c:['#3a4a2a','#7a8a4a','#d8e0b0'],sp:'light',st:null},tags:[]},
+ {id:'cabezon',n:'Cabezon',sci:'Scorpaenichthys marmoratus',g:'bottom',w:'salt',r:2,typ:18,tro:28,art:{s:'rockfish',c:['#3a3a2a','#6a6a4a','#c0c0a0'],sp:'verm',st:null},tags:[]},
+ {id:'pcod',n:'Pacific Cod',sci:'Gadus macrocephalus',g:'bottom',w:'salt',r:2,typ:24,tro:36,art:{s:'catfish',c:['#4a4a3a','#9a9a7a','#e8e8d8'],sp:'few',st:null},tags:[]},
+ {id:'albacore',n:'Albacore Tuna',sci:'Thunnus alalunga',g:'pelagic',w:'salt',r:3,typ:28,tro:40,art:{s:'tuna',c:['#1a2a4a','#5a7aa0','#f0f4f8'],sp:'none',st:null},tags:['game']},
+ {id:'starry',n:'Starry Flounder',sci:'Platichthys stellatus',g:'flatfish',w:'salt',r:1,typ:14,tro:22,art:{s:'flat',c:['#4a4030','#8a7a5a','#e8dcc0'],sp:'bars',st:null},tags:[]},
+ {id:'petrale',n:'Petrale Sole',sci:'Eopsetta jordani',g:'flatfish',w:'salt',r:2,typ:15,tro:22,art:{s:'flat',c:['#5a4a3a','#a08a6a','#eee4d0'],sp:'none',st:null},tags:[]},
+ {id:'surfperch',n:'Redtail Surfperch',sci:'Amphistichus rhodoterus',g:'panfish',w:'salt',r:1,typ:10,tro:15,art:{s:'panfish',c:['#5a6a7a','#c8d0d8','#f4f6f8'],sp:'bars',st:'#d06a5a'},tags:[]},
+ {id:'seaperch',n:'Striped Seaperch',sci:'Embiotoca lateralis',g:'panfish',w:'salt',r:1,typ:9,tro:13,art:{s:'panfish',c:['#3a5a6a','#d08a4a','#f0c8a0'],sp:'none',st:'#3a80b0'},tags:[]},
+ {id:'sanddab',n:'Pacific Sanddab',sci:'Citharichthys sordidus',g:'flatfish',w:'salt',r:1,typ:8,tro:12,art:{s:'flat',c:['#5a5a4a','#a0a08a','#e8e8d8'],sp:'few',st:null},tags:[]},
+ {id:'herring',n:'Pacific Herring',sci:'Clupea pallasii',g:'pelagic',w:'salt',r:1,typ:8,tro:12,art:{s:'salmon',c:['#2a4a6a','#b0c8dc','#f4f8fb'],sp:'none',st:null},tags:[]},
+ {id:'dogfish',n:'Spiny Dogfish',sci:'Squalus suckleyi',g:'shark',w:'salt',r:1,typ:30,tro:42,art:{s:'shark',c:['#4a5a6a','#8a9aa8','#e8ecf0'],sp:'few',st:null},tags:[]},
+ {id:'sixgill',n:'Sixgill Shark',sci:'Hexanchus griseus',g:'shark',w:'salt',r:5,typ:100,tro:180,art:{s:'shark',c:['#3a3a3a','#6a6a6a','#c8c8c8'],sp:'none',st:null},tags:['trophy','protected']},
+ {id:'salmonshark',n:'Salmon Shark',sci:'Lamna ditropis',g:'shark',w:'salt',r:5,typ:70,tro:100,art:{s:'shark',c:['#2a3a4a','#5a6a7a','#eef2f6'],sp:'none',st:null},tags:['trophy']},
+ {id:'mackerel',n:'Pacific Mackerel',sci:'Scomber japonicus',g:'pelagic',w:'salt',r:2,typ:12,tro:18,art:{s:'tuna',c:['#2a4a5a','#6aa0b0','#e8f4f8'],sp:'verm',st:null},tags:[]},
+ {id:'wolfeel',n:'Wolf Eel',sci:'Anarrhichthys ocellatus',g:'other',w:'salt',r:4,typ:48,tro:70,art:{s:'eel',c:['#3a3a3a','#7a7a7a','#c8c8c8'],sp:'dark',st:null},tags:[]},
+ {id:'gsturgeon',n:'Green Sturgeon',sci:'Acipenser medirostris',g:'sturgeon',w:'anadromous',r:5,typ:50,tro:70,art:{s:'sturgeon',c:['#3a4a3a','#6a7a5a','#c8d0b8'],sp:'scute',st:null},tags:['trophy','protected']},
+ {id:'striper',n:'Striped Bass',sci:'Morone saxatilis',g:'bass',w:'anadromous',r:3,typ:24,tro:36,art:{s:'bass',c:['#3a4a5a','#b8c4cc','#f4f6f8'],sp:'stripes',st:null},tags:['game']},
+ {id:'tench',n:'Tench',sci:'Tinca tinca',g:'carp',w:'fresh',r:3,typ:14,tro:20,art:{s:'carp',c:['#2a3a1a','#5a6a2a','#b8c080'],sp:'none',st:null},tags:[]},
+ {id:'grasscarp',n:'Grass Carp',sci:'Ctenopharyngodon idella',g:'carp',w:'fresh',r:3,typ:30,tro:40,art:{s:'carp',c:['#4a5a3a','#9aa070','#e0e4c8'],sp:'scale',st:null},tags:[]},
+ {id:'eulachon',n:'Eulachon (Smelt)',sci:'Thaleichthys pacificus',g:'other',w:'anadromous',r:3,typ:7,tro:10,art:{s:'salmon',c:['#3a4a5a','#b8c8d0','#f4f6f8'],sp:'none',st:null},tags:['native']},
+ {id:'sculpin',n:'Prickly Sculpin',sci:'Cottus asper',g:'other',w:'fresh',r:1,typ:4,tro:7,art:{s:'rockfish',c:['#3a3a2a','#7a7a5a','#c8c8a8'],sp:'verm',st:null},tags:['native']},
+ {id:'lahontan',n:'Lahontan Cutthroat',sci:'Oncorhynchus clarkii henshawi',g:'trout',w:'fresh',r:3,typ:18,tro:28,art:{s:'trout',c:['#4a5a4a','#b0a878','#ece2c0'],sp:'dark',st:'#d88a3a'},tags:[]},
+ {id:'redband',n:'Redband Trout',sci:'Oncorhynchus mykiss gairdneri',g:'trout',w:'fresh',r:3,typ:12,tro:20,art:{s:'trout',c:['#4a5a3a','#c0a870','#f0e0b0'],sp:'dark',st:'#d05a4a'},tags:['native']},
+ {id:'atlantic',n:'Atlantic Salmon',sci:'Salmo salar',g:'salmon',w:'fresh',r:4,typ:20,tro:30,art:{s:'salmon',c:['#3a4a5a','#b0bcc8','#f2f4f6'],sp:'dark',st:null},tags:[]}
+];
+const SP = Object.fromEntries(SPECIES.map(s=>[s.id,s]));
+const GROUP_LABEL = {salmon:'Salmon',trout:'Trout',char:'Char',bass:'Bass',panfish:'Panfish',walleye:'Walleye',pike:'Pike & Muskie',catfish:'Catfish',carp:'Carp & Suckers',sturgeon:'Sturgeon',other:'Other',rockfish:'Rockfish',flatfish:'Flatfish',bottom:'Bottomfish',pelagic:'Pelagic',shark:'Sharks'};
+
+const REGIONS = ['Puget Sound North','Puget Sound South','Olympic Peninsula','Washington Coast','Southwest Washington','Columbia Gorge','Yakima River Region','Central Cascades','North Cascades','Okanogan','Columbia Basin','Palouse / Snake River','Spokane Region','Outside Washington'];
+// rough lat/lng boxes for auto-region (WA only)
+const REGION_BOX = [
+ ['Puget Sound North',47.7,49.0,-123.2,-121.9],['Puget Sound South',46.9,47.7,-123.2,-121.9],['Olympic Peninsula',47.2,48.4,-125,-123.2],['Washington Coast',46.2,47.2,-125,-123.5],
+ ['Southwest Washington',45.5,46.6,-123.5,-122.0],['Columbia Gorge',45.5,46.2,-122.0,-120.5],['Yakima River Region',46.2,47.3,-121.2,-119.8],['Central Cascades',47.0,47.9,-121.9,-120.5],
+ ['North Cascades',47.9,49.0,-121.9,-120.4],['Okanogan',47.9,49.0,-120.4,-118.8],['Columbia Basin',46.0,47.9,-120.5,-118.5],['Palouse / Snake River',46.0,47.2,-118.5,-116.9],['Spokane Region',47.2,49.0,-118.8,-116.9]
+];
+const WATERS = ['Cle Elum Lake','Yakima River','Lake Washington','Lake Sammamish','Puget Sound','Skagit River','Snoqualmie River','Cowlitz River','Columbia River','Lake Chelan','Banks Lake','Potholes Reservoir','Moses Lake','Lake Roosevelt','Rufus Woods Lake','Snake River','Hood Canal','Westport','Neah Bay','Sekiu','Lake Crescent','Quinault River','Hoh River','Sol Duc River','Lake Cushman','Kachess Lake','Keechelus Lake','Rattlesnake Lake','Lake Whatcom','Lake Stevens','Baker Lake','Ross Lake','Omak Lake','Lake Lenore','Rocky Ford Creek','Lake Wenatchee','Wenatchee River','Methow River','Lake Tapps','American Lake','Silver Lake','Riffe Lake','Mayfield Lake','Blue Lake','Lake Goodwin','Nisqually River','Deschutes River (WA)','Lake Roesiger','Rock Lake','Sprague Lake','Ilwaco','La Push','Tokeland','Grays Harbor','Willapa Bay','Point Defiance','Possession Bar','Shilshole','Edmonds Pier','Mukilteo','Deception Pass','San Juan Islands'];
+
+const CHALLENGES = [
+ {id:'wa-salmon',n:'Washington Salmon Challenge',region:'Washington',sp:['chinook','coho','sockeye','pink','chum','steelhead'],xp:5000,badge:'Salmon Slam'},
+ {id:'pnw-trout',n:'Pacific Northwest Trout',region:'Pacific Northwest',sp:['rainbow','cutthroat','westslope','brown','brook','bull','lake','golden','tiger'],xp:5000,badge:'Trout Bum'},
+ {id:'sound-bottom',n:'Puget Sound Bottomfish',region:'Puget Sound',sp:['lingcod','cabezon','blackrock','copperrock','greenling'],xp:3500,badge:'Bottom Dweller'},
+ {id:'warmwater',n:'Warmwater Grand Slam',region:'Washington',sp:['largemouth','smallmouth','walleye','perch','bcrappie','bluegill'],xp:3500,badge:'Warmwater Slam'},
+ {id:'columbia-giants',n:'Columbia Giants',region:'Columbia River',sp:['wsturgeon','chinook','walleye','tigermuskie'],xp:6000,badge:'River Giant'},
+ {id:'coast',n:'Coastal Big Three',region:'Washington Coast',sp:['halibut','lingcod','albacore'],xp:4500,badge:'Blue Water'}
+];
+
+const ACHIEVEMENTS = [
+ {id:'first',n:'First Cast',d:'Log your first catch',ico:'fish',test:s=>s.catches.length>=1,p:s=>[Math.min(1,s.catches.length),1]},
+ {id:'ten',n:'Ten Up',d:'Log 10 catches',ico:'fish',test:s=>s.catches.length>=10,p:s=>[Math.min(10,s.catches.length),10]},
+ {id:'salmon',n:'Salmon Hunter',d:'Catch 5 salmon species',ico:'salmon',test:s=>cnt(s,'salmon')>=5,p:s=>[Math.min(5,cnt(s,'salmon')),5]},
+ {id:'trout',n:'Trout Bum',d:'Catch 5 trout species',ico:'trout',test:s=>cnt(s,'trout')>=5,p:s=>[Math.min(5,cnt(s,'trout')),5]},
+ {id:'salt',n:'Salt Life',d:'Catch 5 saltwater species',ico:'wave',test:s=>cntw(s,'salt')>=5,p:s=>[Math.min(5,cntw(s,'salt')),5]},
+ {id:'weekend',n:'Weekend Warrior',d:'Fish on 5+ weekends',ico:'tent',test:s=>weekends(s)>=5,p:s=>[Math.min(5,weekends(s)),5]},
+ {id:'waters',n:'New Waters',d:'Fish 5 different waters',ico:'map',test:s=>waters(s)>=5,p:s=>[Math.min(5,waters(s)),5]},
+ {id:'pbstreak',n:'Personal Best Streak',d:'3 new personal bests',ico:'trophy',test:s=>pbs(s)>=3,p:s=>[Math.min(3,pbs(s)),3]},
+ {id:'explorer',n:'Washington Explorer',d:'Fish 5 Washington regions',ico:'mtn',test:s=>regions(s)>=5,p:s=>[Math.min(5,regions(s)),5]},
+ {id:'rare',n:'Rare Find',d:'Land a Rare or better',ico:'star',test:s=>s.catches.some(c=>TIER_ORDER.indexOf(c.tier)>=2),p:s=>[s.catches.some(c=>TIER_ORDER.indexOf(c.tier)>=2)?1:0,1]},
+ {id:'legend',n:'Living Legend',d:'Land a Legendary catch',ico:'crown',test:s=>s.catches.some(c=>c.tier==='legendary'),p:s=>[s.catches.some(c=>c.tier==='legendary')?1:0,1]},
+ {id:'release',n:'Catch & Release Hero',d:'Release 10 fish',ico:'release',test:s=>s.catches.filter(c=>c.released).length>=10,p:s=>[Math.min(10,s.catches.filter(c=>c.released).length),10]},
+ {id:'dawn',n:'Dawn Patrol',d:'Log a catch before 6 am',ico:'bolt',test:s=>s.catches.some(c=>new Date(c.ts).getHours()<6),p:s=>[s.catches.some(c=>new Date(c.ts).getHours()<6)?1:0,1]},
+ {id:'century',n:'Century Club',d:'Log 100 catches',ico:'medal',test:s=>s.catches.length>=100,p:s=>[Math.min(100,s.catches.length),100]}
+];
+function cnt(s,g){return new Set(s.catches.map(c=>SP[c.sp]).filter(x=>x&&x.g===g).map(x=>x.id)).size}
+function cntw(s,w){return new Set(s.catches.map(c=>SP[c.sp]).filter(x=>x&&x.w===w).map(x=>x.id)).size}
+function weekends(s){return new Set(s.catches.filter(c=>[0,6].includes(new Date(c.ts).getDay())).map(c=>{const d=new Date(c.ts);d.setDate(d.getDate()-d.getDay());return d.toDateString()})).size}
+function waters(s){return new Set(s.catches.map(c=>(c.water||'').trim().toLowerCase()).filter(Boolean)).size}
+function regions(s){return new Set(s.catches.map(c=>c.region).filter(r=>r&&r!=='Outside Washington')).size}
+function pbs(s){return s.catches.filter(c=>c.pb).length}
+
+// Demo community (local only)
+const DEMO_FEED = [
+ {id:'f1',user:'Jake M.',ago:'2h ago',region:'Yakima River Region',sp:'steelhead',len:32.1,wt:12.4,tier:'epic',txt:'What a day on the Yak! Conditions were perfect. 💪',tags:['steelhead','yakimariver','catchandrelease'],likes:142,comments:18},
+ {id:'f2',user:'Sarah K.',ago:'5h ago',region:'Puget Sound North',sp:'coho',len:28.6,wt:8.9,tier:'rare',txt:'First coho of the season! Puget Sound never disappoints.',tags:['cohosalmon','pugetsound','salmonseason'],likes:87,comments:12},
+ {id:'f3',user:'River Dan',ago:'1d ago',region:'Central Cascades',sp:'rainbow',len:19.2,wt:4.1,tier:'uncommon',txt:'Cle Elum evening bite was on. Released to fight another day.',tags:['rainbowtrout','cleelum'],likes:54,comments:6},
+ {id:'f4',user:'Marisol T.',ago:'2d ago',region:'Washington Coast',sp:'lingcod',len:38.0,wt:22.5,tier:'epic',txt:'Westport ling on the jig. Arms are done.',tags:['lingcod','westport'],likes:203,comments:31},
+ {id:'f5',user:'PNW_Fisher',ago:'3d ago',region:'Columbia Basin',sp:'walleye',len:27.5,wt:8.2,tier:'rare',txt:'Banks Lake walleye are stacking up on the humps.',tags:['walleye','bankslake'],likes:66,comments:9}
+];
+const DEMO_LEADERS = {
+ Washington:[['RiverRanger',38400],['PNW_Fisher',31900],['SaltyCast',27250],['DriftBoatDee',22100],['Kokanee_Kid',19800],['TideRunner',16300],['Cascade_Cass',14900],['MossyRock',12600]],
+ Global:[['NorthShoreNick',98000],['Tarpon_Tara',91200],['FjordFinn',64200],['RiverRanger',38400],['PNW_Fisher',31900],['SaltyCast',27250],['DriftBoatDee',22100],['Kokanee_Kid',19800]]
+};
+</script>
+<script>
+/* ===================== Fish Hunt — core ===================== */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = ()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+const fmtDate = ts=>new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const fmtDateLong = ts=>new Date(ts).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+const fmtTime = ts=>new Date(ts).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+const ago = ts=>{const d=(Date.now()-ts)/1000;if(d<3600)return Math.max(1,Math.round(d/60))+'m ago';if(d<86400)return Math.round(d/3600)+'h ago';if(d<86400*30)return Math.round(d/86400)+'d ago';return fmtDate(ts)};
+const num = (n,d=1)=>n==null||isNaN(n)?'—':Number(n).toFixed(d).replace(/\.0$/,'');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---------- Store ---------- */
+const DEFAULT = {v:1,onboarded:false,name:'',homeRegion:'Puget Sound North',homeWaters:'',privacy:'private',units:'in',xp:0,catches:[],achievements:{},challengesDone:{},likes:{},follows:{},inbox:[],apiKey:'',model:'claude-opus-5',idEndpoint:'',demo:false,createdAt:Date.now()};
+let S = load();
+function load(){try{const raw=localStorage.getItem('fh:state');if(raw){const o=JSON.parse(raw);return Object.assign({},DEFAULT,o)}}catch(e){}return Object.assign({},DEFAULT)}
+let saveT;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem('fh:state',JSON.stringify(S))}catch(e){toast('Storage full — photo not saved')}},60)}
+
+// Photos live in IndexedDB as blobs (real captures) or as small SVG strings (demo art)
+const DB = {
+  db:null,
+  open(){return new Promise((res,rej)=>{if(this.db)return res(this.db);const r=indexedDB.open('fishhunt',1);r.onupgradeneeded=e=>{e.target.result.createObjectStore('photos')};r.onsuccess=e=>{this.db=e.target.result;res(this.db)};r.onerror=()=>rej(r.error)})},
+  async put(k,v){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error)})},
+  async get(k){const db=await this.open();return new Promise((res,rej)=>{const r=db.transaction('photos').objectStore('photos').get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
+  async del(k){const db=await this.open();return new Promise((res)=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').delete(k);t.oncomplete=res;t.onerror=res})},
+  async clear(){const db=await this.open();return new Promise((res)=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').clear();t.oncomplete=res;t.onerror=res})}
+};
+const urlCache=new Map();
+async function photoURL(c){ // returns an object URL / data URL for a catch photo
+  if(!c)return null;
+  if(c.art)return null; // rendered inline
+  if(urlCache.has(c.id))return urlCache.get(c.id);
+  try{const b=await DB.get(c.id);if(b){const u=URL.createObjectURL(b);urlCache.set(c.id,u);return u}}catch(e){}
+  return null;
+}
+async function photoEl(c,cls=''){ // html for the catch image
+  const u=await photoURL(c);
+  if(u)return `<img src="${u}" alt="${esc(SP[c.sp]?.n||'catch')}" class="${cls}">`;
+  return fishScene(SP[c.sp],c.id);
+}
+// fill elements marked data-photo=<catchId> asynchronously
+async function hydratePhotos(root=document){
+  for(const el of $$('[data-photo]',root)){const c=S.catches.find(x=>x.id===el.dataset.photo)||CUR.catch;if(!c)continue;el.innerHTML=await photoEl(c);el.removeAttribute('data-photo')}
+}
+
+/* ---------- Fish art (SVG) ---------- */
+function fishSVG(sp,opts={}){
+  if(!sp)return '';
+  const a=sp.art||{s:'salmon',c:['#334','#889','#eee']};const sil=opts.sil;const [c0,c1,c2]=sil?['#0b1a2b','#0f2236','#132a40']:a.c;
+  const id='g'+sp.id+(opts.k||'');
+  let body,tail,fins,extra='';
+  switch(a.s){
+    case 'pike': body='M18 52 C40 34 110 30 150 42 C165 46 172 50 176 52 C172 54 165 58 150 62 C110 74 40 70 18 52Z';tail='M18 52 L4 36 L10 52 L4 68Z';fins='M60 63 L70 78 L84 66Z M120 63 L128 76 L138 64Z M110 38 L122 26 L134 40Z';break;
+    case 'bass': body='M22 52 C40 22 100 18 140 34 C160 42 170 50 176 52 C170 56 158 66 140 72 C100 86 40 82 22 52Z';tail='M22 52 L6 34 L12 52 L6 70Z';fins='M56 38 L64 14 L72 20 L84 16 L96 22 L108 18 L118 30Z M60 70 L70 86 L86 72Z M112 70 L120 84 L130 70Z';break;
+    case 'panfish': body='M28 52 C40 20 100 14 136 34 C156 44 166 50 172 52 C166 56 156 64 136 72 C100 90 40 84 28 52Z';tail='M28 52 L14 38 L18 52 L14 66Z';fins='M56 34 L64 8 L78 14 L92 10 L104 16 L116 26Z M64 74 L74 92 L92 76Z';break;
+    case 'trout': body='M20 52 C40 32 100 28 146 40 C162 45 172 50 176 52 C172 55 162 60 146 66 C100 78 40 72 20 52Z';tail='M20 52 L4 38 L8 52 L4 66Z';fins='M76 38 L86 24 L100 38Z M56 64 L64 78 L78 66Z M108 64 L116 76 L126 64Z M140 44 L146 38 L150 45Z';break;
+    case 'catfish': body='M22 52 C40 34 100 30 146 40 C162 45 172 50 176 52 C172 56 162 62 146 66 C100 76 40 72 22 52Z';tail='M22 52 L8 40 L10 52 L8 64Z';fins='M70 36 L80 20 L92 36Z M56 66 L64 80 L76 66Z';extra=`<path d="M150 48 L186 30 M152 56 L188 66 M160 44 L184 42" stroke="${c1}" stroke-width="2" fill="none" stroke-linecap="round"/>`;break;
+    case 'carp': body='M22 52 C40 26 100 22 144 36 C160 42 170 49 176 52 C170 56 160 66 144 72 C100 84 40 80 22 52Z';tail='M22 52 L6 34 L12 52 L6 70Z';fins='M66 32 L76 12 L98 22 L110 34Z M60 70 L70 88 L86 72Z';break;
+    case 'sturgeon': body='M14 52 C34 42 90 38 140 44 C160 46 172 50 184 52 C172 54 160 58 140 60 C90 66 34 62 14 52Z';tail='M14 52 L2 40 L6 52 L2 64Z';fins='M60 62 L68 76 L82 63Z M120 62 L128 74 L138 62Z M96 40 L104 30 L112 41Z';extra=`<path d="M40 44 L60 42 L80 41 L100 41 L120 42 L140 44" stroke="${c2}" stroke-width="3" stroke-dasharray="4 5" fill="none"/>`;break;
+    case 'rockfish': body='M28 52 C40 24 96 16 132 30 C152 38 166 48 172 52 C166 56 152 68 132 76 C96 90 40 82 28 52Z';tail='M28 52 L12 38 L18 52 L12 66Z';fins='M52 30 L58 6 L66 20 L74 4 L82 18 L90 6 L98 20 L108 10 L116 26Z M60 74 L70 92 L90 76Z M118 72 L124 86 L136 72Z';break;
+    case 'flat': body='M20 52 C30 30 80 18 120 24 C150 28 172 42 176 52 C172 62 150 76 120 80 C80 86 30 74 20 52Z';tail='M20 52 L8 40 L10 52 L8 64Z';fins=`<path d="M30 40 C60 20 120 16 170 44" stroke="${c1}" stroke-width="3" fill="none"/><path d="M30 64 C60 84 120 88 170 60" stroke="${c1}" stroke-width="3" fill="none"/>`;break;
+    case 'shark': body='M16 52 C36 40 90 34 140 40 C160 44 172 49 180 52 C172 55 160 60 140 64 C90 70 36 64 16 52Z';tail='M16 52 L4 30 L10 52 L4 68Z';fins='M84 40 L96 16 L112 40Z M70 62 L76 76 L90 64Z M130 62 L136 72 L146 62Z';break;
+    case 'eel': body='M10 52 C40 44 90 44 140 46 C160 47 172 50 180 52 C172 54 160 57 140 58 C90 60 40 60 10 52Z';tail='M10 52 L4 46 L4 58Z';fins=`<path d="M40 45 C80 38 130 38 170 46" stroke="${c1}" stroke-width="3" fill="none"/><path d="M40 59 C80 66 130 66 170 58" stroke="${c1}" stroke-width="3" fill="none"/>`;break;
+    case 'tuna': body='M18 52 C40 30 100 24 146 36 C164 42 174 50 178 52 C174 54 164 62 146 68 C100 80 40 74 18 52Z';tail='M18 52 L2 32 L12 52 L2 72Z';fins='M84 36 L96 16 L110 38Z M60 66 L68 80 L82 66Z M120 66 L128 76 L138 66Z';break;
+    case 'grayling': body='M20 52 C40 34 100 30 146 40 C162 45 172 50 176 52 C172 55 162 60 146 66 C100 78 40 72 20 52Z';tail='M20 52 L4 38 L8 52 L4 66Z';fins='M60 38 L66 6 L80 10 L94 4 L106 12 L116 30Z M60 64 L68 78 L82 66Z';break;
+    default: body='M18 52 C40 30 100 26 146 38 C162 44 172 50 176 52 C172 55 162 60 146 66 C100 78 40 74 18 52Z';tail='M18 52 L2 36 L8 52 L2 68Z';fins='M78 36 L88 22 L102 38Z M56 66 L64 80 L78 66Z M110 66 L118 78 L128 66Z M140 44 L146 38 L150 45Z';
+  }
+  const finsSVG = fins.startsWith('<')?fins:`<path d="${fins}" fill="${c1}" opacity=".85"/>`;
+  let spots='';
+  if(!sil){
+    const sp=a.sp;
+    if(sp==='dark'||sp==='few'){const n=sp==='few'?7:16;for(let i=0;i<n;i++){const x=50+((i*37)%96),y=40+((i*23)%22);spots+=`<circle cx="${x}" cy="${y}" r="${1.6+(i%3)*.5}" fill="${c0}" opacity=".7"/>`}}
+    if(sp==='red'){for(let i=0;i<10;i++){const x=54+((i*41)%92),y=42+((i*29)%20);spots+=`<circle cx="${x}" cy="${y}" r="2.2" fill="#d33" opacity=".85"/>`}}
+    if(sp==='light'){for(let i=0;i<14;i++){const x=50+((i*37)%96),y=40+((i*23)%22);spots+=`<circle cx="${x}" cy="${y}" r="1.8" fill="${c2}" opacity=".8"/>`}}
+    if(sp==='bars'){for(let i=0;i<6;i++){const x=48+i*18;spots+=`<path d="M${x} 34 Q${x+4} 52 ${x} 70" stroke="${c0}" stroke-width="5" fill="none" opacity=".45"/>`}}
+    if(sp==='stripes'){for(let i=0;i<5;i++){spots+=`<path d="M30 ${42+i*5} Q100 ${40+i*5} 170 ${44+i*5}" stroke="${c0}" stroke-width="1.6" fill="none" opacity=".6"/>`}}
+    if(sp==='verm'){for(let i=0;i<8;i++){const x=44+i*16;spots+=`<path d="M${x} 40 q6 6 0 12 t0 12" stroke="${c0}" stroke-width="2.2" fill="none" opacity=".55"/>`}}
+    if(sp==='scale'){for(let r=0;r<3;r++)for(let i=0;i<9;i++){const x=48+i*13+(r%2)*6,y=42+r*8;spots+=`<path d="M${x} ${y} q5 6 10 0" stroke="${c0}" stroke-width="1.4" fill="none" opacity=".5"/>`}}
+    if(sp==='scute'){for(let i=0;i<7;i++){spots+=`<path d="M${44+i*18} 50 l4 -5 4 5z" fill="${c2}"/>`}}
+  }
+  const stripe = (!sil&&a.st)?`<path d="M28 52 C70 48 120 48 168 52" stroke="${a.st}" stroke-width="7" fill="none" opacity=".7" stroke-linecap="round"/>`:'';
+  const eye = sil?'':`<circle cx="152" cy="46" r="4.2" fill="#fff"/><circle cx="153" cy="46" r="2.4" fill="#111"/>`;
+  const gill = sil?'':`<path d="M140 40 q8 12 0 24" stroke="${c0}" stroke-width="1.8" fill="none" opacity=".6"/>`;
+  return `<svg viewBox="0 0 190 104" ${opts.size?'width="190" height="104"':''} xmlns="http://www.w3.org/2000/svg" class="fish" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c0}"/><stop offset=".5" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+  <g transform="${opts.flip?'translate(190 0) scale(-1 1)':''}"><path d="${tail}" fill="${c1}"/>${finsSVG}<path d="${body}" fill="url(#${id})"/>${spots}${stripe}${gill}${eye}</g></svg>`;
+}
+// "photo" scene for demo catches: water backdrop + fish
+function fishScene(sp,k=''){
+  const g='s'+(k||'x').replace(/[^a-z0-9]/gi,'');
+  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb7d8"/><stop offset=".35" stop-color="#2f6390"/><stop offset="1" stop-color="#0b2238"/></linearGradient></defs><rect width="400" height="300" fill="url(#${g})"/><path d="M0 120 L60 70 L110 100 L170 55 L230 95 L290 60 L350 100 L400 75 L400 130 L0 130Z" fill="#183a55" opacity=".8"/><path d="M0 130 L400 130 L400 300 L0 300Z" fill="#12314b" opacity=".6"/><g stroke="#cfe6ff" stroke-opacity=".18" stroke-width="2"><path d="M20 180h60M120 205h90M240 190h70M300 240h60M60 250h50"/></g><g transform="translate(40 90) scale(1.7)">${fishSVG(sp,{k:g,size:true})}</g></svg>`;
+}
+
+/* ---------- Engine: tiers, XP, levels ---------- */
+function normCDF(z){const t=1/(1+.2316419*Math.abs(z));const d=.3989423*Math.exp(-z*z/2);let p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p}
+function topPct(sp,len){ if(!sp||!len)return null; const sd=Math.max(1,(sp.tro-sp.typ)/2); const z=(len-sp.typ)/sd; return clamp(Math.round((1-normCDF(z))*100),1,99) }
+function sizePts(pct){ if(pct==null)return 0; if(pct<=2)return 70; if(pct<=8)return 55; if(pct<=15)return 40; if(pct<=30)return 25; if(pct<=50)return 10; return 0 }
+function tierFor(sp,len,pb){ const base=(sp?.r||1)*20; const score=base+sizePts(topPct(sp,len))+(pb?10:0); const t = score>=130?'legendary':score>=90?'epic':score>=60?'rare':score>=40?'uncommon':'common'; return {tier:t,score} }
+function levelFor(xp){let L=1;while(xpForLevel(L+1)<=xp)L++;return L}
+function xpForLevel(L){return Math.round(120*(L-1)*(L-1)+80*(L-1))} // cumulative XP required to reach level L
+function levelTitle(L){let t=LEVEL_TITLES[0][1];for(const [l,n] of LEVEL_TITLES){if(L>=l)t=n}return t}
+function levelInfo(){const L=levelFor(S.xp);const a=xpForLevel(L),b=xpForLevel(L+1);return {L,title:levelTitle(L),cur:S.xp-a,need:b-a,pct:Math.round((S.xp-a)/(b-a)*100)}}
+function speciesCaught(){return new Set(S.catches.map(c=>c.sp))}
+function pbFor(spId,excludeId){let best=null;for(const c of S.catches){if(c.sp!==spId||c.id===excludeId||!c.len)continue;if(!best||c.len>best.len)best=c}return best}
+function challengeProgress(ch){const have=speciesCaught();return ch.sp.filter(s=>have.has(s)).length}
+function regionFrom(lat,lng){if(lat==null)return null;for(const [n,a,b,c,d] of REGION_BOX){if(lat>=a&&lat<=b&&lng>=c&&lng<=d)return n}return 'Outside Washington'}
+
+// Commit a reviewed catch: computes tier/xp/pb, updates state, evaluates achievements+challenges. Returns verdict object.
+function commitCatch(draft){
+  const sp=SP[draft.sp];
+  const had=speciesCaught();const newSpecies=!had.has(sp.id);
+  const prevPB=pbFor(sp.id);const pb=!!(draft.len&&prevPB&&draft.len>prevPB.len);
+  const {tier,score}=tierFor(sp,draft.len,pb);
+  const pct=topPct(sp,draft.len);
+  const parts=[['Catch logged',XP.catch]];
+  if(newSpecies)parts.push(['New species',XP.newSpecies]);
+  if(pb)parts.push(['Personal best',XP.pb]);
+  if(TIERS[tier].xp)parts.push([TIERS[tier].n+' catch',TIERS[tier].xp]);
+  const c={id:draft.id||uid(),sp:sp.id,ts:draft.ts||Date.now(),lat:draft.lat??null,lng:draft.lng??null,privacy:draft.privacy||S.privacy,water:draft.water||'',region:draft.region||(regionFrom(draft.lat,draft.lng)||''),len:draft.len||null,wt:draft.wt||null,method:draft.method||'manual',tier,score,pct,pb,released:!!draft.released,caption:draft.caption||'',fav:false,aiConf:draft.aiConf??null,verified:{photo:!!draft.hasPhoto,species:draft.aiConf!=null,length:draft.method==='ai',time:true,location:draft.lat!=null},art:!!draft.art,createdAt:Date.now()};
+  S.catches.unshift(c);
+  const before={ach:new Set(Object.keys(S.achievements)),ch:new Set(Object.keys(S.challengesDone))};
+  let xp=parts.reduce((a,p)=>a+p[1],0);
+  const chDone=[];
+  for(const ch of CHALLENGES){if(!S.challengesDone[ch.id]&&challengeProgress(ch)===ch.sp.length){S.challengesDone[ch.id]=Date.now();parts.push([ch.n+' complete',ch.xp]);xp+=ch.xp;chDone.push(ch)}}
+  S.xp+=xp;c.xp=xp;
+  const newAch=[];for(const a of ACHIEVEMENTS){if(!S.achievements[a.id]&&a.test(S)){S.achievements[a.id]=Date.now();newAch.push(a)}}
+  for(const a of newAch)S.inbox.unshift({id:uid(),ts:Date.now(),k:'ach',t:'Achievement unlocked: '+a.n,s:a.d});
+  for(const ch of chDone)S.inbox.unshift({id:uid(),ts:Date.now(),k:'ch',t:'Challenge complete: '+ch.n,s:'+'+ch.xp.toLocaleString()+' XP · '+ch.badge+' badge'});
+  if(pb)S.inbox.unshift({id:uid(),ts:Date.now(),k:'pb',t:'New personal best · '+sp.n,s:num(c.len)+' in'});
+  save();
+  const chal=CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,sp.id));
+  return {c,sp,newSpecies,pb,prevPB,tier,pct,parts,xp,newAch,chDone,chal,registry:[speciesCaught().size,SPECIES.length]};
+}
+function ch_has(ch,id){return ch.sp.includes(id)}
+
+/* ---------- UI helpers ---------- */
+let toastT;function toast(m,ms=2200){$$('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),ms)}
+function sheet(html,onOpen){const bg=document.createElement('div');bg.className='sheet-bg';bg.innerHTML=`<div class="sheet" role="dialog"><div class="grab"></div>${html}</div>`;bg.addEventListener('click',e=>{if(e.target===bg)bg.remove()});$('#overlay').appendChild(bg);if(onOpen)onOpen(bg);return bg}
+function closeSheets(){$('#overlay').innerHTML=''}
+function confirmSheet(title,body,okLabel,danger){return new Promise(res=>{const bg=sheet(`<h3>${esc(title)}</h3><p class="muted" style="margin:0 0 16px">${esc(body)}</p><div class="grid2"><button class="btn ghost" data-x>Cancel</button><button class="btn ${danger?'danger':''}" data-ok>${esc(okLabel)}</button></div>`);bg.querySelector('[data-x]').onclick=()=>{bg.remove();res(false)};bg.querySelector('[data-ok]').onclick=()=>{bg.remove();res(true)}})}
+function tierTag(t,cls=''){const T=TIERS[t]||TIERS.common;return `<span class="tier ${t} ${cls}">${T.ico}${T.n}</span>`}
+function stars(n){return '★'.repeat(n)+'<span style="opacity:.25">'+'★'.repeat(5-n)+'</span>'}
+function hexBadge(n,cls=''){return `<div class="badge-hex ${cls}"><svg class="shape" viewBox="0 0 74 82"><defs><linearGradient id="hx${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0c66a"/><stop offset="1" stop-color="#b8792a"/></linearGradient></defs><path d="M37 2 L70 20 L70 58 L37 80 L4 58 L4 20Z" fill="#12283d" stroke="url(#hx${n})" stroke-width="3"/><path d="M37 10 L63 24 L63 54 L37 72 L11 54 L11 24Z" fill="none" stroke="#5a86b0" stroke-width="1" opacity=".6"/></svg><span class="f">${I.fish}</span><span class="n">${n}</span></div>`}
+function sized(svg,n=24){return svg.replace('<svg',`<svg width="${n}" height="${n}"`)}
+function shieldBadge(ico,color='#2d6fb8',locked=false){const c=locked?'#3a4a5a':color;return `<svg class="shield" viewBox="0 0 70 78"><defs><linearGradient id="sh${ico}${locked?'l':''}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3d27a"/><stop offset="1" stop-color="#b47a2a"/></linearGradient></defs><path d="M35 3 L65 13 V40 C65 58 50 70 35 75 C20 70 5 58 5 40 V13Z" fill="#102a44" stroke="url(#sh${ico}${locked?'l':''})" stroke-width="3"/><path d="M35 10 L58 18 V40 C58 54 47 63 35 68 C23 63 12 54 12 40 V18Z" fill="${c}" opacity=".35"/><g transform="translate(19 22) scale(1.35)" style="color:#fff">${sized(I[ico]||I.fish)}</g></svg>`}
+const ACH_ICON={fish:'fish',salmon:'fish',trout:'fish',wave:'wave',tent:'mtn',map:'map',trophy:'trophy',mtn:'tree',star:'star',crown:'crown',release:'release',bolt:'bolt',medal:'medal'};
+const ACH_COLOR={fish:'#2d6fb8',salmon:'#c65b7c',trout:'#3ddc84',wave:'#22c1c3',tent:'#2d6fb8',map:'#22c1c3',trophy:'#f2b64a',mtn:'#3ddc84',star:'#3b8bff',crown:'#f2b64a',release:'#22c1c3',bolt:'#f2b64a',medal:'#b45cff'};
+function locLine(c,owner=true){ // what location text to show for a catch
+  if(owner){ return [c.water,c.region].filter(Boolean).join(' · ')||'Location not set' }
+  switch(c.privacy){case 'exact':case 'waterbody':return c.water||c.region||'Undisclosed';case 'region':return c.region||'Undisclosed';default:return 'Undisclosed water'}
+}
+function avatarLetter(){return (S.name||'A').trim()[0].toUpperCase()}
+function pctLabel(){ // demo standing
+  const all=DEMO_LEADERS.Washington.map(x=>x[1]).concat([S.xp]).sort((a,b)=>b-a);const rank=all.indexOf(S.xp)+1;return Math.max(1,Math.round(rank/(all.length+40)*100))
+}
+
+/* ---------- Router ---------- */
+const CUR={route:'home',params:{},catch:null,draft:null};
+const ROUTES={};
+function go(route,params={}){CUR.route=route;CUR.params=params;location.hash='#'+route+(params.id?'/'+params.id:'');render()}
+function render(){
+  closeSheets();
+  const fn=ROUTES[CUR.route]||ROUTES.home;
+  const v=$('#view');v.scrollTop=0;window.scrollTo(0,0);
+  const out=fn(CUR.params);
+  if(out instanceof Promise){out.then(h=>{v.innerHTML=h;after()})}else{v.innerHTML=out;after()}
+  const navKey={home:'home',explore:'explore',registry:'explore',species:'explore',map:'explore',challenges:'explore',feed:'explore',trophy:'trophy',catch:'trophy',more:'more',profile:'more',achievements:'more',settings:'more',inbox:'more'}[CUR.route];
+  $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.nav===navKey));
+  $('#topbar').classList.toggle('hide',['capture','onboarding'].includes(CUR.route));
+  $('#nav').classList.toggle('hide',['capture','onboarding','review','verdict'].includes(CUR.route));
+  $('#avatarBtn').textContent=avatarLetter();
+  $('#inboxDot').hidden=!S.inbox.some(i=>!i.read);
+}
+function after(){hydratePhotos();const f=CUR.after;if(f){CUR.after=null;f()}}
+window.addEventListener('hashchange',()=>{const [r,id]=location.hash.slice(1).split('/');if(r&&r!==CUR.route){CUR.route=ROUTES[r]?r:'home';CUR.params=id?{id}:{};render()}});
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){e.preventDefault();const [r,id]=g.dataset.go.split('/');go(r,id?{id}:{});return}
+  const n=e.target.closest('[data-nav]');if(n){go(n.dataset.nav);return}
+});
+</script>
+<script>
+/* ===================== Fish Hunt — screens ===================== */
+const tagline = `<div class="page-h"><div><h1 id="ph"></h1><p id="pp"></p></div><div class="tag">More fish.<br>Brighter days.</div></div>`;
+function pageH(t,p,tag=true){return `<div class="page-h"><div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div>${tag?'<div class="tag">More fish.<br>Brighter days.</div>':''}</div>`}
+function quote(){return `<div class="hero-quote">More fish. Brighter days.<i></i></div>`}
+
+/* ---------- Home ---------- */
+ROUTES.home = ()=>{
+  const li=levelInfo();const have=speciesCaught();
+  const homeSp=SPECIES.filter(s=>!have.has(s.id)).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n));
+  const next=homeSp[0];
+  const chal=CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>!S.challengesDone[x.ch.id]).sort((a,b)=>b.p/b.ch.sp.length-a.p/a.ch.sp.length)[0];
+  const recent=[...S.catches].sort((a,b)=>TIER_ORDER.indexOf(b.tier)-TIER_ORDER.indexOf(a.tier)||b.ts-a.ts)[0];
+  const first=S.catches.length===0;
+  return `${pageH(`Welcome back${S.name?', '+esc(S.name.split(' ')[0]):''}`, first?'Your collection starts with one cast.':'Here is where your collection stands.')}
+  <div class="stack">
+    <div class="card">
+      <div class="split"><span class="eyebrow">Registry progress</span><a data-go="registry" href="#registry" class="small b" style="color:#fff">View Registry ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+      <div class="row" style="margin-top:10px;align-items:baseline"><span class="serif" style="font-size:40px;font-weight:700;color:#fff;line-height:1">${have.size}<span style="font-size:22px;opacity:.7"> / ${SPECIES.length}</span></span><span class="muted">species discovered</span></div>
+      <div class="prog" style="margin-top:10px"><i style="width:${Math.round(have.size/SPECIES.length*100)}%"></i></div>
+    </div>
+    ${next?`<div class="card" data-go="species/${next.id}" role="button" style="cursor:pointer">
+      <div class="split"><span class="eyebrow">Next target</span>${tierTag(TIER_ORDER[next.r-1])}</div>
+      <div class="row" style="margin-top:10px"><div style="width:96px;height:60px;border-radius:12px;overflow:hidden;background:#0d2238;flex:none">${fishSVG(next,{k:'nt'})}</div><div class="grow"><b style="font-size:18px;color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div><div class="small" style="margin-top:4px;color:#5cf0a0;font-weight:600">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery</div></div>${I.chev.replace('class="chev"','style="width:20px;height:20px;color:#fff"')}</div>
+    </div>`:''}
+    ${chal?`<div class="card" data-go="challenges" role="button" style="cursor:pointer">
+      <div class="split"><span class="eyebrow">Current challenge</span><span class="small b" style="color:#fff">${chal.p} / ${chal.ch.sp.length}</span></div>
+      <b style="display:block;font-size:18px;color:#fff;margin-top:8px">${esc(chal.ch.n)}</b>
+      <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${chal.ch.sp.map(id=>`<span class="pill" style="${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.7'}">${have.has(id)?'✓ ':''}${esc(SP[id].n.replace(' Salmon','').replace(' Trout',''))}</span>`).join('')}</div>
+      <div class="prog green" style="margin-top:12px"><i style="width:${Math.round(chal.p/chal.ch.sp.length*100)}%"></i></div>
+    </div>`:''}
+    ${recent?`<div class="card" data-go="catch/${recent.id}" role="button" style="cursor:pointer;padding:12px">
+      <div class="split" style="margin-bottom:10px"><span class="eyebrow">Recent trophy</span>${tierTag(recent.tier)}</div>
+      <div class="catchrow" style="background:transparent;border:0;padding:0"><div class="im" data-photo="${recent.id}"></div><div><div class="sp" style="margin-top:0">${esc(SP[recent.sp].n)}</div><div class="mm">${recent.len?`<span>${I.ruler.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.len)} in</span>`:''}${recent.wt?`<span>${I.scale.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.wt)} lb</span>`:''}</div><div class="loc">${esc(locLine(recent))}</div><div class="loc">${fmtDate(recent.ts)}${recent.pb?' · <span style="color:#ffd985">Personal best</span>':''}</div></div></div>
+    </div>`:`<div class="card" style="text-align:center;padding:26px 16px"><div style="width:64px;height:64px;margin:0 auto 10px;color:#fff">${I.cam}</div><b style="font-size:18px;color:#fff">Record your first catch</b><p class="muted" style="margin:6px 0 14px">Take a photo. Get the verdict. Start the collection.</p><button class="btn" data-nav="capture">${I.cam} Open camera</button></div>`}
+    <div class="card level-card" data-go="profile" role="button" style="cursor:pointer">
+      ${hexBadge(li.L)}
+      <div class="lvl"><div class="eyebrow">Personal progress</div><h3 style="margin-top:4px">Level ${li.L}</h3><div class="title">${esc(li.title)}</div><div class="xp"><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span><span class="muted">${S.xp.toLocaleString()} total</span></div><div class="prog"><i style="width:${li.pct}%"></i></div></div>
+    </div>
+    ${quote()}
+  </div>`;
+};
+
+/* ---------- Explore hub ---------- */
+ROUTES.explore = ()=>{
+  const have=speciesCaught();
+  const tiles=[
+    ['registry','Species Registry',`${have.size} / ${SPECIES.length} discovered`,I.book],
+    ['map','Catch Map',`${new Set(S.catches.map(c=>c.water).filter(Boolean)).size} waters fished`,I.map],
+    ['challenges','Challenges',`${CHALLENGES.filter(c=>S.challengesDone[c.id]).length} / ${CHALLENGES.length} complete`,I.flag],
+    ['feed','Community Feed','Real anglers. Real catches.',I.users],
+    ['collections','Regional Collections','Salmon · Trout · Salt · Fresh',I.tree]
+  ];
+  return `${pageH('Explore','Registry, map, challenges and the feed.')}
+  <div class="stack">${tiles.map(([r,t,s,ic])=>`<div class="card" data-go="${r}" role="button" style="cursor:pointer;padding:14px"><div class="listrow" style="padding:0;border:0"><div class="ic">${ic}</div><div class="grow"><div class="t">${t}</div><div class="s">${s}</div></div>${I.chev}</div></div>`).join('')}</div>`;
+};
+ROUTES.collections = ()=>{
+  const have=speciesCaught();
+  const groups=[['Salmon',s=>s.g==='salmon'],['Trout & Char',s=>['trout','char'].includes(s.g)],['Bass & Panfish',s=>['bass','panfish','walleye'].includes(s.g)],['Freshwater',s=>s.w==='fresh'],['Saltwater',s=>s.w==='salt'],['Anadromous',s=>s.w==='anadromous'],['Native species',s=>s.tags.includes('native')],['Trophy species',s=>s.tags.includes('trophy')]];
+  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Collections</h1><p>Complete a set. Earn the badge.</p></div>
+  <div class="stack">${groups.map(([n,f])=>{const all=SPECIES.filter(f);const got=all.filter(s=>have.has(s.id)).length;return `<div class="card" data-go="registry" style="cursor:pointer"><div class="split"><b style="color:#fff;font-size:16px">${n}</b><span class="small b" style="color:#fff">${got} / ${all.length}</span></div><div class="prog${got===all.length?' gold':''}" style="margin-top:10px"><i style="width:${Math.round(got/all.length*100)}%"></i></div></div>`}).join('')}</div>`;
+};
+
+/* ---------- Registry ---------- */
+let regFilter='all', regSort='default';
+ROUTES.registry = ()=>{
+  const have=speciesCaught();
+  const chal=CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>!S.challengesDone[x.ch.id]).sort((a,b)=>b.p/b.ch.sp.length-a.p/a.ch.sp.length)[0]||{ch:CHALLENGES[0],p:challengeProgress(CHALLENGES[0])};
+  const filters=[['all','All'],['salmon','Salmon'],['trout','Trout'],['bass','Bass & Panfish'],['fresh','Freshwater'],['salt','Saltwater'],['caught','Caught'],['missing','Not yet']];
+  let list=SPECIES.filter(s=>{switch(regFilter){case 'salmon':return s.g==='salmon';case 'trout':return ['trout','char'].includes(s.g);case 'bass':return ['bass','panfish','walleye'].includes(s.g);case 'fresh':return s.w==='fresh';case 'salt':return s.w==='salt';case 'caught':return have.has(s.id);case 'missing':return !have.has(s.id);default:return true}});
+  if(regSort==='az')list=[...list].sort((a,b)=>a.n.localeCompare(b.n));
+  if(regSort==='rarity')list=[...list].sort((a,b)=>b.r-a.r);
+  const pct=Math.round(have.size/SPECIES.length*100);
+  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Species Registry</h1><p>Track your catches. Complete the collection.</p><button class="right ico" id="regSort" style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
+  <div class="card reg-head">
+    <div><div class="big">${have.size}<small> / ${SPECIES.length}</small></div><div class="lbl">discovered</div><div class="row" style="margin-top:12px"><div class="prog grow"><i style="width:${pct}%"></i></div><span class="small b" style="color:#fff">${pct}%</span></div><div class="script" style="font-size:18px;color:var(--ice);margin-top:10px">“Different waters. A bigger story.”</div></div>
+    <div class="chal" data-go="challenges" role="button" style="cursor:pointer"><svg class="hexi" viewBox="0 0 56 62"><path d="M28 2 L53 16 L53 46 L28 60 L3 46 L3 16Z" fill="#12283d" stroke="#3b8bff" stroke-width="2.5"/><g transform="translate(14 17) scale(1.2)" style="color:#fff">${sized(I.mtn)}</g></svg><b>${esc(chal.ch.n)}</b><span>${chal.p} / ${chal.ch.sp.length}</span>${I.chev}</div>
+  </div>
+  <div class="chips" style="margin-top:12px">${filters.map(([k,n])=>`<button class="chip ${regFilter===k?'on':''}" data-rf="${k}">${n}</button>`).join('')}</div>
+  <div class="grid3" id="regGrid">${list.map(s=>regCard(s,have.has(s.id))).join('')}</div>
+  ${quote()}`;
+};
+function regCard(s,got){
+  const pb=got?pbFor(s.id):null;const first=got?[...S.catches].filter(c=>c.sp===s.id).sort((a,b)=>a.ts-b.ts)[0]:null;
+  const bestTier=got?S.catches.filter(c=>c.sp===s.id).map(c=>c.tier).sort((a,b)=>TIER_ORDER.indexOf(b)-TIER_ORDER.indexOf(a))[0]:TIER_ORDER[s.r-1];
+  return `<div class="fcard ${got?'':'sil'}" data-go="species/${s.id}" role="button"><div class="art">${fishSVG(s,{sil:!got,k:'r'})}${got?`<span class="chk">${I.check}</span>`:''}</div><div class="body"><div class="name">${esc(s.n)}</div><div style="margin-top:6px">${tierTag(bestTier)}</div><div class="meta">${got?`<span>${I.ruler}${pb?num(pb.len)+' in':'—'}</span><span>${I.cal}${first?fmtDate(first.ts):''}</span>`:'<span>Not yet caught</span>'}</div></div></div>`;
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rf]');if(b){regFilter=b.dataset.rf;render()}if(e.target.closest('#regSort')){regSort=regSort==='default'?'az':regSort==='az'?'rarity':'default';toast('Sorted: '+({default:'Registry order',az:'A → Z',rarity:'Rarity'}[regSort]));render()}});
+
+/* ---------- Species detail ---------- */
+ROUTES.species = ({id})=>{
+  const s=SP[id];if(!s)return ROUTES.registry();
+  const mine=S.catches.filter(c=>c.sp===id).sort((a,b)=>b.ts-a.ts);const got=mine.length>0;
+  const pb=pbFor(id);const first=[...mine].sort((a,b)=>a.ts-b.ts)[0];
+  const bestTier=got?mine.map(c=>c.tier).sort((a,b)=>TIER_ORDER.indexOf(b)-TIER_ORDER.indexOf(a))[0]:null;
+  const inCh=CHALLENGES.filter(ch=>ch.sp.includes(id));
+  return `<div class="centerh"><button class="back" data-go="registry">${I.back}</button><h1>${esc(s.n)}</h1><p style="font-style:italic">${esc(s.sci)}</p></div>
+  <div class="card" style="padding:0;overflow:hidden"><div style="aspect-ratio:16/9;background:linear-gradient(180deg,#1b4468,#0d2238)">${fishSVG(s,{sil:!got,k:'d'})}</div>
+    <div style="padding:14px 16px"><div class="split"><span class="eyebrow">Status</span>${got?`<span class="pill" style="border-color:rgba(61,220,132,.6);color:#5cf0a0">${I.check} Discovered</span>`:`<span class="pill" style="opacity:.8">${I.lock} Not yet caught</span>`}</div>
+    <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="pill">${GROUP_LABEL[s.g]}</span><span class="pill">${s.w==='fresh'?'Freshwater':s.w==='salt'?'Saltwater':'Anadromous'}</span>${tierTag(TIER_ORDER[s.r-1])}${s.tags.includes('protected')?'<span class="pill" style="border-color:rgba(255,93,108,.5);color:#ff8c98">Release only</span>':''}${s.tags.includes('native')?'<span class="pill">Native</span>':''}</div>
+    <p class="muted small" style="margin:12px 0 0">Typical ${s.typ} in · Trophy ${s.tro}+ in. ${s.r>=4?'A hard-to-find species — any verified catch starts at Rare or better.':'Size drives the tier: a fish past the trophy mark can reach Epic or Legendary.'}</p></div></div>
+  ${got?`<div class="kv" style="margin-top:12px"><div><div class="k">Personal best</div><div class="v">${pb?num(pb.len)+' in':'—'}</div></div><div><div class="k">Total caught</div><div class="v">${mine.length}</div></div><div><div class="k">First caught</div><div class="v" style="font-size:14px">${fmtDateLong(first.ts)}</div></div><div><div class="k">Best catch tier</div><div class="v">${tierTag(bestTier)}</div></div></div>
+  <div class="sub-h"><h2 class="sans">Your catch history</h2></div>
+  <div class="stack">${mine.map(c=>catchRow(c)).join('')}</div>`:
+  `<div class="card" style="margin-top:12px;text-align:center"><b style="color:#fff;font-size:17px">Worth ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[s.r-1]].xp).toLocaleString()}+ XP</b><p class="muted small" style="margin:6px 0 12px">Discovering a new species pays out on top of the catch itself.</p><button class="btn" data-nav="capture">${I.cam} Record a catch</button></div>`}
+  ${inCh.length?`<div class="sub-h"><h2 class="sans">Part of</h2></div><div class="stack">${inCh.map(ch=>`<div class="card" data-go="challenges" style="cursor:pointer;padding:12px 16px"><div class="split"><b style="color:#fff">${esc(ch.n)}</b><span class="small b" style="color:#fff">${challengeProgress(ch)} / ${ch.sp.length}</span></div></div>`).join('')}</div>`:''}`;
+};
+function catchRow(c){const s=SP[c.sp];return `<div class="catchrow" data-go="catch/${c.id}" role="button" style="cursor:pointer"><div class="im" data-photo="${c.id}"></div><div><div class="w"><span>${esc(c.water||c.region||'Unknown water')}</span><small>${ago(c.ts)}</small></div><div class="loc">${I.pin.replace('<svg','<svg style="width:12px;height:12px;vertical-align:-2px"')} ${esc(c.region||'—')}</div><div class="sp">${esc(s.n)}</div><div class="mm">${c.len?`<span>${I.ruler.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(c.len)} in</span>`:''}${c.wt?`<span>${I.scale.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(c.wt)} lb</span>`:''}${tierTag(c.tier)}</div></div><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#fff">${I.chev}</span></div>`}
+
+/* ---------- Trophy Room ---------- */
+let trFilter='all';
+ROUTES.trophy = ()=>{
+  const li=levelInfo();const have=speciesCaught();
+  const filters=[['all','All'],['salmon','Salmon'],['trout','Trout'],['fresh','Freshwater'],['salt','Saltwater'],['fav','Favorites']];
+  const list=S.catches.filter(c=>{const s=SP[c.sp];switch(trFilter){case 'salmon':return s.g==='salmon';case 'trout':return ['trout','char'].includes(s.g);case 'fresh':return s.w!=='salt';case 'salt':return s.w==='salt';case 'fav':return c.fav;default:return true}});
+  return `${pageH('Trophy Room','Your catches. Your story.')}
+  <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species</span></div><div>${I.trophy.replace('<svg','<svg style="color:var(--gold)"')}<b>${pbs(S)}</b><span>Personal Bests</span></div><div style="padding:14px 10px"><div class="row" style="justify-content:center;gap:6px"><span class="xpc" style="color:#5cf0a0">XP</span><b style="font-size:20px">Lv ${li.L}</b></div><div class="prog green" style="margin:8px 0 5px;height:6px"><i style="width:${li.pct}%"></i></div><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span></div></div>
+  <div class="chips" style="margin-top:12px">${filters.map(([k,n])=>`<button class="chip ${trFilter===k?'on':''}" data-tf="${k}">${k==='fav'?I.heart:k==='all'?'':I.fish}${n}</button>`).join('')}</div>
+  ${list.length?`<div class="grid2">${list.map(c=>trophyCard(c)).join('')}</div>`:`<div class="card" style="text-align:center;padding:30px 16px"><b style="color:#fff;font-size:17px">${S.catches.length?'Nothing here yet':'Your trophy room is empty'}</b><p class="muted" style="margin:6px 0 14px">${S.catches.length?'Try another filter.':'The first fish you record lands here.'}</p>${S.catches.length?'':`<button class="btn" data-nav="capture">${I.cam} Record a catch</button>`}</div>`}`;
+};
+function trophyCard(c){const s=SP[c.sp];return `<div class="fcard" data-go="catch/${c.id}" role="button"><div class="art" data-photo="${c.id}"></div><span class="tiertag" style="position:absolute;top:8px;left:8px">${tierTag(c.tier)}</span><button class="fav ${c.fav?'on':''}" data-fav="${c.id}" aria-label="Favorite" style="position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:rgba(7,17,29,.55);display:grid;place-items:center;color:${c.fav?'#ff4d5e':'#fff'}">${c.fav?I.heart.replace('fill="none"','fill="#ff4d5e"'):I.heart}</button><div class="body"><div class="name caps">${esc(s.n)}</div><div class="meta"><span>${c.len?num(c.len)+' in':'—'}</span><span>•</span><span>${fmtDate(c.ts)}</span></div></div><span class="arrow">${I.chev}</span></div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-tf]');if(b){trFilter=b.dataset.tf;render();return}const f=e.target.closest('[data-fav]');if(f){e.stopPropagation();e.preventDefault();const c=S.catches.find(x=>x.id===f.dataset.fav);if(c){c.fav=!c.fav;save();render()}}},true);
+
+/* ---------- Catch detail ---------- */
+ROUTES.catch = ({id})=>{
+  const c=S.catches.find(x=>x.id===id);if(!c)return ROUTES.trophy();
+  const s=SP[c.sp];const v=c.verified||{};
+  const vrows=[['photo','Photo verified'],['species','Species verified by AI'],['length','Length verified'],['time','Timestamp verified'],['location','Location verified privately']];
+  return `<div class="centerh"><button class="back" data-go="trophy">${I.back}</button><h1>${esc(s.n)}</h1><p>${fmtDateLong(c.ts)} · ${fmtTime(c.ts)}</p></div>
+  <div class="shot-photo"><span data-photo="${c.id}" style="display:block;width:100%;height:100%"></span><span class="tiertag">${tierTag(c.tier)}</span><button class="fav ${c.fav?'on':''}" data-fav="${c.id}" aria-label="Favorite">${I.heart}</button></div>
+  <div class="v-stats" style="margin-top:12px"><div><div class="k">${I.ruler} LENGTH</div><div class="v">${c.len?num(c.len)+' in':'—'}</div></div><div><div class="k">${I.scale} WEIGHT</div><div class="v">${c.wt?num(c.wt)+' lb':'—'}</div></div><div><div class="k">${I.chart} PERCENTILE</div><div class="v">${c.pct?'Top '+c.pct+'%':'—'}</div><div class="s">of registered ${esc(s.n.split(' ')[0])}</div></div></div>
+  <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px">${c.pb?`<span class="banner gold">${I.trophy} Personal best</span>`:''}<span class="banner xp"><span class="xpc">XP</span> +${(c.xp||0).toLocaleString()} XP</span>${c.released?`<span class="pill">${I.release} Released</span>`:'<span class="pill">Kept</span>'}</div>
+  <div class="card" style="margin-top:12px"><div class="split"><span class="eyebrow">Location</span><span class="pill">${I.lock} ${PRIVACY[c.privacy]||'Private'}</span></div><b style="display:block;color:#fff;font-size:16px;margin-top:8px">${esc(c.water||'Water not set')}</b><div class="muted small">${esc(c.region||'Region not set')}${c.lat!=null?` · ${c.lat.toFixed(3)}, ${c.lng.toFixed(3)} <span class="faint">(only you see this)</span>`:''}</div><div class="small muted" style="margin-top:8px">Others see: <b style="color:#fff">${esc(locLine(c,false))}</b></div><div class="seg" style="margin-top:10px">${Object.entries(PRIVACY).map(([k,n])=>`<button data-priv="${c.id}:${k}" class="${c.privacy===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div></div>
+  ${c.caption?`<div class="card" style="margin-top:12px"><span class="eyebrow">Caption</span><p style="margin:6px 0 0;color:#fff">${esc(c.caption)}</p></div>`:''}
+  <div class="card" style="margin-top:12px"><span class="eyebrow">Verification</span><div class="verify" style="margin-top:8px">${vrows.map(([k,n])=>`<div class="${v[k]?'':'no'}">${v[k]?I.check:I.circle}${n}</div>`).join('')}</div>${c.aiConf!=null?`<div class="faint small" style="margin-top:8px">AI confidence ${Math.round(c.aiConf*100)}%${c.method==='ai'?' · length estimated from photo':''}</div>`:''}</div>
+  <div class="grid2" style="margin-top:12px"><button class="btn ghost" data-share="${c.id}">${I.share} Share</button><button class="btn ghost" data-go="species/${c.sp}">${I.book} Species page</button></div>
+  <button class="btn danger" style="margin-top:12px" data-del="${c.id}">${I.trash} Delete catch</button>`;
+};
+document.addEventListener('click',async e=>{
+  const p=e.target.closest('[data-priv]');if(p){const [id,k]=p.dataset.priv.split(':');const c=S.catches.find(x=>x.id===id);if(c){c.privacy=k;save();render()}return}
+  const d=e.target.closest('[data-del]');if(d){const c=S.catches.find(x=>x.id===d.dataset.del);if(!c)return;if(await confirmSheet('Delete this catch?','It is removed from your Trophy Room, Registry and stats. XP earned from it is removed too. This cannot be undone.','Delete',true)){S.xp=Math.max(0,S.xp-(c.xp||0));S.catches=S.catches.filter(x=>x.id!==c.id);await DB.del(c.id);save();toast('Catch deleted');go('trophy')}return}
+  const sh=e.target.closest('[data-share]');if(sh){const c=S.catches.find(x=>x.id===sh.dataset.share);if(c)shareCatch(c);return}
+});
+
+/* ---------- Challenges ---------- */
+ROUTES.challenges = ()=>{
+  const have=speciesCaught();
+  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Challenges</h1><p>A reason to go back out.</p></div>
+  <div class="stack">${CHALLENGES.map(ch=>{const p=challengeProgress(ch);const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}</span><b style="display:block;color:#fff;font-size:18px;margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:20px">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600">+${ch.xp.toLocaleString()} XP</div></div></div>
+  <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${ch.sp.map(id=>`<span class="pill" data-go="species/${id}" style="cursor:pointer;${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.65'}">${have.has(id)?'✓ ':''}${esc(SP[id].n)}</span>`).join('')}</div>
+  <div class="prog ${done?'gold':'green'}" style="margin-top:12px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div>
+  <div class="split" style="margin-top:8px"><span class="small muted">Reward: ${esc(ch.badge)} badge</span>${done?`<span class="pill" style="border-color:rgba(242,182,74,.6);color:#ffd985">${I.trophy} Complete</span>`:''}</div></div>`}).join('')}</div>`;
+};
+
+/* ---------- Feed (local demo) ---------- */
+let feedTab='following';
+ROUTES.feed = ()=>{
+  const mine=S.catches.filter(c=>c.privacy!=='private').slice(0,3).map(c=>({id:'me-'+c.id,user:S.name||'You',ago:ago(c.ts),region:locLine(c,false),sp:c.sp,len:c.len,wt:c.wt,tier:c.tier,txt:c.caption||'',tags:[SP[c.sp].n.toLowerCase().replace(/[^a-z]/g,'')],likes:0,comments:0,mine:true,cid:c.id}));
+  let posts=[...DEMO_FEED];
+  if(feedTab==='nearby')posts=posts.filter(p=>p.region===S.homeRegion||p.region.includes('Puget')||p.region.includes('Cascades'));
+  if(feedTab==='friends')posts=posts.filter(p=>S.follows[p.user]);
+  if(feedTab==='top')posts=[...posts].sort((a,b)=>b.likes-a.likes);
+  if(feedTab==='following')posts=[...mine,...posts];
+  const tabs=[['following','Following',I.users],['nearby','Nearby',I.pin],['friends','Friends',I.users],['top','Top Catches',I.trophy]];
+  return `${pageH('Community Feed','Real anglers. Real catches. A brighter tomorrow.')}
+  <div class="chips">${tabs.map(([k,n,ic])=>`<button class="chip ${feedTab===k?'on':''}" data-ft="${k}">${ic}${n}</button>`).join('')}</div>
+  <div class="stack">${posts.length?posts.map(post).join(''):`<div class="card" style="text-align:center;padding:26px"><b style="color:#fff">No one here yet</b><p class="muted small" style="margin:6px 0 0">Follow anglers from the Following tab and their catches show up here.</p></div>`}
+  <p class="faint tiny" style="text-align:center;padding:8px 0 0">Community posts are a local preview. Your own catches appear here only when their privacy is set above Private.</p></div>`;
+};
+function post(p){const s=SP[p.sp];const liked=!!S.likes[p.id];const fol=!!S.follows[p.user];return `<article class="post"><div class="ph"><div class="av">${p.mine?avatarLetter():esc(p.user[0])}</div><div class="grow"><b>${esc(p.user)}</b><small>${esc(p.ago)} • ${I.pin.replace('<svg','<svg style="width:11px;height:11px;vertical-align:-1px"')} ${esc(p.region)}</small></div>${p.mine?'':`<button class="follow ${fol?'on':''}" data-follow="${esc(p.user)}">${fol?'Following':'Follow'}</button>`}</div>
+  <div class="pic">${p.mine?`<span data-photo="${p.cid}" style="display:block;width:100%;height:100%"></span>`:fishScene(s,'f'+p.id)}<span class="tiertag" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;border-radius:12px;background:rgba(7,17,29,.75);border:1px solid var(--line-2)">${tierTag(p.tier)}<span style="color:var(--gold);font-size:12px;letter-spacing:1px">${'★'.repeat(TIERS[p.tier].stars)}</span></span><div class="cap"><b>${esc(s.n.toUpperCase())}</b><i>${esc(s.sci)}</i></div><div class="mm">${p.len?`<span>${num(p.len)} in</span>`:''}${p.wt?`<span>${num(p.wt)} lb</span>`:''}</div></div>
+  ${p.txt||p.tags.length?`<div class="txt">${esc(p.txt)}${p.tags.length?`<div class="h">${p.tags.map(t=>'#'+esc(t)).join(' ')}</div>`:''}</div>`:''}
+  <div class="acts"><button class="${liked?'liked':''}" data-like="${p.id}">${I.heart} ${p.likes+(liked?1:0)}</button><button data-cmt>${I.comment} ${p.comments}</button><button class="share" ${p.mine?`data-share="${p.cid}"`:'data-cmt'}>${I.share} Share</button></div></article>`}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-ft]');if(t){feedTab=t.dataset.ft;render();return}const l=e.target.closest('[data-like]');if(l){S.likes[l.dataset.like]=!S.likes[l.dataset.like];save();render();return}const f=e.target.closest('[data-follow]');if(f){S.follows[f.dataset.follow]=!S.follows[f.dataset.follow];save();render();return}if(e.target.closest('[data-cmt]')){toast('Comments arrive with the community release')}});
+
+/* ---------- More / Profile / Achievements / Inbox / Settings ---------- */
+ROUTES.more = ()=>{
+  const li=levelInfo();
+  const rows=[['profile','Profile',`Level ${li.L} · ${li.title}`,I.medal],['achievements','Achievements',`${Object.keys(S.achievements).length} / ${ACHIEVEMENTS.length} unlocked`,I.trophy],['inbox','Notifications',S.inbox.length?`${S.inbox.filter(i=>!i.read).length} unread`:'Nothing new',I.bell],['settings','Settings & privacy',PRIVACY[S.privacy]+' by default',I.settings]];
+  return `${pageH('More','')}
+  <div class="card" data-go="profile" role="button" style="cursor:pointer"><div class="row"><div class="avatar" style="width:56px;height:56px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-weight:700;font-size:22px;border:2px solid rgba(255,255,255,.6)">${avatarLetter()}</div><div class="grow"><b style="color:#fff;font-size:20px">${esc(S.name||'Angler')}</b><div class="muted small">${esc(S.homeRegion)} · Level ${li.L}</div></div>${I.chev}</div></div>
+  <div class="card" style="margin-top:12px;padding:4px 16px">${rows.map(([r,t,s,ic])=>`<div class="listrow" data-go="${r}" role="button" style="cursor:pointer"><div class="ic">${ic}</div><div class="grow"><div class="t">${t}</div><div class="s">${s}</div></div>${I.chev}</div>`).join('')}</div>
+  <p class="faint tiny" style="text-align:center;margin-top:18px">Fish Hunt MVP prototype · catch · explore · collect</p>`;
+};
+ROUTES.profile = ()=>{
+  const li=levelInfo();const have=speciesCaught();const longest=S.catches.reduce((m,c)=>c.len>m?c.len:m,0);
+  const pct=pctLabel();
+  const lb=(DEMO_LEADERS[profLB]||DEMO_LEADERS.Washington);const rows=[...lb.map(([n,x])=>({n,x})),{n:'You',x:S.xp,me:true}].sort((a,b)=>b.x-a.x);const meIdx=rows.findIndex(r=>r.me);
+  const show=[...rows.slice(0,3)];if(meIdx>2)show.push(rows[meIdx]);
+  const unlocked=ACHIEVEMENTS.filter(a=>S.achievements[a.id]).slice(-3);
+  return `<div class="page-h"><div><h1>Profile</h1></div><button class="sub-h lnk" data-go="settings" style="padding:0;color:#fff;font-size:14px;display:inline-flex;gap:6px;align-items:center">${I.edit.replace('<svg','<svg style="width:18px;height:18px"')} Edit Profile</button></div>
+  <div class="row" style="gap:16px;padding:4px 2px 14px"><div style="width:96px;height:96px;border-radius:50%;background:var(--navy-600);border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-family:var(--serif);font-size:40px;font-weight:700;color:#fff;flex:none">${avatarLetter()}</div><div class="grow"><div class="serif" style="font-size:30px;font-weight:700;color:#fff;line-height:1">${esc(S.name||'Angler')}</div><div class="row small" style="margin-top:6px;color:#fff;gap:6px">${I.pin.replace('<svg','<svg style="width:15px;height:15px"')} ${esc(S.homeRegion)}, WA</div><div class="muted small" style="font-style:italic;margin-top:4px">“Chasing fish and good days.”</div></div><div class="tag script" style="font-size:18px;color:#fff;transform:rotate(-4deg);text-align:right">More fish.<br>Brighter days.</div></div>
+  <div class="card"><span class="eyebrow">Angler level</span><div class="level-card" style="margin-top:6px">${hexBadge(li.L)}<div class="lvl"><h3>Level ${li.L}</h3><div class="title">${esc(li.title)}</div><div class="xp"><span></span><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span></div><div class="prog"><i style="width:${li.pct}%"></i></div></div></div>
+    <div class="grid2" style="margin-top:12px"><div class="tile"><div class="ic">${I.mtn}</div><div><b>Pacific Northwest</b><span>Region</span></div></div><div class="tile" data-go="settings" style="cursor:pointer"><div class="ic">${I.tree}</div><div class="grow"><b>${esc(S.homeWaters||S.homeRegion)}</b><span>Home waters</span></div>${I.chev}</div></div></div>
+  <div class="sub-h"><h2>My Stats</h2><a data-go="trophy" href="#trophy">View All Stats ${I.arrow.replace('<svg','<svg style="width:15px;height:15px"')}</a></div>
+  <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species Discovered</span></div><div>${I.ruler}<b>${longest?num(longest)+' in':'—'}</b><span>Longest Fish</span></div><div>${I.trophy}<b>${pbs(S)}</b><span>Personal Bests</span></div></div>
+  <div class="card" style="margin-top:14px"><div class="split"><h2 class="serif" style="font-size:22px;color:#fff">Standing</h2><span class="small b" style="color:#fff">${profLB} leaderboard</span></div>
+    <div class="standing" style="margin-top:10px"><div><div class="medal"><svg viewBox="0 0 64 76"><defs><linearGradient id="md" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6d284"/><stop offset="1" stop-color="#b8792a"/></linearGradient></defs><path d="M20 2h10l6 22h-10zM34 2h10l-6 22h-10z" fill="#c9302f"/><circle cx="32" cy="48" r="22" fill="url(#md)"/><circle cx="32" cy="48" r="16" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/><path d="M32 36l3.5 7.5 8 1-6 5.5 1.7 8L32 54l-7.2 4 1.7-8-6-5.5 8-1z" fill="#8a5a1a"/></svg><div class="pct">Top ${pct}%<small>in Washington</small></div></div><p class="muted small" style="margin:10px 0 0">You're in the top ${pct}% of anglers in Washington by XP.</p></div>
+    <div class="lb"><div class="seg"><button class="${profLB==='Washington'?'on':''}" data-lb="Washington">Washington</button><button class="${profLB==='Global'?'on':''}" data-lb="Global">Global</button></div>${show.map(r=>`<div class="r ${r.me?'me':''}"><span>${rows.indexOf(r)+1}</span><span class="av">${esc(r.n[0])}</span><span>${esc(r.n)}</span><span>${r.x.toLocaleString()} XP</span></div>`).join('')}</div></div></div>
+  <div class="sub-h"><h2>Achievements</h2><a data-go="achievements" href="#achievements">View All ${I.arrow.replace('<svg','<svg style="width:15px;height:15px"')}</a></div>
+  ${unlocked.length?`<div class="ach">${unlocked.map(a=>achCard(a,true)).join('')}</div>`:`<div class="card muted small">Your first achievement unlocks with your first catch.</div>`}`;
+};
+let profLB='Washington';
+document.addEventListener('click',e=>{const b=e.target.closest('[data-lb]');if(b){profLB=b.dataset.lb;render()}});
+function achCard(a,got){const [p,t]=a.p(S);return `<div class="${got?'':'locked'}" data-ach="${a.id}">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8',!got)}<b>${esc(a.n)}</b><span>${esc(a.d)}</span>${got?`<span class="chk">${I.check}</span>`:`<div class="prog" style="height:5px;margin-top:8px"><i style="width:${Math.round(p/t*100)}%"></i></div><span class="tiny">${p} / ${t}</span>`}</div>`}
+ROUTES.achievements = ()=>`<div class="centerh"><button class="back" data-go="profile">${I.back}</button><h1>Achievements</h1><p>${Object.keys(S.achievements).length} of ${ACHIEVEMENTS.length} unlocked</p></div><div class="ach">${ACHIEVEMENTS.map(a=>achCard(a,!!S.achievements[a.id])).join('')}</div>`;
+ROUTES.inbox = ()=>{S.inbox.forEach(i=>i.read=true);save();const K={ach:I.trophy,ch:I.flag,pb:I.medal,sys:I.info};return `<div class="centerh"><button class="back" data-go="more">${I.back}</button><h1>Notifications</h1></div>${S.inbox.length?`<div class="card" style="padding:4px 16px">${S.inbox.map(i=>`<div class="listrow"><div class="ic">${K[i.k]||I.bell}</div><div class="grow"><div class="t">${esc(i.t)}</div><div class="s">${esc(i.s||'')} · ${ago(i.ts)}</div></div></div>`).join('')}</div>`:`<div class="card" style="text-align:center;padding:28px"><b style="color:#fff">Quiet for now</b><p class="muted small" style="margin:6px 0 0">Personal bests, achievements and challenge progress land here.</p></div>`}`};
+ROUTES.settings = ()=>`<div class="centerh"><button class="back" data-go="more">${I.back}</button><h1>Settings</h1><p>Profile, privacy and data.</p></div>
+  <div class="card stack"><span class="eyebrow">Profile</span>
+    <div class="field"><label>Display name</label><input class="inp" id="setName" value="${esc(S.name)}" placeholder="Your name"></div>
+    <div class="field"><label>Home region</label><select class="inp" id="setRegion">${REGIONS.map(r=>`<option ${S.homeRegion===r?'selected':''}>${r}</option>`).join('')}</select></div>
+    <div class="field"><label>Home waters</label><input class="inp" id="setWaters" list="waters" value="${esc(S.homeWaters)}" placeholder="e.g. Lake Washington"></div>
+  </div>
+  <div class="card stack" style="margin-top:12px"><span class="eyebrow">Location privacy</span><p class="muted small" style="margin:0">Exact coordinates always stay on your device. This sets what new catches show to others.</p>
+    <div class="seg" id="setPriv">${Object.entries(PRIVACY).map(([k,n])=>`<button data-sp="${k}" class="${S.privacy===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div>
+    <div class="small muted" id="privHelp">${privHelp(S.privacy)}</div>
+  </div>
+  <div class="card stack" style="margin-top:12px"><span class="eyebrow">Species identification</span><p class="muted small" style="margin:0">Without a key the camera runs in demo mode (you pick the species). Paste an Anthropic API key to identify fish from the photo with Claude vision. Developer preview only: the key is stored in this browser and calls go straight from the device.</p>
+    <div class="field"><label>Anthropic API key</label><input class="inp" id="setKey" type="password" value="${esc(S.apiKey)}" placeholder="sk-ant-…" autocomplete="off"></div>
+    <div class="field"><label>Model</label><input class="inp" id="setModel" value="${esc(S.model)}"></div>
+  </div>
+  <div class="card stack" style="margin-top:12px"><span class="eyebrow">Data</span>
+    <div class="grid2"><button class="btn ghost sm" id="btnExport">${I.save} Export JSON</button><button class="btn ghost sm" id="btnImport">${I.image} Import JSON</button></div>
+    <button class="btn ghost sm" id="btnDemo">${S.demo?'Remove sample catches':'Load sample catches'}</button>
+    <button class="btn danger sm" id="btnWipe">${I.trash} Erase everything on this device</button>
+  </div>
+  <button class="btn" style="margin-top:14px" id="btnSaveSet">Save settings</button>
+  <datalist id="waters">${WATERS.map(w=>`<option value="${esc(w)}">`).join('')}</datalist>`;
+function privHelp(k){return {private:'Only you see where you fished. Catches stay out of the community feed.',region:'Others see a broad area like “Yakima River Region”.',waterbody:'Others see the water name, e.g. “Cle Elum Lake”, never the spot.',exact:'You choose to share the exact location on each catch.'}[k]}
+document.addEventListener('click',async e=>{
+  if(e.target.closest('#btnSaveSet')){S.name=$('#setName').value.trim();S.homeRegion=$('#setRegion').value;S.homeWaters=$('#setWaters').value.trim();S.apiKey=$('#setKey').value.trim();S.model=$('#setModel').value.trim()||'claude-opus-5';save();toast('Settings saved');go('profile');return}
+  const sp=e.target.closest('[data-sp]');if(sp){S.privacy=sp.dataset.sp;save();$$('#setPriv button').forEach(b=>b.classList.toggle('on',b.dataset.sp===S.privacy));$('#privHelp').textContent=privHelp(S.privacy);return}
+  if(e.target.closest('#btnExport')){const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),state:S},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fish-hunt-export.json';a.click();toast('Export started (photos stay on device)');return}
+  if(e.target.closest('#btnImport')){$('#fileImport').click();return}
+  if(e.target.closest('#btnDemo')){if(S.demo){if(await confirmSheet('Remove sample catches?','Your own recorded catches are kept.','Remove',true)){removeDemo();toast('Sample catches removed');render()}}else{seedDemo();toast('Sample catches loaded');go('home')}return}
+  if(e.target.closest('#btnWipe')){if(await confirmSheet('Erase everything?','All catches, photos, XP and settings on this device are deleted.','Erase',true)){await DB.clear();localStorage.removeItem('fh:state');location.hash='';location.reload()}return}
+});
+$('#fileImport').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const o=JSON.parse(t);const st=o.state||o;if(!Array.isArray(st.catches))throw 0;S=Object.assign({},DEFAULT,st);save();toast('Imported '+S.catches.length+' catches');go('home')}).catch(()=>toast('That file is not a Fish Hunt export'));e.target.value=''});
+
+/* ---------- Onboarding ---------- */
+let onbStep=0;
+ROUTES.onboarding = ()=>{
+  const logo=$('#topbar .brand svg').outerHTML.replace('<svg','<svg class="logo"');
+  const steps=[
+    `${logo}<h1>Every fish you catch becomes part of your collection.</h1><p>Fish Hunt is a registry of real catches. Take a photo, get the verdict, watch your collection grow.</p><div class="loop">${['Catch','Capture','Identify','Verdict','Collect','Progress'].map((s,i)=>`${i?I.chev:''}<span>${s}</span>`).join('')}</div>`,
+    `${logo}<h1>Who's holding the rod?</h1><p>Your name goes on your trophy room and your standing.</p><div class="stack" style="margin-top:16px"><div class="field"><label>Name</label><input class="inp" id="onbName" value="${esc(S.name)}" placeholder="First name or handle" autocomplete="nickname"></div><div class="field"><label>Home region</label><select class="inp" id="onbRegion">${REGIONS.map(r=>`<option ${S.homeRegion===r?'selected':''}>${r}</option>`).join('')}</select></div></div>`,
+    `${logo}<h1>Your spots stay yours.</h1><p>Fish Hunt stores the exact location of each catch on your device only. By default, nobody else sees where you fished. You can share a region or a water name later, catch by catch.</p><div class="card" style="margin-top:16px"><div class="split"><div><b style="color:#fff">Start with sample catches</b><div class="muted small">See the app filled in. Remove them anytime in Settings.</div></div><button class="toggle ${onbDemo?'on':''}" id="onbDemo" role="switch" aria-checked="${onbDemo}"></button></div></div>`
+  ];
+  return `<div class="onb">${steps[onbStep]}<div class="dots">${steps.map((_,i)=>`<i class="${i===onbStep?'on':''}"></i>`).join('')}</div><button class="btn" id="onbNext">${onbStep<2?'Continue':'Start collecting'}</button>${onbStep>0?`<button class="btn ghost" style="margin-top:10px" id="onbBack">Back</button>`:''}</div>`;
+};
+let onbDemo=true;
+document.addEventListener('click',e=>{
+  if(e.target.closest('#onbDemo')){onbDemo=!onbDemo;render();return}
+  if(e.target.closest('#onbBack')){onbStep--;render();return}
+  if(e.target.closest('#onbNext')){
+    if(onbStep===1){S.name=$('#onbName').value.trim();S.homeRegion=$('#onbRegion').value;if(!S.name){toast('Add a name so we know who caught what');return}}
+    if(onbStep<2){onbStep++;render();return}
+    S.onboarded=true;if(onbDemo)seedDemo();save();go('home');
+  }
+});
+</script>
+<script>
+/* ===================== Fish Hunt — capture → review → verdict ===================== */
+let camStream=null, camGuess=null;
+ROUTES.capture = ()=>{
+  CUR.draft={id:uid(),ts:Date.now(),privacy:S.privacy,released:false};
+  camGuess=null;
+  const logo=$('#topbar .brand svg').outerHTML;
+  CUR.after=startCamera;
+  return `<div class="cam-wrap">
+    <video id="camVideo" autoplay playsinline muted></video>
+    <div class="cam-frame"><i></i><i></i><i></i><i></i></div>
+    <div class="cam-top"><button class="back" data-go="home" style="color:#fff">${I.back}</button><div class="brand">${logo}<div><b>Fish Hunt</b><small style="display:block;font-size:9px;letter-spacing:.22em;color:var(--ice)">CATCH · EXPLORE · COLLECT</small></div></div><button class="x" data-go="home" aria-label="Close">${I.x}</button></div>
+    <div class="cam-title"><h1>Record Catch</h1><p>Take a clear photo of your catch</p></div>
+    <div class="cam-match" id="camMatch"><div class="mini">${fishSVG(SP.coho,{k:'m'})}</div><div><small>${S.apiKey?'AI species ID ready':'Demo mode — pick the species after the shot'}</small><b id="camMatchName">${S.apiKey?'Point at the fish':'Species ID'}</b></div>${I.chev}</div>
+    <div class="cam-hint">${I.target}<div><b>Align fish within the frame</b><span>Best results in good light</span></div>${I.info.replace('<svg','<svg style="width:18px;height:18px;color:var(--mist)"')}</div>
+    <div class="cam-bottom">
+      <div class="cam-opts"><button class="ok">${I.scan}<div><b>Auto-detect size</b><span>${S.apiKey?'Ready':'Needs AI key'}</span></div></button><button>${I.ruler}<div><b>Add length</b><span>Optional</span></div></button><button>${I.scale}<div><b>Add weight</b><span>Optional</span></div></button></div>
+      <div class="cam-ctl"><button class="ib" id="btnGallery"><span class="sq">${I.image}</span>Gallery</button><button class="ib" id="btnFlash"><span class="sq">${I.bolt}</span>Flash<small id="flashLbl">Auto</small></button><button class="shutter" id="btnShutter" aria-label="Take photo"><i></i></button><span></span><button class="ib" data-go="registry"><span class="sq">${I.book}</span>Species Guide</button></div>
+      <div class="cam-mode"><div><span class="on">PHOTO</span><span>VIDEO</span></div></div>
+    </div>
+    <div id="camFallback" class="hide" style="position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,#1b4468,#0d2238);z-index:1;text-align:center;padding:24px"><div><div style="width:64px;height:64px;margin:0 auto 12px;color:#fff">${I.cam}</div><b style="color:#fff;font-size:18px">Camera not available here</b><p class="muted" style="margin:6px 0 0">Use Gallery to import a photo, or open Fish Hunt on your phone.</p></div></div>
+  </div>`;
+};
+async function startCamera(){
+  const v=$('#camVideo');if(!v)return;
+  try{
+    if(!navigator.mediaDevices?.getUserMedia)throw new Error('no media');
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1440}},audio:false});
+    v.srcObject=camStream;
+    // Ask for location while the camera warms up (private by default, stored on device only)
+    getPosition().then(p=>{if(p&&CUR.draft){CUR.draft.lat=p.lat;CUR.draft.lng=p.lng;CUR.draft.region=regionFrom(p.lat,p.lng)}});
+  }catch(e){$('#camFallback')?.classList.remove('hide');$('#btnShutter')?.setAttribute('disabled','');}
+}
+function stopCamera(){if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null}}
+function getPosition(){return new Promise(res=>{if(!navigator.geolocation)return res(null);navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude,lng:p.coords.longitude}),()=>res(null),{timeout:8000,maximumAge:60000})})}
+document.addEventListener('click',e=>{
+  if(e.target.closest('#btnShutter')){const v=$('#camVideo');if(!v||!v.videoWidth){toast('Camera is still starting');return}const c=document.createElement('canvas');const W=Math.min(1600,v.videoWidth);c.width=W;c.height=Math.round(v.videoHeight*W/v.videoWidth);c.getContext('2d').drawImage(v,0,0,c.width,c.height);c.toBlob(b=>gotPhoto(b),'image/jpeg',.9);return}
+  if(e.target.closest('#btnGallery')){$('#fileGallery').click();return}
+  if(e.target.closest('#btnFlash')){const l=$('#flashLbl');l.textContent={Auto:'On',On:'Off',Off:'Auto'}[l.textContent];return}
+});
+$('#fileGallery').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;if(!CUR.draft||CUR.route!=='capture'){CUR.draft={id:uid(),ts:Date.now(),privacy:S.privacy,released:false}}const b=await downscale(f,1600);
+  // try EXIF-free fallback: use file's lastModified as catch time if older than an hour
+  if(f.lastModified&&Date.now()-f.lastModified>3600e3)CUR.draft.ts=f.lastModified;
+  gotPhoto(b)});
+function downscale(file,max){return new Promise(res=>{const img=new Image();img.onload=()=>{const r=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*r);c.height=Math.round(img.height*r);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(img.src);c.toBlob(b=>res(b||file),'image/jpeg',.88)};img.onerror=()=>res(file);img.src=URL.createObjectURL(file)})}
+async function gotPhoto(blob){
+  stopCamera();
+  const d=CUR.draft;d.hasPhoto=true;d.blob=blob;
+  await DB.put(d.id,blob);
+  urlCache.set(d.id,URL.createObjectURL(blob));
+  if(d.lat==null){const p=await getPosition();if(p){d.lat=p.lat;d.lng=p.lng;d.region=regionFrom(p.lat,p.lng)}}
+  go('review');
+}
+
+/* ---------- Species identification ---------- */
+function blobToB64(blob){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.readAsDataURL(blob)})}
+async function identify(blob){
+  if(!S.apiKey){ // demo: offer a short list the user confirms
+    const pool=SPECIES.filter(s=>s.r<=2&&(S.homeRegion.includes('Coast')||S.homeRegion.includes('Sound')?true:s.w!=='salt'));
+    const pick=pool[Math.floor(Math.random()*pool.length)];
+    return {demo:true,species:pick.id,confidence:null,alternates:pool.filter(s=>s.id!==pick.id).slice(0,3).map(s=>s.id),length:null};
+  }
+  const b64=await blobToB64(blob);
+  const list=SPECIES.map(s=>`${s.id}: ${s.n} (${s.sci})`).join('\n');
+  const schema={type:'object',additionalProperties:false,required:['species_id','confidence','alternates','estimated_length_in','fish_present','note'],properties:{
+    species_id:{type:'string',enum:SPECIES.map(s=>s.id).concat(['unknown'])},confidence:{type:'number',minimum:0,maximum:1},
+    alternates:{type:'array',items:{type:'string',enum:SPECIES.map(s=>s.id)},maxItems:3},estimated_length_in:{type:['number','null']},fish_present:{type:'boolean'},note:{type:'string'}}};
+  const body={model:S.model||'claude-opus-5',max_tokens:1024,
+    output_config:{format:{type:'json_schema',schema},effort:'medium'},
+    system:'You identify fish for a Pacific Northwest angling registry. Return only the JSON requested. Choose species_id from the provided list; use "unknown" when no fish is visible or none of the listed species fits. Estimate total length in inches only when a reliable size reference (hand, ruler, rod grip, known object) is visible; otherwise null. Keep note under 20 words.',
+    messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:blob.type||'image/jpeg',data:b64}},{type:'text',text:'Identify the fish in this photo.\n\nSpecies list:\n'+list}]}]};
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+  if(!r.ok){const t=await r.text().catch(()=>'');throw new Error('ID request failed ('+r.status+') '+t.slice(0,160))}
+  const j=await r.json();
+  if(j.stop_reason==='refusal')throw new Error('The identifier declined this photo');
+  const txt=(j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+  const o=JSON.parse(txt);
+  return {demo:false,species:o.fish_present&&o.species_id!=='unknown'?o.species_id:null,confidence:o.confidence,alternates:o.alternates||[],length:o.estimated_length_in,note:o.note};
+}
+
+/* ---------- Catch Review ---------- */
+ROUTES.review = ()=>{
+  const d=CUR.draft;if(!d||!d.hasPhoto){return ROUTES.capture()}
+  CUR.after=async()=>{
+    const ph=$('#revPhoto');if(ph){const u=await photoURL({id:d.id});if(u)ph.innerHTML=`<img src="${u}" alt="Your catch">`}
+    if(d.idDone)return;
+    try{const r=await identify(d.blob||await DB.get(d.id));d.idDone=true;d.id_=r;if(r.species&&!d.sp){d.sp=r.species;d.aiConf=r.confidence}if(r.length&&!d.len){d.len=Math.round(r.length*10)/10;d.method='ai'}}
+    catch(e){d.idDone=true;d.id_={error:e.message};toast(e.message,3500)}
+    render();
+  };
+  const sp=d.sp?SP[d.sp]:null;const r=d.id_;
+  return `<div class="centerh"><button class="back" id="revBack">${I.back}</button><h1>Catch Review</h1><p>Confirm the details, then get your verdict.</p></div>
+  <div class="review-photo" id="revPhoto"></div>
+  <div class="card" style="margin-top:12px">
+    <div class="split"><span class="eyebrow">Species</span>${!d.idDone?`<span class="row small muted"><span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Identifying…</span>`:r?.demo?'<span class="pill">Demo ID</span>':r?.error?'<span class="pill" style="color:#ff8c98">ID unavailable</span>':d.aiConf!=null?`<span class="pill" style="color:#8ec6ff">AI match ${Math.round(d.aiConf*100)}%</span>`:''}</div>
+    <button class="row" id="pickSpecies" style="width:100%;margin-top:8px;text-align:left"><div style="width:84px;height:52px;border-radius:10px;overflow:hidden;background:#0d2238;flex:none">${sp?fishSVG(sp,{k:'rv'}):''}</div><div class="grow"><b style="font-size:19px;color:#fff">${sp?esc(sp.n):'Choose species'}</b><div class="muted small" style="font-style:italic">${sp?esc(sp.sci):(d.idDone?'Tap to search the registry':'Waiting for the identifier')}</div></div>${I.chev}</button>
+    ${r&&r.alternates?.length?`<div class="row small" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="muted">Or:</span>${r.alternates.filter(a=>a!==d.sp).slice(0,3).map(a=>`<button class="pill" data-alt="${a}">${esc(SP[a]?.n||a)}</button>`).join('')}</div>`:''}
+    ${r?.note?`<div class="faint small" style="margin-top:8px">${esc(r.note)}</div>`:''}
+  </div>
+  <div class="card stack" style="margin-top:12px">
+    <div class="grid2"><div class="field"><label>Length (in)${d.method==='ai'?' · AI estimate':''}</label><input class="inp" id="revLen" type="number" inputmode="decimal" step="0.1" min="1" max="200" value="${d.len??''}" placeholder="e.g. 24.5"></div><div class="field"><label>Weight (lb)</label><input class="inp" id="revWt" type="number" inputmode="decimal" step="0.1" min="0" max="500" value="${d.wt??''}" placeholder="optional"></div></div>
+    <div class="field"><label>Water</label><input class="inp" id="revWater" list="waters" value="${esc(d.water||'')}" placeholder="Lake, river or bay"></div>
+    <div class="field"><label>Region ${d.lat!=null?'<span class="faint">· from GPS</span>':''}</label><select class="inp" id="revRegion">${REGIONS.map(x=>`<option ${(d.region||S.homeRegion)===x?'selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="field"><label>Catch time</label><input class="inp" id="revTs" type="datetime-local" value="${localISO(d.ts)}"></div>
+    <div class="field"><label>Kept or released?</label><div class="seg" id="revRel"><button class="${d.released?'':'on'}" data-rel="0">Kept</button><button class="${d.released?'on':''}" data-rel="1">${I.release} Released</button></div></div>
+    <div class="field"><label>Location privacy</label><div class="seg" id="revPriv">${Object.entries(PRIVACY).map(([k,n])=>`<button data-rp="${k}" class="${(d.privacy||S.privacy)===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div><div class="faint small">${d.lat!=null?'Exact coordinates are stored on this device only.':'No GPS fix — location will not be verified for this catch.'}</div></div>
+    <div class="field"><label>Caption</label><textarea class="inp" id="revCap" placeholder="What a day…">${esc(d.caption||'')}</textarea></div>
+  </div>
+  <button class="btn gold" style="margin-top:14px" id="btnVerdict" ${sp?'':'disabled'}>${I.gem} Get Verdict</button>
+  <datalist id="waters">${WATERS.map(w=>`<option value="${esc(w)}">`).join('')}</datalist>`;
+};
+function localISO(ts){const d=new Date(ts);const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`}
+function readReview(){const d=CUR.draft;if(!d)return;const v=id=>$(id)?.value;d.len=parseFloat(v('#revLen'))||null;if(d.len&&d.method==='ai'&&Math.abs(d.len-(d.id_?.length||0))>0.05)d.method='manual';d.wt=parseFloat(v('#revWt'))||null;d.water=(v('#revWater')||'').trim();d.region=v('#revRegion');const t=v('#revTs');if(t){const ms=new Date(t).getTime();if(!isNaN(ms))d.ts=ms}d.caption=(v('#revCap')||'').trim()}
+document.addEventListener('click',async e=>{
+  if(e.target.closest('#revBack')){if(await confirmSheet('Discard this photo?','You can take another one.','Discard',true)){await DB.del(CUR.draft.id);CUR.draft=null;go('capture')}return}
+  const alt=e.target.closest('[data-alt]');if(alt){readReview();CUR.draft.sp=alt.dataset.alt;CUR.draft.aiConf=null;render();return}
+  const rel=e.target.closest('[data-rel]');if(rel){readReview();CUR.draft.released=rel.dataset.rel==='1';render();return}
+  const rp=e.target.closest('[data-rp]');if(rp){readReview();CUR.draft.privacy=rp.dataset.rp;render();return}
+  if(e.target.closest('#pickSpecies')){readReview();speciesPicker(id=>{CUR.draft.sp=id;CUR.draft.aiConf=null;render()});return}
+  if(e.target.closest('#btnVerdict')){readReview();const d=CUR.draft;if(!d.sp)return;if(d.len&&(d.len<1||d.len>200)){toast('Check that length');return}CUR.verdict=commitCatch(d);CUR.draft=null;go('verdict');return}
+});
+function speciesPicker(cb){
+  const bg=sheet(`<h3>Choose species</h3><input class="inp" id="spq" placeholder="Search 72 species…" autocomplete="off"><div id="splist" style="margin-top:10px"></div>`);
+  const list=$('#splist',bg),q=$('#spq',bg);
+  const draw=()=>{const t=q.value.trim().toLowerCase();const have=speciesCaught();const rows=SPECIES.filter(s=>!t||s.n.toLowerCase().includes(t)||s.sci.toLowerCase().includes(t)||GROUP_LABEL[s.g].toLowerCase().includes(t)).slice(0,40);list.innerHTML=rows.map(s=>`<div class="listrow" data-pick="${s.id}" role="button" style="cursor:pointer"><div style="width:64px;height:40px;border-radius:8px;overflow:hidden;background:#0d2238;flex:none">${fishSVG(s,{k:'p',sil:!have.has(s.id)})}</div><div class="grow"><div class="t">${esc(s.n)}</div><div class="s" style="font-style:italic">${esc(s.sci)}</div></div>${have.has(s.id)?`<span class="pill" style="color:#5cf0a0">✓</span>`:`<span class="pill">New</span>`}</div>`).join('')||'<p class="muted">No match.</p>'};
+  q.addEventListener('input',draw);draw();setTimeout(()=>q.focus(),50);
+  list.addEventListener('click',e=>{const r=e.target.closest('[data-pick]');if(r){bg.remove();cb(r.dataset.pick)}});
+}
+
+/* ---------- Verdict ---------- */
+ROUTES.verdict = ({id})=>{
+  let V=CUR.verdict;
+  if(!V&&id){const c=S.catches.find(x=>x.id===id);if(c){V={c,sp:SP[c.sp],newSpecies:false,pb:c.pb,tier:c.tier,pct:c.pct,parts:[['XP earned',c.xp||0]],xp:c.xp||0,newAch:[],chDone:[],chal:CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,c.sp)),registry:[speciesCaught().size,SPECIES.length],replay:true}}}
+  if(!V)return ROUTES.home();
+  const {c,sp,tier,pct}=V;const T=TIERS[tier];const reg=V.registry;const have=speciesCaught();const spIdx=SPECIES.findIndex(s=>s.id===sp.id)+1;
+  CUR.after=()=>{revealSequence(V);};
+  return `<div class="verdict">
+  <div class="centerh"><button class="back" data-go="home">${I.back}</button><h1>Verdict</h1><p>Here's what you caught!</p><span class="right small muted" style="top:14px">1 / 1</span></div>
+  <div class="hero v-reveal" id="vr0"><span data-photo="${c.id}" style="display:block;width:100%;height:100%"></span><button class="pill vp" data-go="catch/${c.id}">${I.image} View Photo</button></div>
+  <div class="v-species"><div class="v-reveal" id="vr1"><span class="eyebrow">Species</span><h2>${esc(sp.n)}</h2><div class="sci">${esc(sp.sci)}</div><div style="margin-top:8px"><span class="pill">${I.fish} ${GROUP_LABEL[sp.g]}${sp.tags.includes('game')?' · Game fish':''}</span></div></div>
+    <div class="v-tier ${tier} v-reveal" id="vr2"><div class="nm tc-${tier}">${T.ico}${T.n.toUpperCase()}</div><div class="stars">${'★'.repeat(T.stars)}</div><div class="why">${T.why}</div></div></div>
+  <div class="v-stats v-reveal" id="vr3"><div><div class="k">${I.ruler} LENGTH</div><div class="v">${c.len?num(c.len)+' in':'—'}</div></div><div><div class="k">${I.scale} WEIGHT</div><div class="v">${c.wt?num(c.wt)+' lb':'—'}</div></div><div><div class="k">${I.chart} PERCENTILE</div><div class="v">${pct?'Top '+pct+'%':'—'}</div><div class="s">${pct?'of registered '+esc(sp.n.split(' ')[0]):'add a length'}</div></div></div>
+  <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Logged to your registry</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span> +<span id="xpNum">0</span> XP</span></div></div>
+  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}Species Registry: <b>#${spIdx}</b> <span class="muted">· ${reg[0]} / ${reg[1]}</span></span><a data-go="species/${sp.id}" href="#species/${sp.id}">View Species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+    ${V.chal.length?`<div class="stack" style="margin-top:12px">${V.chal.map(({ch,p})=>`<div class="card" style="padding:12px 14px" data-go="challenges"><div class="split"><b style="color:#fff">${esc(ch.n)}</b><span class="small b" style="color:#fff">${p} / ${ch.sp.length}</span></div><div class="prog green" style="margin-top:8px;height:6px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div></div>`).join('')}</div>`:''}
+    ${V.newAch.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Achievement unlocked</span>${V.newAch.map(a=>`<div class="row" style="margin-top:8px"><div style="width:44px">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8')}</div><div><b style="color:#fff">${esc(a.n)}</b><div class="muted small">${esc(a.d)}</div></div></div>`).join('')}</div>`:''}
+    ${V.chDone.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Challenge complete</span>${V.chDone.map(ch=>`<b style="display:block;color:#fff;margin-top:6px">${esc(ch.n)} · +${ch.xp.toLocaleString()} XP</b>`).join('')}</div>`:''}
+    <details class="small muted" style="margin-top:12px"><summary style="cursor:pointer">XP breakdown</summary><div style="margin-top:6px">${V.parts.map(p=>`<div class="split"><span>${esc(p[0])}</span><span>+${p[1].toLocaleString()}</span></div>`).join('')}</div></details></div>
+  <div class="v-reveal stack" id="vr7" style="margin-top:16px"><button class="btn" data-share="${c.id}">${I.share} Share Verdict</button><button class="btn ghost" data-go="trophy">${I.trophy} View Trophy Room</button><button class="btn ghost" data-go="home">Done</button></div>
+  ${quote()}</div>`;
+};
+function revealSequence(V){
+  const els=[...Array(8)].map((_,i)=>$('#vr'+i));const fast=V.replay;
+  els.forEach((el,i)=>{if(!el)return;setTimeout(()=>el.classList.add('in'),fast?60*i:220+i*420)});
+  const total=V.xp;const n=$('#xpNum');const t0=performance.now()+(fast?100:220+5*420);
+  const iv=setInterval(()=>{const p=clamp((performance.now()-t0)/900,0,1);if(n)n.textContent=Math.round(total*(1-Math.pow(1-p,3))).toLocaleString();if(p>=1)clearInterval(iv)},40);
+  if(!fast&&TIER_ORDER.indexOf(V.tier)>=2)setTimeout(()=>confetti(V.tier),220+2*420);
+}
+function confetti(tier){const cols={rare:['#3b8bff','#8ec6ff','#fff'],epic:['#b45cff','#d3a3ff','#fff','#f2b64a'],legendary:['#f2b64a','#ffd985','#fff','#b45cff']}[tier]||['#fff'];const w=document.createElement('div');w.className='confetti';w.innerHTML=[...Array(70)].map((_,i)=>`<i style="left:${Math.random()*100}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*.6}s;animation-duration:${1.4+Math.random()*1.2}s;transform:rotate(${Math.random()*360}deg)"></i>`).join('');document.body.appendChild(w);setTimeout(()=>w.remove(),3200)}
+
+/* ---------- Share card (canvas 1080×1350) ---------- */
+async function shareCatch(c){
+  const sp=SP[c.sp];const W=1080,H=1350;const cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#123152');g.addColorStop(.5,'#0b1a2b');g.addColorStop(1,'#07111d');x.fillStyle=g;x.fillRect(0,0,W,H);
+  // photo
+  const img=new Image();const u=await photoURL(c);
+  await new Promise(res=>{img.onload=res;img.onerror=res;img.src=u||('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(fishScene(sp,'share')))});
+  const ph={x:60,y:150,w:960,h:720};x.save();roundRect(x,ph.x,ph.y,ph.w,ph.h,36);x.clip();
+  if(img.width){const r=Math.max(ph.w/img.width,ph.h/img.height);const w=img.width*r,h=img.height*r;x.drawImage(img,ph.x+(ph.w-w)/2,ph.y+(ph.h-h)/2,w,h)}else{x.fillStyle='#0d2238';x.fillRect(ph.x,ph.y,ph.w,ph.h)}
+  x.restore();
+  x.fillStyle='#fff';x.font='700 54px "Playfair Display", Georgia, serif';x.fillText('Fish Hunt',60,90);x.font='600 22px Inter, system-ui, sans-serif';x.fillStyle='rgba(232,242,255,.85)';x.fillText('C A T C H   ·   E X P L O R E   ·   C O L L E C T',60,122);
+  x.textAlign='right';x.font='600 40px Caveat, cursive';x.fillStyle='#fff';x.fillText('More fish. Brighter days.',1020,100);x.textAlign='left';
+  // species + tier
+  const T=TIERS[c.tier];const col={common:'#c9d3df',uncommon:'#3ddc84',rare:'#7fb2ff',epic:'#d3a3ff',legendary:'#ffd985'}[c.tier];
+  x.fillStyle='#fff';x.font='700 76px "Playfair Display", Georgia, serif';fitText(x,sp.n.toUpperCase(),60,975,700);
+  x.font='italic 30px Inter, system-ui, sans-serif';x.fillStyle='#a9bdd6';x.fillText(sp.sci,60,1020);
+  x.fillStyle=col;roundRect(x,760,915,260,80,40);x.globalAlpha=.18;x.fill();x.globalAlpha=1;x.strokeStyle=col;x.lineWidth=3;x.stroke();x.fillStyle=col;x.font='800 34px Inter, system-ui, sans-serif';x.textAlign='center';x.fillText(T.n.toUpperCase(),890,967);x.textAlign='left';
+  x.fillStyle='#f2b64a';x.font='36px Inter';x.textAlign='center';x.fillText('★'.repeat(T.stars),890,1040);x.textAlign='left';
+  // stats
+  const stats=[['LENGTH',c.len?num(c.len)+' in':'—'],['WEIGHT',c.wt?num(c.wt)+' lb':'—'],['PERCENTILE',c.pct?'Top '+c.pct+'%':'—']];
+  stats.forEach(([k,v],i)=>{const sx=60+i*320;x.fillStyle='rgba(255,255,255,.06)';roundRect(x,sx,1070,300,130,24);x.fill();x.strokeStyle='rgba(255,255,255,.16)';x.lineWidth=2;x.stroke();x.fillStyle='#a9bdd6';x.font='600 22px Inter, system-ui, sans-serif';x.fillText(k,sx+24,1112);x.fillStyle='#fff';x.font='700 48px Inter, system-ui, sans-serif';x.fillText(v,sx+24,1170)});
+  x.fillStyle=c.pb?'#ffd985':'#5cf0a0';x.font='700 30px Inter, system-ui, sans-serif';x.fillText((c.pb?'🏆 NEW PERSONAL BEST   ':'')+'+'+(c.xp||0).toLocaleString()+' XP',60,1262);
+  x.fillStyle='#a9bdd6';x.font='500 26px Inter, system-ui, sans-serif';x.fillText(fmtDate(c.ts)+'  ·  '+locLine(c,false),60,1308);
+  x.textAlign='right';x.fillStyle='rgba(255,255,255,.6)';x.font='600 24px Inter';x.fillText(esc(S.name||'').toUpperCase(),1020,1308);x.textAlign='left';
+  cv.toBlob(async b=>{const f=new File([b],'fish-hunt-verdict.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Fish Hunt verdict',text:`${sp.n} · ${T.n}${c.len?' · '+num(c.len)+' in':''} — Fish Hunt`});return}catch(e){}}
+    const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;a.click();toast('Verdict card saved')},'image/png');
+}
+function roundRect(x,X,Y,W,H,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+H,r);x.arcTo(X+W,Y+H,X,Y+H,r);x.arcTo(X,Y+H,X,Y,r);x.arcTo(X,Y,X+W,Y,r);x.closePath()}
+function fitText(x,t,X,Y,maxW){let size=76;while(size>30){x.font=`700 ${size}px "Playfair Display", Georgia, serif`;if(x.measureText(t).width<=maxW)break;size-=4}x.fillText(t,X,Y,maxW)}
+
+/* ---------- Map ---------- */
+let leafletLoading=null;
+function loadLeaflet(){if(window.L)return Promise.resolve();if(leafletLoading)return leafletLoading;leafletLoading=new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(l);const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)});return leafletLoading}
+let mapSpecies='all',mapDays=0;
+ROUTES.map = ()=>{
+  const mine=S.catches.filter(c=>c.lat!=null);
+  const list=S.catches.filter(c=>(mapSpecies==='all'||c.sp===mapSpecies)&&(!mapDays||Date.now()-c.ts<mapDays*86400e3));
+  const waters=new Set(S.catches.map(c=>c.water).filter(Boolean));
+  CUR.after=async()=>{
+    try{await loadLeaflet()}catch(e){$('#map').innerHTML='<div style="display:grid;place-items:center;height:100%;color:var(--mist)">Map tiles need a connection.</div>';return}
+    const el=$('#map');if(!el)return;const pts=list.filter(c=>c.lat!=null);
+    const m=L.map(el,{zoomControl:false,attributionControl:true}).setView(pts.length?[pts[0].lat,pts[0].lng]:[47.4,-121.6],pts.length?9:7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'© OpenStreetMap'}).addTo(m);
+    const b=[];for(const c of pts){const ic=L.divIcon({className:'',html:`<div class="fpin ${c.tier}">${I.fish}</div>`,iconSize:[36,36],iconAnchor:[18,36],popupAnchor:[0,-36]});L.marker([c.lat,c.lng],{icon:ic}).addTo(m).bindPopup(`<b>${esc(c.water||c.region||'Catch')}</b><br>${esc(SP[c.sp].n)}${c.len?' · '+num(c.len)+' in':''}<br><a href="#catch/${c.id}" style="color:#8ec6ff">Open catch →</a>`);b.push([c.lat,c.lng])}
+    if(b.length>1)m.fitBounds(b,{padding:[30,30]});
+    $('#mapLocate').onclick=async()=>{const p=await getPosition();if(p)m.setView([p.lat,p.lng],11);else toast('Location unavailable')};
+  };
+  return `<div class="page-h" style="align-items:flex-start"><div><h1>Catch Map</h1><p>Your waters. Your history.</p></div><div class="pill" style="flex-direction:column;align-items:flex-end;gap:2px;padding:8px 12px"><span class="row" style="gap:6px">${I.lock} Private spot protection: <b style="color:#5cf0a0">ON</b></span></div></div>
+  <div class="chips"><select class="chip" id="mapSp" style="appearance:none">${['all',...new Set(S.catches.map(c=>c.sp))].map(id=>`<option value="${id}" ${mapSpecies===id?'selected':''}>${id==='all'?'All Species':SP[id].n}</option>`).join('')}</select><select class="chip" id="mapDays" style="appearance:none">${[[0,'All time'],[30,'Last 30 days'],[90,'Last 90 days'],[365,'Last year']].map(([d,n])=>`<option value="${d}" ${mapDays===d?'selected':''}>${n}</option>`).join('')}</select></div>
+  <div id="map"><button id="mapLocate" class="ico" style="position:absolute;right:12px;top:12px;z-index:500;width:44px;height:44px;border-radius:50%;background:var(--navy-900);border:1px solid var(--line-2);color:#fff;display:grid;place-items:center">${I.nav.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
+  <div class="sub-h"><h2>${mapSpecies==='all'&&!mapDays?'Your Catches':'Filtered Catches'}</h2><span class="small muted">${list.length} catch${list.length===1?'':'es'} · ${waters.size} waters</span></div>
+  ${mine.length<S.catches.length?`<p class="faint small" style="margin:0 0 10px">${S.catches.length-mine.length} catch${S.catches.length-mine.length===1?'':'es'} without a GPS fix are listed below but not pinned.</p>`:''}
+  <div class="stack">${list.slice(0,30).map(c=>catchRow(c)).join('')||'<div class="card muted small">No catches match these filters.</div>'}</div>`;
+};
+document.addEventListener('change',e=>{if(e.target.id==='mapSp'){mapSpecies=e.target.value;render()}if(e.target.id==='mapDays'){mapDays=+e.target.value;render()}});
+
+/* ---------- Demo seed ---------- */
+function seedDemo(){
+  if(S.demo)return;
+  const rows=[ // sp, days ago, len, wt, water, region, lat, lng, released, privacy, caption
+    ['coho',31,28.4,8.7,'Cle Elum Lake','Central Cascades',47.297,-121.08,false,'waterbody','Evening bite. Unreal colors.'],
+    ['chinook',4,42.1,31.2,'Puget Sound','Puget Sound North',47.98,-122.34,false,'region','Blackmouth on the flood.'],
+    ['sockeye',56,24.7,6.1,'Lake Washington','Puget Sound North',47.62,-122.25,false,'waterbody',''],
+    ['steelhead',129,32.6,12.1,'Skagit River','North Cascades',48.44,-121.75,true,'region','Swung up on a purple leech.'],
+    ['rainbow',82,20.1,3.4,'Rattlesnake Lake','Central Cascades',47.43,-121.77,true,'private',''],
+    ['smallmouth',395,18.3,3.9,'Columbia River','Columbia Gorge',45.72,-121.5,true,'region','Topwater at first light.'],
+    ['cutthroat',203,14.2,1.3,'Snoqualmie River','Central Cascades',47.52,-121.83,true,'private',''],
+    ['largemouth',108,18.2,4.4,'Lake Sammamish','Puget Sound North',47.6,-122.08,true,'waterbody','Frog bite is on.'],
+    ['pike',55,37.6,14.8,'Lake Roosevelt','Spokane Region',47.95,-118.3,false,'region','Big northern in the coves.'],
+    ['walleye',76,27.5,8.2,'Banks Lake','Columbia Basin',47.7,-119.25,false,'waterbody',''],
+    ['lingcod',160,38.0,22.5,'Westport','Washington Coast',46.9,-124.12,false,'region','Jig bite off the jetty.'],
+    ['perch',12,11.5,0.9,'Moses Lake','Columbia Basin',47.13,-119.3,false,'waterbody',''],
+    ['kokanee',140,15.2,1.6,'Lake Chelan','North Cascades',47.9,-120.2,false,'private',''],
+    ['blackrock',162,17.4,2.8,'Westport','Washington Coast',46.89,-124.15,false,'region',''],
+    ['rainbow',330,16.3,2.1,'Lake Wenatchee','Central Cascades',47.83,-120.78,true,'private',''],
+    ['coho',401,24.2,6.5,'Puget Sound','Puget Sound North',47.83,-122.36,false,'region','First coho of the season.'],
+    ['smallmouth',360,15.1,2.2,'Snake River','Palouse / Snake River',46.55,-117.5,true,'region',''],
+    ['brook',280,10.2,0.6,'Kachess Lake','Central Cascades',47.36,-121.22,true,'private','High lakes weekend.'],
+    ['perch',13,9.8,0.7,'Moses Lake','Columbia Basin',47.13,-119.3,false,'waterbody',''],
+    ['largemouth',220,16.7,3.1,'Silver Lake','Southwest Washington',46.3,-122.8,true,'waterbody',''],
+    ['chum',40,29.8,11.4,'Hood Canal','Puget Sound South',47.4,-123.1,false,'region','Fall run is in.'],
+    ['cutthroat',18,15.8,1.7,'Yakima River','Yakima River Region',46.85,-120.5,true,'region','Dries on the Yak.'],
+    ['rainbow',60,22.4,4.6,'Rocky Ford Creek','Columbia Basin',47.3,-119.4,true,'region','Spring creek pig.'],
+    ['bcrappie',95,12.1,1.1,'Potholes Reservoir','Columbia Basin',46.98,-119.32,false,'waterbody','']
+  ].sort((a,b)=>b[1]-a[1]); // oldest first so PB detection and XP accrue naturally
+  for(const r of rows){const [sp,daysAgo,len,wt,water,region,lat,lng,released,privacy,caption]=r;const dd=new Date();dd.setHours(6+daysAgo%11,(daysAgo*7)%60,0,0);const ts=dd.getTime()-daysAgo*86400e3;const V=commitCatch({id:'demo-'+uid(),sp,ts,len,wt,water,region,lat,lng,released,privacy,caption,hasPhoto:true,art:true,aiConf:.86+(daysAgo%12)/100,method:'manual'});V.c.demo=true}
+  S.catches.filter(c=>c.demo).forEach((c,i)=>{if(i%5===0)c.fav=true});
+  S.catches.sort((a,b)=>b.ts-a.ts);
+  S.demo=true;S.inbox.unshift({id:uid(),ts:Date.now(),k:'sys',t:'Sample catches loaded',s:'Remove them anytime in Settings → Data.'});save();
+}
+function removeDemo(){const gone=S.catches.filter(c=>c.demo);S.catches=S.catches.filter(c=>!c.demo);S.xp=S.catches.reduce((a,c)=>a+(c.xp||0),0);S.achievements={};S.challengesDone={};for(const a of ACHIEVEMENTS)if(a.test(S))S.achievements[a.id]=Date.now();for(const ch of CHALLENGES)if(challengeProgress(ch)===ch.sp.length)S.challengesDone[ch.id]=Date.now();S.demo=false;save()}
+
+/* ---------- Boot ---------- */
+(function boot(){
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+  const [r,id]=location.hash.slice(1).split('/');
+  if(!S.onboarded){CUR.route='onboarding'}else{CUR.route=ROUTES[r]?r:'home';CUR.params=id?{id}:{}}
+  if(CUR.route==='review'||CUR.route==='verdict'&&!id)CUR.route='home';
+  render();
+  window.addEventListener('pagehide',stopCamera);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&CUR.route==='capture')stopCamera()});
+})();
+</script>
+</body>
+</html>
