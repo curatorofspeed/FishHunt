@@ -623,6 +623,9 @@ header.top .brand svg{color:#163a56}
 nav.bottom button.on{color:var(--water-2)}
 body[data-hdr="onb"]{--ridge:300px}
 header.top .ico .dot{border-color:var(--navy-950)}
+details.dev summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px}
+details.dev summary::before{content:'▸';font-size:11px}
+details.dev[open] summary::before{content:'▾'}
 </style>
 </head>
 <body>
@@ -2007,9 +2010,11 @@ ROUTES.settings = ()=>`<div class="centerh"><button class="back" data-go="more">
     <div class="seg" id="setPriv" aria-label="Default location privacy">${Object.entries(PRIVACY).map(([k,n])=>`<button data-sp="${k}" class="${S.privacy===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div>
     <div class="small muted" id="privHelp" aria-live="polite">${privHelp(S.privacy)}</div>
   </div>
-  <div class="card stack" style="margin-top:12px"><span class="eyebrow">Species identification</span><p class="muted small" style="margin:0">Without a key the camera runs in demo mode (you pick the species). Paste an Anthropic API key to identify fish from the photo with Claude vision. Developer preview only: the key is stored in this browser and calls go straight from the device.</p>
-    <div class="field"><label>Anthropic API key</label><input class="inp" id="setKey" type="password" value="${esc(S.apiKey)}" placeholder="sk-ant-…" autocomplete="off"></div>
+  <div class="card stack" style="margin-top:12px"><span class="eyebrow">Species identification</span><p class="muted small" style="margin:0">Photos are identified on FishDex's server with Claude vision. The photo is sent for the identification and not kept, and only the species list and your home region travel with it. Each device gets ${ID_DAY_CAP} identifications a day; offline, you pick the species yourself.</p>
+    <details class="dev"><summary class="small muted">Developer options</summary>
+    <div class="field" style="margin-top:10px"><label>Anthropic API key</label><input class="inp" id="setKey" type="password" value="${esc(S.apiKey)}" placeholder="sk-ant-…" autocomplete="off"></div>
     <div class="field"><label>Model</label><input class="inp" id="setModel" value="${esc(S.model)}"></div>
+    <p class="faint small" style="margin:0">With a key here, identification calls Anthropic straight from this device instead of the server.</p></details>
   </div>
   <div class="card stack" style="margin-top:12px"><span class="eyebrow">Data</span>
     <div class="grid2"><button class="btn ghost sm" id="btnExport">${I.save} Export JSON</button><button class="btn ghost sm" id="btnImport">${I.image} Import JSON</button></div>
@@ -2065,7 +2070,7 @@ ROUTES.capture = ()=>{
     <div class="cam-frame"><i></i><i></i><i></i><i></i></div>
     <div class="cam-top"><button class="back" data-go="home" style="color:#fff">${I.back}</button><div class="brand">${logo}<div><b>FishDex</b><small style="display:block;font-size:9px;letter-spacing:.22em;color:var(--ice)">CATCH · EXPLORE · COLLECT</small></div></div><button class="x" data-go="home" aria-label="Close">${I.x}</button></div>
     <div class="cam-title"><h1 id="camTitle">Record Catch</h1><p>Take a clear photo of your catch</p></div>
-    <button type="button" class="cam-match" id="camMatch"><span class="mini">${fishSVG(SP.coho,{k:'m'})}</span><span class="cm-txt"><small>${S.apiKey?'AI species ID after the shot':'Demo mode — you pick the species after the shot'}</small><b id="camMatchName">Choose species</b></span>${I.chev}</button>
+    <button type="button" class="cam-match" id="camMatch"><span class="mini">${fishSVG(SP.coho,{k:'m'})}</span><span class="cm-txt"><small>${idAvailable()?'AI species ID after the shot':'Offline — you pick the species after the shot'}</small><b id="camMatchName">Choose species</b></span>${I.chev}</button>
     <div class="cam-hint">${I.target}<div><b>Align fish within the frame</b><span>Best results in good light</span></div>${I.info.replace('<svg','<svg style="width:18px;height:18px;color:var(--mist)"')}</div>
     <div class="cam-bottom">
       <div class="cam-opts"><button type="button" id="optAuto" data-copt="auto">${I.scan}<div><b>Auto size</b><span id="optAutoLbl"></span></div></button><button type="button" id="optLen" data-copt="len">${I.ruler}<div><b>Add length</b><span id="optLenLbl">Optional</span></div></button><button type="button" id="optWt" data-copt="wt">${I.scale}<div><b>Add weight</b><span id="optWtLbl">Optional</span></div></button></div>
@@ -2098,8 +2103,8 @@ function initTorch(){const t=camStream?.getVideoTracks?.()[0];let ok=false;try{o
 function setFlashState(st){const b=$('#btnFlash'),l=$('#flashLbl');if(!b||!l)return;b.dataset.state=st;b.disabled=st==='unavailable';b.setAttribute('aria-pressed',st==='on'?'true':'false');l.textContent={on:'On',off:'Off',unavailable:'Unavailable'}[st]}
 function updateCamOpts(){
   const d=CUR.draft||{};const a=$('#optAuto');if(!a)return;
-  const hasKey=!!S.apiKey,on=hasKey&&S.autoSize!==false;
-  a.classList.toggle('ok',on);a.setAttribute('aria-pressed',on?'true':'false');$('#optAutoLbl').textContent=hasKey?(on?'On':'Off'):'Needs AI key';
+  const hasKey=idAvailable(),on=hasKey&&S.autoSize!==false;
+  a.classList.toggle('ok',on);a.setAttribute('aria-pressed',on?'true':'false');$('#optAutoLbl').textContent=hasKey?(on?'On':'Off'):'Needs a connection';
   $('#optLenLbl').textContent=d.len?num(d.len)+' in':'Optional';$('#optWtLbl').textContent=d.wt?num(d.wt)+' lb':'Optional';
   $('#optLen').classList.toggle('ok',!!d.len);$('#optWt').classList.toggle('ok',!!d.wt);
   const sp=d.sp?SP[d.sp]:null;$('#camMatchName').textContent=sp?sp.n:'Choose species';
@@ -2118,7 +2123,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#btnShutter')){const sh=$('#btnShutter');if(!sh||sh.disabled||sh.getAttribute('aria-busy')==='true')return;const v=$('#camVideo');if(!v||!v.videoWidth){toast('Camera is still starting');return}sh.setAttribute('aria-busy','true');const c=document.createElement('canvas');const W=Math.min(1600,v.videoWidth);c.width=W;c.height=Math.round(v.videoHeight*W/v.videoWidth);c.getContext('2d').drawImage(v,0,0,c.width,c.height);c.toBlob(b=>{if(b)gotPhoto(b);else{sh.removeAttribute('aria-busy');toast('Could not capture that frame')}},'image/jpeg',.9);return}
   if(e.target.closest('#btnGallery')){$('#fileGallery').click();return}
   if(e.target.closest('#btnFlash')){const b=$('#btnFlash'),t=camStream?.getVideoTracks?.()[0];if(!t||b.disabled)return;const on=b.dataset.state!=='on';t.applyConstraints({advanced:[{torch:on}]}).then(()=>setFlashState(on?'on':'off')).catch(()=>{setFlashState('unavailable');toast('Flash is not available on this camera')});return}
-  const o=e.target.closest('[data-copt]');if(o&&CUR.route==='capture'){if(o.dataset.copt==='auto'){if(!S.apiKey){toast('Add an Anthropic API key in Settings to estimate size from the photo',3200);return}S.autoSize=S.autoSize===false;save();updateCamOpts();announce('Auto-detect size '+(S.autoSize!==false?'on':'off'));return}measureSheet(o.dataset.copt);return}
+  const o=e.target.closest('[data-copt]');if(o&&CUR.route==='capture'){if(o.dataset.copt==='auto'){if(!idAvailable()){toast('Size estimates need a connection',3200);return}S.autoSize=S.autoSize===false;save();updateCamOpts();announce('Auto-detect size '+(S.autoSize!==false?'on':'off'));return}measureSheet(o.dataset.copt);return}
   if(e.target.closest('#camMatch')&&CUR.draft){speciesPicker(id=>{CUR.draft.sp=id;CUR.draft.aiConf=null;updateCamOpts()});return}
 });
 $('#fileGallery').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;if(!CUR.draft||CUR.route!=='capture'){CUR.draft={id:uid(),ts:Date.now(),privacy:S.privacy,released:false}}const b=await downscale(f,1600);
@@ -2141,14 +2146,24 @@ async function gotPhoto(blob){
 
 /* ---------- Species identification ---------- */
 function blobToB64(blob){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.readAsDataURL(blob)})}
+// Species identification runs on FishDex's server: the photo goes to the fishdex-identify edge function, which holds the
+// Anthropic key, validates the answer against the species list the app sends, and caps each device per day.
+const ID_ENDPOINT='https://kokxlzygppakgcebkygc.supabase.co/functions/v1/fishdex-identify';
+const ID_DAY_CAP=40;
+function deviceId(){if(!S.device||!/^[a-z0-9]{6,40}$/.test(S.device)){S.device=(uid()+uid()).toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,32);save()}return S.device}
+function quickPicks(){const counts={};for(const c of S.catches)counts[c.sp]=(counts[c.sp]||0)+1;const mine=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);const salty=regionSalty(S.homeRegion);const common=SPECIES.filter(s=>inHome(s)&&s.r<=2&&(salty||s.w!=='salt')).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n)).map(s=>s.id);return [...new Set([...mine,...common])].slice(0,4)}
+const idAvailable=()=>!!S.apiKey||navigator.onLine;
 async function identify(blob){
-  if(!S.apiKey){ // demo: never guess. The angler picks; quick picks come from their own history, then common local species.
-    const counts={};for(const c of S.catches)counts[c.sp]=(counts[c.sp]||0)+1;
-    const mine=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
-    const salty=regionSalty(S.homeRegion);
-    const common=SPECIES.filter(s=>inHome(s)&&s.r<=2&&(salty||s.w!=='salt')).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n)).map(s=>s.id);
-    return {demo:true,species:null,confidence:null,alternates:[...new Set([...mine,...common])].slice(0,4),length:null};
-  }
+  if(S.apiKey)return identifyDirect(blob);
+  if(!navigator.onLine)return {demo:true,offline:true,species:null,confidence:null,alternates:quickPicks(),length:null};
+  const b64=await blobToB64(blob);
+  let r;try{r=await fetch(ID_ENDPOINT,{method:'POST',headers:{'content-type':'application/json','x-fishdex-device':deviceId()},body:JSON.stringify({image_b64:b64,media_type:blob.type||'image/jpeg',home:{region:S.homeRegion,place:homeStateName()},species:SPECIES.map(s=>({id:s.id,n:s.n,sci:s.sci}))})})}
+  catch(e){const err=new Error('Identification needs a connection');err.alternates=quickPicks();throw err}
+  if(!r.ok){let msg='Identification unavailable ('+r.status+')';try{const j=await r.json();if(j.error)msg=j.error[0].toUpperCase()+j.error.slice(1)}catch(e){}const err=new Error(msg);err.alternates=quickPicks();throw err}
+  const o=await r.json();
+  return {demo:false,species:o.species||null,confidence:o.confidence,alternates:(o.alternates&&o.alternates.length?o.alternates:quickPicks()),length:o.length,note:o.note};
+}
+async function identifyDirect(blob){ // developer path: a key pasted in Settings calls Anthropic from this device
   const b64=await blobToB64(blob);
   const list=SPECIES.map(s=>`${s.id}: ${s.n} (${s.sci})`).join('\n');
   const schema={type:'object',additionalProperties:false,required:['species_id','confidence','alternates','estimated_length_in','fish_present','note'],properties:{
@@ -2175,8 +2190,8 @@ ROUTES.review = ()=>{
     if(d.idDone||d.idBusy)return; // re-renders while identifying must not start another (paid) request
     d.idBusy=true;
     try{const r=await identify(d.blob||await DB.get(d.id));d.idDone=true;d.id_=r;if(r.species&&!d.sp){d.sp=r.species;d.aiConf=r.confidence}if(r.length&&!d.len&&S.autoSize!==false){d.len=Math.round(r.length*10)/10;d.method='ai'}
-      announce(d.sp?`Species: ${SP[d.sp].n}${d.aiConf!=null?', '+Math.round(d.aiConf*100)+' percent match':''}`:r.demo?'Demo mode. Choose the species yourself.':'Species not identified. Choose it from the list.')}
-    catch(e){d.idDone=true;d.id_={error:e.message};toast(e.message,3500)}
+      announce(d.sp?`Species: ${SP[d.sp].n}${d.aiConf!=null?', '+Math.round(d.aiConf*100)+' percent match':''}`:r.demo?(r.offline?'Offline. Choose the species yourself.':'Demo mode. Choose the species yourself.'):'Species not identified. Choose it from the list.')}
+    catch(e){d.idDone=true;d.id_={error:e.message,alternates:e.alternates||quickPicks()};toast(e.message,3500)}
     finally{d.idBusy=false}
     if(CUR.route==='review'&&CUR.draft===d){readReview();render()}
   };
@@ -2184,8 +2199,8 @@ ROUTES.review = ()=>{
   return `<div class="centerh"><button class="back" id="revBack">${I.back}</button><h1>Catch Review</h1><p>Confirm the details, then get your verdict.</p></div>
   <div class="review-photo" id="revPhoto"></div>
   <div class="card" style="margin-top:12px">
-    <div class="split"><span class="eyebrow">Species</span>${!d.idDone?`<span class="row small muted"><span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Identifying…</span>`:r?.demo?'<span class="pill">Demo mode</span>':r?.error?'<span class="pill" style="color:#ff8c98">ID unavailable</span>':d.aiConf!=null?`<span class="pill" style="color:#8ec6ff">AI match ${Math.round(d.aiConf*100)}%</span>`:''}</div>
-    <button class="row" id="pickSpecies" style="width:100%;margin-top:8px;text-align:left"><div style="width:84px;height:52px;border-radius:10px;overflow:hidden;background:#0d2238;flex:none">${sp?fishSVG(sp,{k:'rv'}):''}</div><div class="grow"><b style="font-size:var(--fs-xl);color:#fff">${sp?esc(sp.n):'Choose species'}</b><div class="muted small" style="font-style:italic">${sp?esc(sp.sci):(!d.idDone?'Waiting for the identifier':r?.demo?'Demo mode does not identify photos. Tap to pick.':'Tap to search the registry')}</div></div>${I.chev}</button>
+    <div class="split"><span class="eyebrow">Species</span>${!d.idDone?`<span class="row small muted"><span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Identifying…</span>`:r?.demo?'<span class="pill">'+(r.offline?'Offline':'Demo mode')+'</span>':r?.error?'<span class="pill" style="color:#ff8c98">ID unavailable</span>':d.aiConf!=null?`<span class="pill" style="color:#8ec6ff">AI match ${Math.round(d.aiConf*100)}%</span>`:''}</div>
+    <button class="row" id="pickSpecies" style="width:100%;margin-top:8px;text-align:left"><div style="width:84px;height:52px;border-radius:10px;overflow:hidden;background:#0d2238;flex:none">${sp?fishSVG(sp,{k:'rv'}):''}</div><div class="grow"><b style="font-size:var(--fs-xl);color:#fff">${sp?esc(sp.n):'Choose species'}</b><div class="muted small" style="font-style:italic">${sp?esc(sp.sci):(!d.idDone?'Waiting for the identifier':r?.demo?(r.offline?'Offline, so the photo was not identified. Tap to pick.':'Demo mode does not identify photos. Tap to pick.'):'Tap to search the registry')}</div></div>${I.chev}</button>
     ${r&&r.alternates?.length?`<div class="row small" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="muted">${d.sp?'Or:':'Quick picks:'}</span>${r.alternates.filter(a=>a!==d.sp).slice(0,d.sp?3:4).map(a=>`<button class="pill" data-alt="${a}">${esc(SP[a]?.n||a)}</button>`).join('')}</div>`:''}
     ${r?.note?`<div class="faint small" style="margin-top:8px">${esc(r.note)}</div>`:''}
   </div>

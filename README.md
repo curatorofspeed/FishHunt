@@ -27,16 +27,16 @@ Open http://localhost:8790. The camera needs `localhost` or HTTPS. On a phone, d
 
 ## Species identification
 
-Two modes, switched in **Settings → Species identification**:
+Photos are identified on the server. The app posts the photo, the home region and the species list to the
+`fishdex-identify` Supabase edge function (see `server/`), which holds the Anthropic key, asks Claude Sonnet 5 for
+a structured answer, validates the species id against the list it was sent, and returns species, confidence,
+up to three alternates, an optional length estimate (only when a size reference is visible) and a short note.
+The app never holds a key. Photos are not stored. Each device gets 40 identifications a day with a four-second
+gap, enforced in Postgres; offline, the camera falls back to picking the species yourself with quick picks from
+your history and common local species.
 
-- **Demo mode** (default, no key): the app never guesses. After the photo the angler picks the
-  species, with quick picks drawn from their own catch history and then common local species.
-- **Claude vision** (developer preview): paste an Anthropic API key. The photo is sent from the
-  device straight to the Messages API (`claude-opus-5` by default, JSON-schema output) with the
-  164-species list with a note of the angler's home waters; the reply carries `species_id`, `confidence`, up to 3 alternates, and an
-  optional length estimate when a size reference is visible.
-  *For production this call moves into a Supabase edge function (like Tyre Hunt's `verify`) so no
-  key ships in the client.*
+Developer path: Settings → Developer options accepts an Anthropic API key and model; with a key set the app calls
+Anthropic directly from the device instead of the server (useful for prompt work, never for real users).
 
 ## How the verdict is scored
 
