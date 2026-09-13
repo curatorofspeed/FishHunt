@@ -524,6 +524,33 @@ header.top .brand svg{color:#163a56}
 .pf-quote{color:var(--hdr-2);font-style:italic}
 .pf-tag{font-family:var(--script);font-weight:600;font-size:var(--fs-xl);color:var(--hdr);transform:rotate(-4deg);text-align:right;white-space:nowrap}
 .onb{background:linear-gradient(180deg,rgba(7,17,29,0) 0px,rgba(7,17,29,0) 120px,rgba(7,17,29,.9) 225px,var(--navy-950) 330px)} /* onboarding copy is bottom-anchored: on a short phone it starts near y 230, so the panel carries its own navy */
+/* ---------- Game layer: Fishdex home, hunts, species levels, seasons ---------- */
+.stats.three{grid-template-columns:repeat(3,1fr)}
+.stats b small{font-size:var(--fs-md);opacity:.7;font-weight:600}
+.hunts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.hunt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--line-2);color:#fff;font:inherit}
+.hunt .hi{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.07);display:grid;place-items:center;flex:none}
+.hunt .hi svg{width:20px;height:20px}
+.hunt b{display:block;font-size:var(--fs-base)}
+.hunt small{display:block;color:var(--mist);font-size:var(--fs-sm);margin-top:2px}
+.hunt .hx{font-size:var(--fs-sm);font-weight:700;color:#5cf0a0;white-space:nowrap}
+.hunt.on{border-color:rgba(59,139,255,.75);background:rgba(31,122,224,.16)}
+.hunt.done{border-color:rgba(242,182,74,.65)}
+.hunt.done .hx{color:#ffd985}
+.coll{padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.coll:last-of-type{border-bottom:0}
+.coll b{color:#fff;font-size:var(--fs-base)}
+.coll .split span{color:var(--ice);font-size:var(--fs-sm);font-weight:600}
+.coll .prog{height:6px;margin-top:8px}
+.ladder{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ladder>div{border-radius:12px;padding:10px 8px;text-align:center;background:rgba(255,255,255,.05);border:1px solid var(--line-2);color:var(--mist);font-size:var(--fs-sm);font-weight:600}
+.ladder>div i{display:block;width:22px;height:22px;margin:0 auto 6px;border-radius:50%;border:2px solid var(--line-2)}
+.ladder>div.on{color:#fff;border-color:rgba(61,220,132,.6)}
+.ladder>div.on i{background:var(--ok);border-color:var(--ok);color:#062}
+.ladder>div.on i svg{width:14px;height:14px;display:block;margin:2px auto}
+.fcard .lvl{color:var(--gold);letter-spacing:1px;font-size:var(--fs-xs);flex-basis:100%}
+.v-flags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.season .dates{color:var(--mist);font-size:var(--fs-sm)}
 </style>
 </head>
 <body>
@@ -636,7 +663,7 @@ const TIERS = {
   legendary:{n:'Legendary',ico:I.crown,c:'var(--legendary)',stars:5,why:'One for the ages.',xp:1500}
 };
 const TIER_ORDER = ['common','uncommon','rare','epic','legendary'];
-const XP = { catch:50, newSpecies:250, pb:300, challenge:5000 };
+const XP = { catch:50, newSpecies:250, pb:300, trophy:1000, verified:100, hunt:150, challenge:5000 };
 const LEVEL_TITLES = [[1,'Greenhorn'],[3,'Weekend Angler'],[6,'Regular'],[9,'Seasoned Angler'],[12,'Dedicated Angler'],[16,'Veteran'],[20,'Expert Angler'],[25,'Master Angler'],[30,'Legend of the Water']];
 const PRIVACY = {private:'Private',region:'Region only',waterbody:'Waterbody',exact:'Exact location'};
 
@@ -897,7 +924,13 @@ const ACHIEVEMENTS = [
  {id:'legend',n:'Living Legend',d:'Land a Legendary catch',ico:'crown',test:s=>s.catches.some(c=>c.tier==='legendary'),p:s=>[s.catches.some(c=>c.tier==='legendary')?1:0,1]},
  {id:'release',n:'Catch & Release Hero',d:'Release 10 fish',ico:'release',test:s=>s.catches.filter(c=>c.released).length>=10,p:s=>[Math.min(10,s.catches.filter(c=>c.released).length),10]},
  {id:'dawn',n:'Dawn Patrol',d:'Log a catch before 6 am',ico:'bolt',test:s=>s.catches.some(c=>new Date(c.ts).getHours()<6),p:s=>[s.catches.some(c=>new Date(c.ts).getHours()<6)?1:0,1]},
- {id:'century',n:'Century Club',d:'Log 100 catches',ico:'medal',test:s=>s.catches.length>=100,p:s=>[Math.min(100,s.catches.length),100]}
+ {id:'century',n:'Century Club',d:'Log 100 catches',ico:'medal',test:s=>s.catches.length>=100,p:s=>[Math.min(100,s.catches.length),100]},
+ {id:'sp10',n:'Ten Species',d:'Discover 10 species',ico:'book',test:s=>speciesCaught().size>=10,p:s=>[Math.min(10,speciesCaught().size),10]},
+ {id:'sp25',n:'Twenty-five Species',d:'Discover 25 species',ico:'book',test:s=>speciesCaught().size>=25,p:s=>[Math.min(25,speciesCaught().size),25]},
+ {id:'sp50',n:'Fifty Species',d:'Discover 50 species',ico:'book',test:s=>speciesCaught().size>=50,p:s=>[Math.min(50,speciesCaught().size),50]},
+ {id:'firsttrophy',n:'First Trophy',d:'Land a trophy-size fish',ico:'trophy',test:s=>s.catches.some(isTrophy),p:s=>[s.catches.some(isTrophy)?1:0,1]},
+ {id:'pb5',n:'Five Personal Bests',d:'Set 5 personal bests',ico:'medal',test:s=>pbs(s)>=5,p:s=>[Math.min(5,pbs(s)),5]},
+ {id:'verified100',n:'Verified Century',d:'100 fully verified catches',ico:'check',test:s=>s.catches.filter(fullyVerified).length>=100,p:s=>[Math.min(100,s.catches.filter(fullyVerified).length),100]}
 ];
 function cnt(s,g){return new Set(s.catches.map(c=>SP[c.sp]).filter(x=>x&&x.g===g).map(x=>x.id)).size}
 function cntw(s,w){return new Set(s.catches.map(c=>SP[c.sp]).filter(x=>x&&x.w===w).map(x=>x.id)).size}
@@ -934,7 +967,7 @@ const num = (n,d=1)=>n==null||isNaN(n)?'—':Number(n).toFixed(d).replace(/\.0$/
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 /* ---------- Store ---------- */
-const DEFAULT = {v:1,onboarded:false,name:'',homeRegion:'Puget Sound North',regScope:'home',homeWaters:'',privacy:'private',units:'in',xp:0,catches:[],achievements:{},challengesDone:{},likes:{},follows:{},inbox:[],apiKey:'',model:'claude-opus-5',idEndpoint:'',demo:false,createdAt:Date.now()};
+const DEFAULT = {v:1,onboarded:false,name:'',homeRegion:'Puget Sound North',regScope:'home',hunt:null,seasonsDone:{},homeWaters:'',privacy:'private',units:'in',xp:0,catches:[],achievements:{},challengesDone:{},likes:{},follows:{},inbox:[],apiKey:'',model:'claude-opus-5',idEndpoint:'',demo:false,createdAt:Date.now()};
 let S = load();
 function load(){try{const raw=localStorage.getItem('fh:state');if(raw){const o=JSON.parse(raw);return Object.assign({},DEFAULT,o)}}catch(e){}return Object.assign({},DEFAULT)}
 let saveT;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem('fh:state',JSON.stringify(S))}catch(e){toast('Storage full — photo not saved')}},60)}
@@ -1122,22 +1155,59 @@ function commitCatch(draft){
   if(newSpecies)parts.push(['New species',XP.newSpecies]);
   if(pb)parts.push(['Personal best',XP.pb]);
   if(TIERS[tier].xp)parts.push([TIERS[tier].n+' catch',TIERS[tier].xp]);
+  const trophy=!!(draft.len&&draft.len>=sp.tro);if(trophy)parts.push(['Trophy fish',XP.trophy]);
   const c={id:draft.id||uid(),sp:sp.id,ts:draft.ts||Date.now(),lat:draft.lat??null,lng:draft.lng??null,privacy:draft.privacy||S.privacy,water:draft.water||'',region:draft.region||(regionFrom(draft.lat,draft.lng)||''),len:draft.len||null,wt:draft.wt||null,method:draft.method||'manual',tier,score,pct,pb,released:!!draft.released,caption:draft.caption||'',fav:false,aiConf:draft.aiConf??null,verified:{photo:!!draft.hasPhoto,species:draft.aiConf!=null,length:draft.method==='ai',time:true,location:draft.lat!=null},art:!!draft.art,createdAt:Date.now()};
+  if(fullyVerified(c))parts.push(['Fully verified',XP.verified]);
   S.catches.unshift(c);
+  let huntDone=null;const h=currentHunt();if(h&&!h.done&&!draft.art){const hit=h.kind==='species'?newSpecies:h.kind==='pb'?pb:TIER_ORDER.indexOf(tier)>=2;if(hit){h.done=true;huntDone=h.kind;parts.push(['Hunt complete',XP.hunt])}}
   const before={ach:new Set(Object.keys(S.achievements)),ch:new Set(Object.keys(S.challengesDone))};
   let xp=parts.reduce((a,p)=>a+p[1],0);
   const chDone=[];
+  const seasonsDone=[];let seasonHit=null;for(const x of activeSeasons(new Date(c.ts))){if(!x.sea.sp.includes(sp.id))continue;const p=seasonProgress(x.sea,x.win);if(p===x.sea.sp.length&&!S.seasonsDone[x.win.key]){S.seasonsDone[x.win.key]=Date.now();parts.push([x.sea.n+' complete',x.sea.xp]);xp+=x.sea.xp;seasonsDone.push(x.sea)}else if(!seasonHit&&!S.seasonsDone[x.win.key])seasonHit={sea:x.sea,p,win:x.win}}
   for(const ch of CHALLENGES){if(!S.challengesDone[ch.id]&&challengeProgress(ch)===ch.sp.length){S.challengesDone[ch.id]=Date.now();parts.push([ch.n+' complete',ch.xp]);xp+=ch.xp;chDone.push(ch)}}
   S.xp+=xp;c.xp=xp;
   const newAch=[];for(const a of ACHIEVEMENTS){if(!S.achievements[a.id]&&a.test(S)){S.achievements[a.id]=Date.now();newAch.push(a)}}
   for(const a of newAch)S.inbox.unshift({id:uid(),ts:Date.now(),k:'ach',t:'Achievement unlocked: '+a.n,s:a.d});
   for(const ch of chDone)S.inbox.unshift({id:uid(),ts:Date.now(),k:'ch',t:'Challenge complete: '+ch.n,s:'+'+ch.xp.toLocaleString()+' XP · '+ch.badge+' badge'});
-  if(pb)S.inbox.unshift({id:uid(),ts:Date.now(),k:'pb',t:'New personal best · '+sp.n,s:num(c.len)+' in'});
+  if(pb)S.inbox.unshift({id:uid(),ts:Date.now(),k:'pb',t:'New personal best · '+sp.n,s:num(c.len)+' in'+(prevPB?' · +'+num(c.len-prevPB.len)+' in over your record':'')});
+  if(huntDone)S.inbox.unshift({id:uid(),ts:Date.now(),k:'hunt',t:'Hunt complete: '+dailyHunts().find(x=>x.kind===huntDone).t,s:'+'+XP.hunt+' XP'});
+  for(const sea of seasonsDone)S.inbox.unshift({id:uid(),ts:Date.now(),k:'season',t:'Season complete: '+sea.n,s:'+'+sea.xp.toLocaleString()+' XP · '+sea.badge+' badge'});
   save();
   const chal=CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,sp.id));
-  return {c,sp,newSpecies,pb,prevPB,tier,pct,parts,xp,newAch,chDone,chal,registry:[regProgress().have,regProgress().total]};
+  return {c,sp,newSpecies,pb,prevPB,pbDelta:pb&&prevPB?c.len-prevPB.len:0,trophy,huntDone,seasonHit,seasonsDone,tier,pct,parts,xp,newAch,chDone,chal,registry:[regProgress().have,regProgress().total]};
 }
 function ch_has(ch,id){return ch.sp.includes(id)}
+// Seasons: windows repeat every year; completing one earns a permanent badge. from/to are [month, day].
+const SEASONS=[
+ {id:'fall-salmon',n:'Fall Salmon Season',from:[9,1],to:[11,30],sp:['chinook','coho','chum','pink'],badge:'Salmon Runner',xp:2500},
+ {id:'winter-steelhead',n:'Winter Steelhead',from:[12,1],to:[3,31],sp:['steelhead','searun','dolly'],badge:'Cold Hands',xp:2500},
+ {id:'spring-trout',n:'Spring Trout Opener',from:[4,1],to:[6,30],sp:['rainbow','cutthroat','brown','brook'],badge:'Opening Day',xp:2000},
+ {id:'summer-warmwater',n:'Summer Warmwater',from:[6,1],to:[8,31],sp:['largemouth','smallmouth','bluegill','bcrappie'],badge:'Dog Days',xp:2000},
+ {id:'fall-reds',n:'Fall Redfish Run',from:[9,1],to:[11,30],sp:['redfish','seatrout','southernflounder'],badge:'Bull Red',xp:2500},
+ {id:'ice-season',n:'Hard Water Season',from:[12,15],to:[2,28],sp:['walleye','perch','pike','lake'],badge:'Ice Walker',xp:2500}
+];
+function seasonWindow(sea,now=new Date()){const y=now.getFullYear();const mk=(yy,m,d,end)=>new Date(yy,m-1,d,end?23:0,end?59:0,end?59:0);let a=mk(y,sea.from[0],sea.from[1]),b=mk(y,sea.to[0],sea.to[1],true);if(b<a){if(now<b)a=mk(y-1,sea.from[0],sea.from[1]);else b=mk(y+1,sea.to[0],sea.to[1],true)}return {a,b,key:sea.id+'-'+a.getFullYear()}}
+function seasonProgress(sea,win){const got=new Set(S.catches.filter(c=>c.ts>=win.a.getTime()&&c.ts<=win.b.getTime()&&sea.sp.includes(c.sp)).map(c=>c.sp));return got.size}
+function activeSeasons(now=new Date()){return SEASONS.map(sea=>{const win=seasonWindow(sea,now);return {sea,win,p:seasonProgress(sea,win),rel:sea.sp.filter(id=>SP[id]&&inHome(SP[id])).length/sea.sp.length,done:!!S.seasonsDone[win.key]}}).filter(x=>now>=x.win.a&&now<=x.win.b).sort((a,b)=>b.rel-a.rel||b.p-a.p)}
+const isTrophy=c=>!!(c&&c.len&&SP[c.sp]&&c.len>=SP[c.sp].tro);
+const fullyVerified=c=>{const v=c&&c.verified||{};return !!(v.photo&&v.species&&v.time&&v.location)};
+function verifyLabel(c){const v=c.verified||{};if(fullyVerified(c))return 'Fully verified';if(v.length)return 'Size verified';if(v.species)return 'Species verified';if(v.photo)return 'Photo verified';return 'Unverified'}
+function speciesLevel(id){const mine=S.catches.filter(c=>c.sp===id);if(!mine.length)return 0;if(mine.some(c=>isTrophy(c)||c.tier==='legendary'))return 3;if(mine.some(c=>{const v=c.verified||{};return v.photo&&v.species&&v.time}))return 2;return 1}
+const todayKey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function dailyHunts(){return [{kind:'species',ico:I.target,t:'New species',d:'Catch something you have never logged.'},{kind:'pb',ico:I.trophy,t:'PB hunt',d:'Beat one of your own records.'},{kind:'rarity',ico:I.gem,t:'Rarity hunt',d:'Land a Rare catch or better.'}]}
+function currentHunt(){return S.hunt&&S.hunt.date===todayKey()?S.hunt:null}
+function newSpeciesThisMonth(){const now=new Date();const first={};for(const c of S.catches){if(!first[c.sp]||c.ts<first[c.sp])first[c.sp]=c.ts}return Object.values(first).filter(ts=>{const d=new Date(ts);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).length}
+function speciesThisMonth(){const now=new Date();return new Set(S.catches.filter(c=>{const d=new Date(c.ts);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).map(c=>c.sp)).size}
+function pbGain(id){const y=new Date().getFullYear();const mine=S.catches.filter(c=>c.sp===id&&c.len);const best=arr=>arr.reduce((m,c)=>c.len>m?c.len:m,0);const now=best(mine.filter(c=>new Date(c.ts).getFullYear()===y)),before=best(mine.filter(c=>new Date(c.ts).getFullYear()<y));return now&&before&&now>before?now-before:0}
+function fishdexCollections(){const have=speciesCaught();const scope=scopeSpecies();const mk=(n,f,rf)=>{const all=scope.filter(f);return {n,rf,have:all.filter(x=>have.has(x.id)).length,total:all.length}};return [mk('Salmon',x=>x.g==='salmon','salmon'),mk('Trout & char',x=>['trout','char'].includes(x.g),'trout'),mk('Bass & panfish',x=>['bass','panfish','walleye'].includes(x.g),'bass'),mk('Saltwater',x=>x.w==='salt','salt')].filter(c=>c.total)}
+const an=n=>(/^[aeiou]/i.test(n)?'an ':'a ')+n;
+function nextHunts(){const have=speciesCaught();const out=[];const next=SPECIES.filter(x=>inHome(x)&&!have.has(x.id)).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n))[0];
+  if(next)out.push({ico:I.target,t:`Catch ${an(next.n)}`,s:`+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery`,p:'0 / 1',go:'species/'+next.id});
+  const counts={};for(const c of S.catches){if(!c.len)continue;const g=SP[c.sp].g;counts[g]=(counts[g]||0)+1}const g=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  if(g){const best=S.catches.filter(c=>SP[c.sp].g===g[0]&&c.len).sort((a,b)=>b.len-a.len)[0];out.push({ico:I.trophy,t:`Beat your ${GROUP_LABEL[g[0]].toLowerCase()} PB`,s:`${SP[best.sp].n} · ${num(best.len)} in`,p:'0 / 1',go:'species/'+best.sp})}
+  const m=speciesThisMonth();out.push({ico:I.wave,t:'Catch 5 species this month',s:m>=5?'Done for this month':`${5-m} to go`,p:`${Math.min(5,m)} / 5`,go:'trophy'});
+  const ch=chSorted().filter(x=>!S.challengesDone[x.ch.id])[0];if(ch)out.push({ico:I.flag,t:`Complete the ${ch.ch.n}`,s:`+${ch.ch.xp.toLocaleString()} XP · ${ch.ch.badge} badge`,p:`${ch.p} / ${ch.ch.sp.length}`,go:'challenges'});
+  return out}
 
 /* ---------- UI helpers ---------- */
 // Toast + screen-reader status: both regions exist from page load, so updates are announced (role=status, polite).
@@ -1180,7 +1250,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){if(LAYERS.length){e.preventDefault();LAYERS[LAYERS.length-1].close();return}if(CUR.route==='capture'){e.preventDefault();closeCamera();return}}
   if(e.key==='Tab'){const root=topLayer();if(!root)return;const f=focusables(root);if(!f.length){e.preventDefault();root.focus();return}const first=f[0],last=f[f.length-1],a=document.activeElement;
     if(e.shiftKey&&(a===first||!root.contains(a))){e.preventDefault();last.focus()}else if(!e.shiftKey&&(a===last||!root.contains(a))){e.preventDefault();first.focus()}return}
-  if((e.key==='Enter'||e.key===' ')&&!e.altKey&&!e.ctrlKey&&!e.metaKey){const t=e.target;if(t&&t.matches&&t.matches('[data-go],[data-pick]')&&!t.matches(NATIVE)){if(e.key===' '&&t.getAttribute('role')==='link')return;e.preventDefault();t.click()}}
+  if((e.key==='Enter'||e.key===' ')&&!e.altKey&&!e.ctrlKey&&!e.metaKey){const t=e.target;if(t&&t.matches&&t.matches('[data-go],[data-pick],[data-coll]')&&!t.matches(NATIVE)){if(e.key===' '&&t.getAttribute('role')==='link')return;e.preventDefault();t.click()}}
 });
 document.addEventListener('focusin',e=>{const root=topLayer();if(root&&!root.contains(e.target)){const f=focusables(root);(f[0]||root).focus({preventScroll:true})}});
 function tierTag(t,cls=''){const T=TIERS[t]||TIERS.common;return `<span class="tier ${t} ${cls}">${T.ico}${T.n}</span>`}
@@ -1188,8 +1258,8 @@ function stars(n){return '★'.repeat(n)+'<span style="opacity:.25">'+'★'.repe
 function hexBadge(n,cls=''){return `<div class="badge-hex ${cls}"><svg class="shape" aria-hidden="true" viewBox="0 0 74 82"><defs><linearGradient id="hx${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0c66a"/><stop offset="1" stop-color="#b8792a"/></linearGradient></defs><path d="M37 2 L70 20 L70 58 L37 80 L4 58 L4 20Z" fill="#12283d" stroke="url(#hx${n})" stroke-width="3"/><path d="M37 10 L63 24 L63 54 L37 72 L11 54 L11 24Z" fill="none" stroke="#5a86b0" stroke-width="1" opacity=".6"/></svg><span class="f">${I.fish}</span><span class="n">${n}</span></div>`}
 function sized(svg,n=24){return svg.replace('<svg',`<svg width="${n}" height="${n}"`)}
 function shieldBadge(ico,color='#2d6fb8',locked=false){const c=locked?'#3a4a5a':color;return `<svg class="shield" aria-hidden="true" viewBox="0 0 70 78"><defs><linearGradient id="sh${ico}${locked?'l':''}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3d27a"/><stop offset="1" stop-color="#b47a2a"/></linearGradient></defs><path d="M35 3 L65 13 V40 C65 58 50 70 35 75 C20 70 5 58 5 40 V13Z" fill="#102a44" stroke="url(#sh${ico}${locked?'l':''})" stroke-width="3"/><path d="M35 10 L58 18 V40 C58 54 47 63 35 68 C23 63 12 54 12 40 V18Z" fill="${c}" opacity=".35"/><g transform="translate(19 22) scale(1.35)" style="color:#fff">${sized(I[ico]||I.fish)}</g></svg>`}
-const ACH_ICON={fish:'fish',salmon:'fish',trout:'fish',wave:'wave',tent:'mtn',map:'map',trophy:'trophy',mtn:'tree',star:'star',crown:'crown',release:'release',bolt:'bolt',medal:'medal'};
-const ACH_COLOR={fish:'#2d6fb8',salmon:'#c65b7c',trout:'#3ddc84',wave:'#22c1c3',tent:'#2d6fb8',map:'#22c1c3',trophy:'#f2b64a',mtn:'#3ddc84',star:'#3b8bff',crown:'#f2b64a',release:'#22c1c3',bolt:'#f2b64a',medal:'#b45cff'};
+const ACH_ICON={fish:'fish',salmon:'fish',trout:'fish',wave:'wave',tent:'mtn',map:'map',trophy:'trophy',mtn:'tree',star:'star',crown:'crown',release:'release',bolt:'bolt',medal:'medal',book:'book',check:'check',cal:'cal'};
+const ACH_COLOR={book:'#3b8bff',check:'#22c1c3',cal:'#f2b64a',fish:'#2d6fb8',salmon:'#c65b7c',trout:'#3ddc84',wave:'#22c1c3',tent:'#2d6fb8',map:'#22c1c3',trophy:'#f2b64a',mtn:'#3ddc84',star:'#3b8bff',crown:'#f2b64a',release:'#22c1c3',bolt:'#f2b64a',medal:'#b45cff'};
 function locLine(c,owner=true){ // what location text to show for a catch
   if(owner){ return [c.water,c.region].filter(Boolean).join(' · ')||'Location not set' }
   switch(c.privacy){case 'exact':case 'waterbody':return c.water||c.region||'Undisclosed';case 'region':return c.region||'Undisclosed';default:return 'Undisclosed water'}
@@ -1258,46 +1328,46 @@ function quote(){return `<div class="hero-quote">More fish. Brighter days.<i></i
 
 /* ---------- Home ---------- */
 ROUTES.home = ()=>{
-  const li=levelInfo();const have=speciesCaught();
-  const homeSp=SPECIES.filter(s=>inHome(s)&&!have.has(s.id)).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n));const rp=regProgress();
-  const next=homeSp[0];
-  const chal=chSorted().filter(x=>!S.challengesDone[x.ch.id])[0];
+  const li=levelInfo();const have=speciesCaught();const rp=regProgress();
+  const next=SPECIES.filter(x=>inHome(x)&&!have.has(x.id)).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n))[0];
   const recent=[...S.catches].sort((a,b)=>TIER_ORDER.indexOf(b.tier)-TIER_ORDER.indexOf(a.tier)||b.ts-a.ts)[0];
-  const first=S.catches.length===0;
-  return `${pageH(`Welcome back${S.name?', '+esc(S.name.split(' ')[0]):''}`, first?'Your collection starts with one cast.':'Here is where your collection stands.')}
+  const first=S.catches.length===0;const newMonth=newSpeciesThisMonth();
+  const hunts=dailyHunts();const picked=currentHunt();const colls=fishdexCollections();
+  const season=activeSeasons().filter(x=>x.rel>=.5)[0];
+  return `${pageH('Your Fishdex', first?'Every fish you catch becomes a card in your collection.':'Every fish you catch is a card in your collection.')}
   <div class="stack">
+    <div class="stats three"><div data-go="registry" style="cursor:pointer">${I.book}<b>${rp.have}<small> / ${rp.total}</small></b><span>${S.regScope==='all'?'All species':esc(homeStateName())+' species'}</span></div><div data-go="profile" style="cursor:pointer">${I.medal}<b>Lv ${li.L}</b><span>${esc(li.title)}</span><div class="prog" style="margin:8px 10px 0;height:5px"><i style="width:${li.pct}%"></i></div></div><div>${I.bolt.replace('<svg','<svg style="color:#ffd985"')}<b>${newMonth}</b><span>New this month</span></div></div>
     <div class="card">
-      <div class="split"><span class="eyebrow">Registry progress</span><a data-go="registry" href="#registry" class="small b" style="color:#fff">View Registry ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
-      <div class="row" style="margin-top:10px;align-items:baseline"><span class="serif" style="font-size:var(--fs-display);font-weight:700;color:#fff;line-height:1">${rp.have}<span style="font-size:var(--fs-2xl);opacity:.7"> / ${rp.total}</span></span><span class="muted">species discovered in ${esc(rp.label)}</span></div>
-      <div class="prog" style="margin-top:10px"><i style="width:${Math.round(rp.have/Math.max(1,rp.total)*100)}%"></i></div>
+      <div class="split"><span class="eyebrow">Today's hunts</span><span class="small muted">${picked?(picked.done?'Complete · +'+XP.hunt+' XP':'Chosen'):'Pick one'}</span></div>
+      <div class="hunts">${hunts.map(h=>{const on=picked&&picked.kind===h.kind;const done=on&&picked.done;return `<button type="button" class="hunt ${on?'on':''} ${done?'done':''}" data-hunt="${h.kind}" aria-pressed="${!!on}"><span class="hi">${h.ico}</span><span class="grow"><b>${h.t}</b><small>${h.d}</small></span><span class="hx">${done?'Done':'+'+XP.hunt+' XP'}</span></button>`}).join('')}</div>
+      <p class="faint small" style="margin:10px 0 0">Hunts reset each day. Only one counts, so choose before you go.</p>
     </div>
-    ${next?`<div class="card" data-go="species/${next.id}" aria-label="Next target: ${esc(next.n)}, ${TIERS[TIER_ORDER[next.r-1]].n}, plus ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery" style="cursor:pointer">
-      <div class="split"><span class="eyebrow">Next target</span>${tierTag(TIER_ORDER[next.r-1])}</div>
-      <div class="row" style="margin-top:10px"><div class="nt-art">${fishPlate(next,{k:'nt',sil:true})}</div><div class="grow"><b style="font-size:var(--fs-lg);color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div><div class="small" style="margin-top:4px;color:#5cf0a0;font-weight:600">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery</div></div>${I.chev.replace('class="chev"','style="width:20px;height:20px;color:#fff"')}</div>
-    </div>`:''}
-    ${chal?`<div class="card" data-go="challenges" aria-label="Current challenge: ${esc(chal.ch.n)}, ${chal.p} of ${chal.ch.sp.length}" style="cursor:pointer">
-      <div class="split"><span class="eyebrow">Current challenge</span><span class="small b" style="color:#fff">${chal.p} / ${chal.ch.sp.length}</span></div>
-      <b style="display:block;font-size:var(--fs-lg);color:#fff;margin-top:8px">${esc(chal.ch.n)}</b>
-      <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${chal.ch.sp.map(id=>`<span class="pill" style="${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.7'}">${have.has(id)?'✓ ':''}${esc(SP[id].n.replace(' Salmon','').replace(' Trout',''))}</span>`).join('')}</div>
-      <div class="prog green" style="margin-top:12px"><i style="width:${Math.round(chal.p/chal.ch.sp.length*100)}%"></i></div>
-    </div>`:''}
+    <div class="card" style="padding:4px 16px"><div class="split" style="padding:12px 0 4px"><span class="eyebrow">Your next hunts</span></div>
+      ${nextHunts().map(h=>`<div class="listrow" data-go="${h.go}" style="cursor:pointer" aria-label="${esc(h.t)}, ${esc(h.p)}"><div class="ic">${h.ico}</div><div class="grow"><div class="t">${esc(h.t)}</div><div class="s">${esc(h.s)}</div></div><span class="small b" style="color:#fff;white-space:nowrap">${esc(h.p)}</span>${I.chev}</div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="split"><span class="eyebrow">Collections</span><a data-go="registry" href="#registry" class="small b" style="color:#fff">Open Fishdex ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+      ${colls.map(c=>`<div class="coll" data-coll="${c.rf}" role="link" tabindex="0" aria-label="${esc(c.n)}, ${c.have} of ${c.total}"><div class="split"><b>${esc(c.n)}</b><span>${c.have} / ${c.total}</span></div><div class="prog${c.have===c.total?' gold':''}"><i style="width:${Math.round(c.have/Math.max(1,c.total)*100)}%"></i></div></div>`).join('')}
+      ${next?`<div class="split" style="margin-top:12px"><span class="small muted">Next unlock</span><span class="small b" style="color:#5cf0a0">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP</span></div><div class="row" style="margin-top:6px" data-go="species/${next.id}" role="link" tabindex="0" aria-label="Next unlock: ${esc(next.n)}"><div class="nt-art" style="width:72px;height:48px">${fishPlate(next,{k:'nu',sil:true})}</div><div class="grow"><b style="color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div></div>${I.chev}</div>`:''}
+    </div>
+    ${season?`<div class="card season" data-go="challenges" role="link" tabindex="0" aria-label="${esc(season.sea.n)}, ${season.p} of ${season.sea.sp.length}"><div class="split"><span class="eyebrow">Season</span><span class="dates">${fmtDate(season.win.a).replace(/, \d{4}/,'')} – ${fmtDate(season.win.b).replace(/, \d{4}/,'')}</span></div><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:6px">${esc(season.sea.n)}</b><div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${season.sea.sp.map(id=>{const got=S.catches.some(c=>c.sp===id&&c.ts>=season.win.a.getTime()&&c.ts<=season.win.b.getTime());return `<span class="pill" style="${got?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.7'}">${got?'✓ ':''}${esc(SP[id].n)}</span>`}).join('')}</div><div class="prog ${season.done?'gold':'green'}" style="margin-top:12px"><i style="width:${Math.round(season.p/season.sea.sp.length*100)}%"></i></div><div class="split" style="margin-top:8px"><span class="small muted">${season.done?'Complete':season.p+' / '+season.sea.sp.length+' this season'}</span><span class="small b" style="color:#ffd985">${esc(season.sea.badge)} badge</span></div></div>`:''}
     ${recent?`<div class="card th-card" data-go="catch/${recent.id}" aria-label="Recent trophy: ${esc(SP[recent.sp].n)}, ${TIERS[recent.tier].n}${recent.len?', '+num(recent.len)+' inches':''}${recent.pb?', personal best':''}" style="cursor:pointer">
       <div class="th-img"><span data-photo="${recent.id}"></span><span class="tiertag">${tierTag(recent.tier)}</span>${recent.pb?'<span class="th-pb">Personal best</span>':''}</div>
       <div class="th-body"><span class="eyebrow">Recent trophy</span><div class="th-name">${esc(SP[recent.sp].n)}</div><div class="mm">${recent.len?`<span>${I.ruler.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.len)} in</span>`:''}${recent.wt?`<span>${I.scale.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.wt)} lb</span>`:''}<span>${fmtDate(recent.ts)}</span></div><div class="loc">${esc(locLine(recent))}</div></div>
     </div>`:`<div class="card" style="text-align:center;padding:26px 16px"><div style="width:64px;height:64px;margin:0 auto 10px;color:#fff">${I.cam}</div><b style="font-size:var(--fs-lg);color:#fff">Record your first catch</b><p class="muted" style="margin:6px 0 14px">Take a photo. Get the verdict. Start the collection.</p><button class="btn" data-nav="capture">${I.cam} Open camera</button></div>`}
-    <div class="card level-card" data-go="profile" aria-label="Level ${li.L}, ${esc(li.title)}, ${li.cur.toLocaleString()} of ${li.need.toLocaleString()} XP" style="cursor:pointer">
-      ${hexBadge(li.L)}
-      <div class="lvl"><div class="eyebrow">Personal progress</div><h3 style="margin-top:4px">Level ${li.L}</h3><div class="title">${esc(li.title)}</div><div class="xp"><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span><span class="muted">${S.xp.toLocaleString()} total</span></div><div class="prog"><i style="width:${li.pct}%"></i></div></div>
-    </div>
     ${quote()}
   </div>`;
 };
+document.addEventListener('click',e=>{
+  const h=e.target.closest('[data-hunt]');if(h){const cur=currentHunt();if(cur&&cur.done){toast('Today\'s hunt is already complete');return}S.hunt={date:todayKey(),kind:h.dataset.hunt,done:false};save();announce('Hunt chosen: '+dailyHunts().find(x=>x.kind===h.dataset.hunt).t);render();return}
+  const c=e.target.closest('[data-coll]');if(c){regFilter=c.dataset.coll;go('registry');return}
+});
 
 /* ---------- Explore hub ---------- */
 ROUTES.explore = ()=>{
   const have=speciesCaught();
   const tiles=[
-    ['registry','Species Registry',`${have.size} / ${SPECIES.length} discovered`,I.book],
+    ['registry','Fishdex',`${regProgress().have} / ${regProgress().total} discovered`,I.book],
     ['map','Catch Map',`${new Set(S.catches.map(c=>c.water).filter(Boolean)).size} waters fished`,I.map],
     ['challenges','Challenges',`${CHALLENGES.filter(c=>S.challengesDone[c.id]).length} / ${CHALLENGES.length} complete`,I.flag],
     ['feed','Community Feed','Real anglers. Real catches.',I.users],
@@ -1323,7 +1393,7 @@ ROUTES.registry = ()=>{
   if(regSort==='az')list=[...list].sort((a,b)=>a.n.localeCompare(b.n));
   if(regSort==='rarity')list=[...list].sort((a,b)=>b.r-a.r);
   const pct=Math.round(rp.have/Math.max(1,rp.total)*100);
-  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Species Registry</h1><p>Track your catches. Complete the collection.</p><button id="regSort" aria-label="Sort species: ${({default:'Registry order',az:'A to Z',rarity:'Rarity'})[regSort]}" class="right hbtn">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
+  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Fishdex</h1><p>Track your catches. Complete the collection.</p><button id="regSort" aria-label="Sort species: ${({default:'Registry order',az:'A to Z',rarity:'Rarity'})[regSort]}" class="right hbtn">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
   <div class="card reg-head">
     <div><div class="big">${rp.have}<small> / ${rp.total}</small></div><div class="lbl">discovered</div><div class="row" style="margin-top:12px"><div class="prog grow"><i style="width:${pct}%"></i></div><span class="small b" style="color:#fff">${pct}%</span></div><div class="script" style="font-size:var(--fs-xl);color:var(--ice);margin-top:10px">“Different waters. A bigger story.”</div></div>
     <div class="chal" data-go="challenges" aria-label="${esc(chal.ch.n)}, ${chal.p} of ${chal.ch.sp.length}" style="cursor:pointer"><svg class="hexi" aria-hidden="true" viewBox="0 0 56 62"><path d="M28 2 L53 16 L53 46 L28 60 L3 46 L3 16Z" fill="#12283d" stroke="#3b8bff" stroke-width="2.5"/><g transform="translate(14 17) scale(1.2)" style="color:#fff">${sized(I.mtn)}</g></svg><b>${esc(chal.ch.n)}</b><span>${chal.p} / ${chal.ch.sp.length}</span>${I.chev}</div>
@@ -1336,7 +1406,7 @@ ROUTES.registry = ()=>{
 function regCard(s,got){
   const pb=got?pbFor(s.id):null;const first=got?[...S.catches].filter(c=>c.sp===s.id).sort((a,b)=>a.ts-b.ts)[0]:null;
   const bestTier=got?S.catches.filter(c=>c.sp===s.id).map(c=>c.tier).sort((a,b)=>TIER_ORDER.indexOf(b)-TIER_ORDER.indexOf(a))[0]:TIER_ORDER[s.r-1];
-  return `<div class="fcard ${got?'':'sil'}" data-go="species/${s.id}" aria-label="${esc(s.n)}, ${got?'caught':'not yet caught'}, ${TIERS[bestTier].n}${pb?', personal best '+num(pb.len)+' inches':''}${first?', first caught '+fmtDate(first.ts):''}"><div class="art">${fishPlate(s,{sil:!got,k:'r'})}${got?`<span class="chk">${I.check}</span>`:''}</div><div class="body"><div class="name">${esc(s.n)}</div><div style="margin-top:6px">${tierTag(bestTier)}</div><div class="meta">${got?`<span>${I.ruler}${pb?num(pb.len)+' in':'—'}</span><span>${I.cal}${first?new Date(first.ts).toLocaleDateString('en-US',{month:'short',year:'numeric'}):''}</span>`:'<span>Not yet caught</span>'}</div></div></div>`;
+  return `<div class="fcard ${got?'':'sil'}" data-go="species/${s.id}" aria-label="${esc(s.n)}, ${got?'caught':'not yet caught'}, ${TIERS[bestTier].n}${pb?', personal best '+num(pb.len)+' inches':''}${first?', first caught '+fmtDate(first.ts):''}"><div class="art">${fishPlate(s,{sil:!got,k:'r'})}${got?`<span class="chk">${I.check}</span>`:''}</div><div class="body"><div class="name">${esc(s.n)}</div><div style="margin-top:6px">${tierTag(bestTier)}</div><div class="meta">${got?`<span class="lvl" aria-label="Level ${speciesLevel(s.id)} of 3">${'★'.repeat(speciesLevel(s.id))}${'☆'.repeat(3-speciesLevel(s.id))}</span><span>${I.ruler}${pb?num(pb.len)+' in':'—'}</span><span>${I.cal}${first?new Date(first.ts).toLocaleDateString('en-US',{month:'short',year:'numeric'}):''}</span>`:'<span>Not yet caught</span>'}</div></div></div>`;
 }
 document.addEventListener('click',e=>{const rs=e.target.closest('[data-rs]');if(rs){S.regScope=rs.dataset.rs;save();render();return}const b=e.target.closest('[data-rf]');if(b){regFilter=b.dataset.rf;render()}if(e.target.closest('#regSort')){regSort=regSort==='default'?'az':regSort==='az'?'rarity':'default';toast('Sorted: '+({default:'Registry order',az:'A → Z',rarity:'Rarity'}[regSort]));render()}});
 
@@ -1352,7 +1422,8 @@ ROUTES.species = ({id})=>{
     <div style="padding:14px 16px"><div class="split"><span class="eyebrow">Status</span>${got?`<span class="pill" style="border-color:rgba(61,220,132,.6);color:#5cf0a0">${I.check} Discovered</span>`:`<span class="pill" style="opacity:.8">${I.lock} Not yet caught</span>`}</div>
     <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="pill">${GROUP_LABEL[s.g]}</span><span class="pill">${s.w==='fresh'?'Freshwater':s.w==='salt'?'Saltwater':'Anadromous'}</span>${tierTag(TIER_ORDER[s.r-1])}${s.tags.includes('protected')?'<span class="pill" style="border-color:rgba(255,93,108,.5);color:#ff8c98">Release only</span>':''}${s.tags.includes('native')?'<span class="pill">Native</span>':''}</div>
     <p class="muted small" style="margin:12px 0 0">Typical ${s.typ} in · Trophy ${s.tro}+ in. ${s.r>=4?'A hard-to-find species — any verified catch starts at Rare or better.':'Size drives the tier: a fish past the trophy mark can reach Epic or Legendary.'}</p></div></div>
-  ${got?`<div class="kv" style="margin-top:12px"><div><div class="k">Personal best</div><div class="v">${pb?num(pb.len)+' in':'—'}</div></div><div><div class="k">Total caught</div><div class="v">${mine.length}</div></div><div><div class="k">First caught</div><div class="v" style="font-size:var(--fs-md)">${fmtDateLong(first.ts)}</div></div><div><div class="k">Best catch tier</div><div class="v">${tierTag(bestTier)}</div></div></div>
+  ${got?`<div class="kv" style="margin-top:12px"><div><div class="k">Personal best</div><div class="v">${pb?num(pb.len)+' in':'—'}</div>${pbGain(id)?`<div class="small" style="color:#5cf0a0;margin-top:2px">+${num(pbGain(id))} in this year</div>`:''}</div><div><div class="k">Total caught</div><div class="v">${mine.length}</div></div><div><div class="k">First caught</div><div class="v" style="font-size:var(--fs-md)">${fmtDateLong(first.ts)}</div></div><div><div class="k">Best catch tier</div><div class="v">${tierTag(bestTier)}</div></div></div>
+  <div class="card" style="margin-top:12px"><div class="split"><span class="eyebrow">Collection level</span><span class="small b" style="color:#ffd985">${'★'.repeat(speciesLevel(id))}${'☆'.repeat(3-speciesLevel(id))}</span></div><div class="ladder">${['Caught','Verified','Trophy'].map((n,i)=>`<div class="${speciesLevel(id)>i?'on':''}"><i>${speciesLevel(id)>i?I.check:''}</i><span>${n}</span></div>`).join('')}</div><div class="small muted" style="margin-top:10px">${speciesLevel(id)>=3?'Trophy unlocked. That card is complete.':speciesLevel(id)===2?`A ${s.tro}+ in ${esc(s.n)} turns this into a trophy card.`:'Log a catch with a photo, an identified species and a GPS fix to verify it.'}</div></div>
   <div class="sub-h"><h2 class="sans">Your catch history</h2></div>
   <div class="stack">${mine.map(c=>catchRow(c)).join('')}</div>`:
   `<div class="card" style="margin-top:12px;text-align:center"><b style="color:#fff;font-size:var(--fs-lg)">Worth ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[s.r-1]].xp).toLocaleString()}+ XP</b><p class="muted small" style="margin:6px 0 12px">Discovering a new species pays out on top of the catch itself.</p><button class="btn" data-nav="capture">${I.cam} Record a catch</button></div>`}
@@ -1385,7 +1456,7 @@ ROUTES.catch = ({id})=>{
   <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px">${c.pb?`<span class="banner gold">${I.trophy} Personal best</span>`:''}<span class="banner xp"><span class="xpc">XP</span> +${(c.xp||0).toLocaleString()} XP</span>${c.released?`<span class="pill">${I.release} Released</span>`:'<span class="pill">Kept</span>'}</div>
   <div class="card" style="margin-top:12px"><div class="split"><span class="eyebrow">Location</span><span class="pill">${I.lock} ${PRIVACY[c.privacy]||'Private'}</span></div><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:8px">${esc(c.water||'Water not set')}</b><div class="muted small">${esc(c.region||'Region not set')}${c.lat!=null?` · ${c.lat.toFixed(3)}, ${c.lng.toFixed(3)} <span class="faint">(only you see this)</span>`:''}</div><div class="small muted" style="margin-top:8px">Others see: <b style="color:#fff">${esc(locLine(c,false))}</b></div><div class="seg" style="margin-top:10px" aria-label="Location privacy for this catch">${Object.entries(PRIVACY).map(([k,n])=>`<button data-priv="${c.id}:${k}" class="${c.privacy===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div></div>
   ${c.caption?`<div class="card" style="margin-top:12px"><span class="eyebrow">Caption</span><p style="margin:6px 0 0;color:#fff">${esc(c.caption)}</p></div>`:''}
-  <div class="card" style="margin-top:12px"><span class="eyebrow">Verification</span><div class="verify" style="margin-top:8px">${vrows.map(([k,n])=>`<div class="${v[k]?'':'no'}">${v[k]?I.check:I.circle}${n}</div>`).join('')}</div>${c.aiConf!=null?`<div class="faint small" style="margin-top:8px">AI confidence ${Math.round(c.aiConf*100)}%${c.method==='ai'?' · length estimated from photo':''}</div>`:''}</div>
+  <div class="card" style="margin-top:12px"><div class="split"><span class="eyebrow">Verification</span><span class="pill" style="${fullyVerified(c)?'border-color:rgba(34,193,195,.6);color:#7fe3e4':''}">${verifyLabel(c)}</span></div><div class="verify" style="margin-top:8px">${vrows.map(([k,n])=>`<div class="${v[k]?'':'no'}">${v[k]?I.check:I.circle}${n}</div>`).join('')}</div>${c.aiConf!=null?`<div class="faint small" style="margin-top:8px">AI confidence ${Math.round(c.aiConf*100)}%${c.method==='ai'?' · length estimated from photo':''}</div>`:''}</div>
   <div class="grid2" style="margin-top:12px"><button class="btn ghost" data-share="${c.id}">${I.share} Share</button><button class="btn ghost" data-go="species/${c.sp}">${I.book} Species page</button></div>
   <button class="btn danger" style="margin-top:12px" data-del="${c.id}">${I.trash} Delete catch</button>`;
 };
@@ -1399,6 +1470,7 @@ document.addEventListener('click',async e=>{
 ROUTES.challenges = ()=>{
   const have=speciesCaught();
   return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Challenges</h1><p>Your waters first. Everything else below.</p></div>
+  ${activeSeasons().length?`<div class="stack" style="margin-bottom:14px">${activeSeasons().map(x=>`<div class="card season ${x.done?'solid':''}" style="${x.done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">Season · ${x.rel<.5?'far from home · ':''}${fmtDate(x.win.a).replace(/, \d{4}/,'')} – ${fmtDate(x.win.b).replace(/, \d{4}/,'')}</span><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:2px">${esc(x.sea.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:var(--fs-xl)">${x.p} / ${x.sea.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600;white-space:nowrap">+${x.sea.xp.toLocaleString()} XP</div></div></div><div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${x.sea.sp.map(id=>{const got=S.catches.some(c=>c.sp===id&&c.ts>=x.win.a.getTime()&&c.ts<=x.win.b.getTime());return `<span class="pill" data-go="species/${id}" style="cursor:pointer;${got?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.65'}">${got?'✓ ':''}${esc(SP[id].n)}</span>`}).join('')}</div><div class="prog ${x.done?'gold':'green'}" style="margin-top:12px"><i style="width:${Math.round(x.p/x.sea.sp.length*100)}%"></i></div><div class="split" style="margin-top:8px"><span class="small muted">Reward: ${esc(x.sea.badge)} badge · permanent</span>${x.done?`<span class="pill" style="border-color:rgba(242,182,74,.6);color:#ffd985">${I.trophy} Complete</span>`:''}</div></div>`).join('')}</div><div class="sub-h" style="padding-top:0"><h2 class="sans">Slams & collections</h2></div>`:''}
   <div class="stack">${chSorted().map(({ch,p,rel})=>{const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}${rel<.5?' · far from home':''}</span><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:var(--fs-xl)">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600;white-space:nowrap">+${ch.xp.toLocaleString()} XP</div></div></div>
   <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${ch.sp.map(id=>`<span class="pill" data-go="species/${id}" aria-label="${esc(SP[id].n)}, ${have.has(id)?'caught':'not yet caught'}" style="cursor:pointer;${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.65'}">${have.has(id)?'✓ ':''}${esc(SP[id].n)}</span>`).join('')}</div>
   <div class="prog ${done?'gold':'green'}" style="margin-top:12px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div>
@@ -1456,8 +1528,8 @@ ROUTES.profile = ()=>{
 let profLB='Local';
 document.addEventListener('click',e=>{const b=e.target.closest('[data-lb]');if(b){profLB=b.dataset.lb;render()}});
 function achCard(a,got){const [p,t]=a.p(S);return `<div class="${got?'':'locked'}" data-ach="${a.id}">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8',!got)}<b>${esc(a.n)}</b><span>${esc(a.d)}</span>${got?`<span class="chk">${I.check}</span>`:`<div class="prog" style="height:5px;margin-top:8px"><i style="width:${Math.round(p/t*100)}%"></i></div><span class="tiny">${p} / ${t}</span>`}</div>`}
-ROUTES.achievements = ()=>`<div class="centerh"><button class="back" data-go="profile">${I.back}</button><h1>Achievements</h1><p>${Object.keys(S.achievements).length} of ${ACHIEVEMENTS.length} unlocked</p></div><div class="ach">${ACHIEVEMENTS.map(a=>achCard(a,!!S.achievements[a.id])).join('')}</div>`;
-ROUTES.inbox = ()=>{S.inbox.forEach(i=>i.read=true);save();const K={ach:I.trophy,ch:I.flag,pb:I.medal,sys:I.info};return `<div class="centerh"><button class="back" data-go="more">${I.back}</button><h1>Notifications</h1></div>${S.inbox.length?`<div class="card" style="padding:4px 16px">${S.inbox.map(i=>`<div class="listrow"><div class="ic">${K[i.k]||I.bell}</div><div class="grow"><div class="t">${esc(i.t)}</div><div class="s">${esc(i.s||'')} · ${ago(i.ts)}</div></div></div>`).join('')}</div>`:`<div class="card" style="text-align:center;padding:28px"><b style="color:#fff">Quiet for now</b><p class="muted small" style="margin:6px 0 0">Personal bests, achievements and challenge progress land here.</p></div>`}`};
+ROUTES.achievements = ()=>{const done=Object.keys(S.seasonsDone||{});return `<div class="centerh"><button class="back" data-go="profile">${I.back}</button><h1>Achievements</h1><p>${Object.keys(S.achievements).length} of ${ACHIEVEMENTS.length} unlocked${done.length?` · ${done.length} season${done.length===1?'':'s'}`:''}</p></div><div class="ach">${ACHIEVEMENTS.map(a=>achCard(a,!!S.achievements[a.id])).join('')}</div>${done.length?`<div class="sub-h"><h2 class="sans">Seasonal trophies</h2></div><div class="ach">${done.map(k=>{const sea=SEASONS.find(x=>k.startsWith(x.id+'-'));const yr=k.slice(-4);return sea?`<div>${shieldBadge('cal','#f2b64a')}<b>${esc(sea.badge)}</b><span>${esc(sea.n)} ${yr}</span><span class="chk">${I.check}</span></div>`:''}).join('')}</div>`:''}`};
+ROUTES.inbox = ()=>{S.inbox.forEach(i=>i.read=true);save();const K={ach:I.trophy,ch:I.flag,pb:I.medal,sys:I.info,hunt:I.target,season:I.cal};return `<div class="centerh"><button class="back" data-go="more">${I.back}</button><h1>Notifications</h1></div>${S.inbox.length?`<div class="card" style="padding:4px 16px">${S.inbox.map(i=>`<div class="listrow"><div class="ic">${K[i.k]||I.bell}</div><div class="grow"><div class="t">${esc(i.t)}</div><div class="s">${esc(i.s||'')} · ${ago(i.ts)}</div></div></div>`).join('')}</div>`:`<div class="card" style="text-align:center;padding:28px"><b style="color:#fff">Quiet for now</b><p class="muted small" style="margin:6px 0 0">Personal bests, achievements and challenge progress land here.</p></div>`}`};
 ROUTES.settings = ()=>`<div class="centerh"><button class="back" data-go="more">${I.back}</button><h1>Settings</h1><p>Profile, privacy and data.</p></div>
   <div class="card stack"><span class="eyebrow">Profile</span>
     <div class="field"><label>Display name</label><input class="inp" id="setName" value="${esc(S.name)}" placeholder="Your name"></div>
@@ -1683,20 +1755,23 @@ function speciesPicker(cb){
 /* ---------- Verdict ---------- */
 ROUTES.verdict = ({id})=>{
   let V=CUR.verdict;
-  if(!V&&id){const c=id==='latest'?S.catches[0]:S.catches.find(x=>x.id===id);if(c){V={c,sp:SP[c.sp],newSpecies:false,pb:c.pb,tier:c.tier,pct:c.pct,parts:[['XP earned',c.xp||0]],xp:c.xp||0,newAch:[],chDone:[],chal:CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,c.sp)),registry:[regProgress().have,regProgress().total],replay:true}}}
+  if(!V&&id){const c=id==='latest'?S.catches[0]:S.catches.find(x=>x.id===id);if(c){V={c,sp:SP[c.sp],newSpecies:false,pb:c.pb,pbDelta:0,trophy:isTrophy(c),huntDone:null,seasonHit:null,seasonsDone:[],tier:c.tier,pct:c.pct,parts:[['XP earned',c.xp||0]],xp:c.xp||0,newAch:[],chDone:[],chal:CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,c.sp)),registry:[regProgress().have,regProgress().total],replay:true}}}
   if(!V)return ROUTES.home();
   const {c,sp,tier,pct}=V;const T=TIERS[tier];const reg=V.registry;const have=speciesCaught();const spIdx=SPECIES.findIndex(s=>s.id===sp.id)+1;
   CUR.after=()=>{revealSequence(V);};
   return `<div class="verdict">
-  <div class="centerh"><button class="back" data-go="home">${I.back}</button><h1>Verdict</h1><p>Here's what you caught!</p></div>
+  <div class="centerh"><button class="back" data-go="home">${I.back}</button><h1>Your Catch</h1><p>Here's what you caught!</p></div>
   <div class="hero v-reveal t-${tier}" id="vr0"><span data-photo="${c.id}" style="display:block;width:100%;height:100%"></span><button class="pill vp" data-go="catch/${c.id}">${I.image} View Photo</button></div>
-  <div class="v-species"><div class="v-reveal" id="vr1"><span class="eyebrow">Species</span><h2>${esc(sp.n)}</h2><div class="sci">${esc(sp.sci)}</div><div style="margin-top:8px"><span class="pill">${I.fish} ${GROUP_LABEL[sp.g]}${sp.tags.includes('game')?' · Game fish':''}</span></div></div>
+  <div class="v-species"><div class="v-reveal" id="vr1"><span class="eyebrow">Species</span><h2>${esc(sp.n)}</h2><div class="sci">${esc(sp.sci)}</div><div class="small" style="margin-top:8px;color:var(--ice)">${esc(c.water||c.region||'Location not set')}${regionState(c.region)?', '+regionState(c.region):''}<br><span class="muted">${fmtDate(c.ts)}</span></div><div style="margin-top:8px"><span class="pill">${I.fish} ${GROUP_LABEL[sp.g]}${sp.tags.includes('game')?' · Game fish':''}</span></div></div>
     <div class="v-tier ${tier} v-reveal" id="vr2"><div class="nm tc-${tier}">${T.ico}${T.n.toUpperCase()}</div><div class="stars">${'★'.repeat(T.stars)}</div><div class="why">${T.why}</div></div></div>
   <div class="v-stats v-reveal" id="vr3"><div><div class="k">${I.ruler} LENGTH</div><div class="v">${c.len?num(c.len)+' in':'—'}</div></div><div><div class="k">${I.scale} WEIGHT</div><div class="v">${c.wt?num(c.wt)+' lb':'—'}</div></div><div><div class="k">${I.chart} PERCENTILE</div><div class="v">${pct?'Top '+pct+'%':'—'}</div><div class="s">${pct?'of registered '+esc(sp.n.split(' ')[0]):'add a length'}</div></div></div>
-  <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Logged to your registry</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span><span class="xpv">+<span id="xpNum">0</span> XP</span></span></div></div>
-  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}${esc(regProgress().label)}: <b>${V.newSpecies?'#':''}${reg[0]} / ${reg[1]}</b>${V.newSpecies?' <span class="muted">new</span>':''}</span><a data-go="species/${sp.id}" href="#species/${sp.id}">View species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+  <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best${V.pbDelta?` · +${num(V.pbDelta)} in`:''}</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Added to your Fishdex</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span><span class="xpv">+<span id="xpNum">0</span> XP</span></span></div></div>
+  ${V.trophy||V.huntDone||fullyVerified(c)?`<div class="v-flags v-reveal in">${V.trophy?`<span class="pill" style="border-color:rgba(242,182,74,.6);color:#ffd985">${I.trophy} Trophy fish${V.replay?'':' · +'+XP.trophy.toLocaleString()+' XP'}</span>`:''}${V.huntDone?`<span class="pill" style="border-color:rgba(59,139,255,.7);color:#8ec6ff">${I.target} Hunt complete · +${XP.hunt} XP</span>`:''}${fullyVerified(c)?`<span class="pill" style="border-color:rgba(34,193,195,.6);color:#7fe3e4">${I.check} Fully verified${V.replay?'':' · +'+XP.verified+' XP'}</span>`:''}</div>`:''}
+  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}Added to your Fishdex <span class="muted">· ${esc(regProgress().label)} ${reg[0]} / ${reg[1]}</span></span><a data-go="species/${sp.id}" href="#species/${sp.id}">View species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
     ${V.chal.length?`<div class="stack" style="margin-top:12px">${V.chal.map(({ch,p})=>`<div class="card" style="padding:12px 14px" data-go="challenges"><div class="split"><b style="color:#fff">${esc(ch.n)}</b><span class="small b" style="color:#fff">${p} / ${ch.sp.length}</span></div><div class="prog green" style="margin-top:8px;height:6px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div></div>`).join('')}</div>`:''}
     ${V.newAch.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Achievement unlocked</span>${V.newAch.map(a=>`<div class="row" style="margin-top:8px"><div style="width:44px">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8')}</div><div><b style="color:#fff">${esc(a.n)}</b><div class="muted small">${esc(a.d)}</div></div></div>`).join('')}</div>`:''}
+    ${V.seasonHit?`<div class="card" style="margin-top:12px" data-go="challenges"><div class="split"><span class="eyebrow">Season</span><span class="small b" style="color:#fff">${V.seasonHit.p} / ${V.seasonHit.sea.sp.length}</span></div><b style="display:block;color:#fff;margin-top:4px">${esc(V.seasonHit.sea.n)}</b><div class="prog green" style="margin-top:8px;height:6px"><i style="width:${Math.round(V.seasonHit.p/V.seasonHit.sea.sp.length*100)}%"></i></div><div class="small muted" style="margin-top:6px">Ends ${fmtDate(V.seasonHit.win.b)} · ${esc(V.seasonHit.sea.badge)} badge</div></div>`:''}
+    ${(V.seasonsDone||[]).length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Season complete</span>${V.seasonsDone.map(sea=>`<b style="display:block;color:#fff;margin-top:6px">${esc(sea.n)} · ${esc(sea.badge)} badge · +${sea.xp.toLocaleString()} XP</b>`).join('')}</div>`:''}
     ${V.chDone.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Challenge complete</span>${V.chDone.map(ch=>`<b style="display:block;color:#fff;margin-top:6px">${esc(ch.n)} · +${ch.xp.toLocaleString()} XP</b>`).join('')}</div>`:''}
     <details class="small muted" style="margin-top:12px"><summary style="cursor:pointer">XP breakdown</summary><div style="margin-top:6px">${V.parts.map(p=>`<div class="split"><span>${esc(p[0])}</span><span>+${p[1].toLocaleString()}</span></div>`).join('')}</div></details></div>
   <div class="v-reveal stack" id="vr7" style="margin-top:16px"><button class="btn" data-share="${c.id}">${I.share} Share Verdict</button><button class="btn ghost" data-go="trophy">${I.trophy} View Trophy Room</button><button class="btn ghost" data-go="home">Done</button></div>
@@ -1811,15 +1886,18 @@ function seedDemo(){
   S.inbox.splice(0,S.inbox.length-inbox0); // sample data must not arrive as 17 unread notifications
   S.demo=true;S.inbox.unshift({id:uid(),ts:Date.now(),k:'sys',t:'Sample catches loaded',s:'Remove them anytime in Settings → Data.'});save();
 }
-function removeDemo(){const gone=S.catches.filter(c=>c.demo);S.catches=S.catches.filter(c=>!c.demo);S.xp=S.catches.reduce((a,c)=>a+(c.xp||0),0);S.achievements={};S.challengesDone={};for(const a of ACHIEVEMENTS)if(a.test(S))S.achievements[a.id]=Date.now();for(const ch of CHALLENGES)if(challengeProgress(ch)===ch.sp.length)S.challengesDone[ch.id]=Date.now();S.inbox=S.inbox.filter(i=>!(i.k==='sys'&&/^Sample catches/.test(i.t)));S.demo=false;save()}
+function removeDemo(){const gone=S.catches.filter(c=>c.demo);S.catches=S.catches.filter(c=>!c.demo);S.xp=S.catches.reduce((a,c)=>a+(c.xp||0),0);S.achievements={};S.challengesDone={};S.seasonsDone={};for(const a of ACHIEVEMENTS)if(a.test(S))S.achievements[a.id]=Date.now();for(const c of S.catches)for(const x of activeSeasons(new Date(c.ts)))if(x.sea.sp.includes(c.sp)&&seasonProgress(x.sea,x.win)===x.sea.sp.length)S.seasonsDone[x.win.key]=Date.now();for(const ch of CHALLENGES)if(challengeProgress(ch)===ch.sp.length)S.challengesDone[ch.id]=Date.now();S.inbox=S.inbox.filter(i=>!(i.k==='sys'&&/^Sample catches/.test(i.t)));S.demo=false;save()}
 
 /* ---------- Boot ---------- */
+// Badges added after a user's first session unlock quietly on load, so nobody has to catch a fish to collect what they already earned.
+function backfillAch(){const got=[];for(const a of ACHIEVEMENTS){if(!S.achievements[a.id]&&a.test(S)){S.achievements[a.id]=Date.now();got.push(a)}}if(got.length){for(const a of got)S.inbox.unshift({id:uid(),ts:Date.now(),k:'ach',t:'Achievement unlocked: '+a.n,s:a.d});save()}}
 (function boot(){
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
   if(new URLSearchParams(location.search).get('demo')==='1'&&!S.demo){S.name=S.name||'Drew';S.onboarded=true;seedDemo()}
   const [r,id]=location.hash.slice(1).split('/');
   if(!S.onboarded){CUR.route='onboarding'}else{CUR.route=ROUTES[r]?r:'home';CUR.params=id?{id}:{}}
   if(CUR.route==='review'||CUR.route==='verdict'&&!id)CUR.route='home';
+  backfillAch();
   render();
   window.addEventListener('pagehide',stopCamera);
   document.addEventListener('visibilitychange',()=>{if(CUR.route!=='capture')return;if(document.hidden)stopCamera();else if(!camStream)startCamera()});

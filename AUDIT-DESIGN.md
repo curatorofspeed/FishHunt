@@ -198,3 +198,23 @@ The Verdict header's "1 / 1" meant nothing. → Removed.
 
 - **Real photography** for sample data and store screenshots.
 - **Phone check** of the light header under a notch and of the camera screen.
+
+## Game layer pass (Sep 12 2026)
+
+Built from the FISHDEX memo. The collection is the reward; XP is the progression layer. `.audit/polish6_patch.py` replays it onto `.audit/index.polish6-orig.html`.
+
+**Changed**
+- Home is **Your Fishdex**: species / level / new-this-month strip, Today's hunts (pick one of three; +150 XP on the next qualifying catch; one per day), Your next hunts (derived: next species, group PB, five species this month, best challenge), Collections with an XP-priced next unlock, the active season for home waters, recent trophy.
+- Species cards climb Caught → Verified → Trophy (stars on registry cards, ladder on the species page). Catch detail names its verification level (Unverified → Photo → Species → Size → Fully verified).
+- Verdict: where and when under the species, PB delta on the gold banner ("+3.9 in"), flag pills for Trophy fish / Hunt complete / Fully verified with their XP, "Added to your Fishdex", season progress and season-complete cards. Replays show flags without XP claims.
+- Seasons table with yearly windows and permanent badges; Challenges lists active seasons first; Achievements gains a Seasonal trophies shelf and six new badges (10/25/50 species, First Trophy, Five PBs, Verified Century). Badges added later unlock quietly at boot.
+- "Species Registry" is now "Fishdex" on Explore, the registry title and the verdict.
+
+**Verified (375×812 frame, animations forced to their end state)**
+- Contrast: 656 text runs across Home (hunt unchosen, chosen, done), Challenges, Species, Fishdex, Achievements with a seasonal trophy, live Verdict with every flag, Catch detail and Notifications. 0 failures. The first render put the "Seasons" heading on the pale sky (white on sky); the label moved into the season cards' eyebrows and the re-measure passes.
+- Layout scan at 360, 375, 390 and 430: no new clipped labels, overlaps or horizontal overflow on the new screens. The registry filter chips still report as "overflow" because they scroll sideways by design, and one pre-existing 2px overrun sits inside a silhouette card at 360.
+- Flows driven in the page: picking a hunt marks the button pressed and the card "Chosen"; a new-species catch completes the species hunt exactly once (+150 XP, inbox note, "Done" on the card); a later qualifying catch does not complete it again; sample catches never complete a hunt. Coho + chum + pink on top of the sample chinook completes Fall Salmon Season once (+2,500 XP, `seasonsDone['fall-salmon-2026']`, inbox note, Salmon Runner under Seasonal trophies, "13 of 21 unlocked · 1 season"). A 46 in chinook: Trophy fish +1,000, PB +3.9 in on the banner and in the inbox, species level 3, First Trophy unlocked.
+- Keyboard: Enter on a Collections row opens the Fishdex with that filter (rows carry `role="link"`, `tabindex="0"`, and the Enter handler now includes `[data-coll]`). Hunt buttons are native buttons with `aria-pressed`.
+- Headless renders at 375: Home (both hunt states), Challenges, Species, Verdict, Achievements, Fishdex.
+
+**Limits:** the pane stayed hidden, so screenshots came from headless Chrome. The state hooks run through `.audit/frame.html?js=`. Seasons and hunts key off the device clock; nothing was tested across a day boundary.

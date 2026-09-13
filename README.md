@@ -52,7 +52,32 @@ Two modes, switched in **Settings → Species identification**:
 The "Top N% of registered <species>" figure is the same curve. Both are tunable without touching UI.
 
 XP: catch +50, new species +250, personal best +300, Uncommon +100, Rare +500, Epic +850,
-Legendary +1,500, challenge complete +3,500–6,000. Level L needs `120(L−1)² + 80(L−1)` cumulative XP.
+Legendary +1,500, trophy fish (at or past the species' trophy length) +1,000, fully verified catch +100,
+today's hunt +150, season complete +2,000–2,500, challenge complete +3,500–6,000.
+Level L needs `120(L−1)² + 80(L−1)` cumulative XP. All of it lives in `XP`, `TIERS`, `SEASONS` and `CHALLENGES`.
+
+## The game layer
+
+The collection is the reward; XP is the progression layer. Home is **Your Fishdex**: species discovered in
+your home waters, level, new species this month, and then:
+
+- **Today's hunts.** Pick one of three each day (new species, PB, rarity). The next qualifying catch
+  completes it for +150 XP. Stored as `S.hunt = {date, kind, done}`; sample catches never complete a hunt.
+- **Your next hunts.** Derived, never stored: the easiest species you haven't caught in home waters, beating
+  the PB in your most-fished group, five species this month, and the most relevant unfinished challenge.
+- **Collections.** Salmon, Trout & char, Bass & panfish and Saltwater within the registry scope. Each row opens
+  the Fishdex with that filter, and "Next unlock" prices the next discovery in XP.
+- **Seasons** (`SEASONS`). Date windows that repeat every year: Fall Salmon (Sep 1 – Nov 30), Winter Steelhead,
+  Spring Trout, Summer Warmwater, Fall Redfish and Hard Water. Catching every listed species inside the window
+  earns a permanent badge and XP once per year (`S.seasonsDone[id-year]`). Home shows the active season for your
+  waters; Challenges lists every active season on top; finished ones sit under Achievements as seasonal trophies.
+- **Species levels.** Every species card climbs Caught → Verified (photo, identified species, timestamp) →
+  Trophy (trophy length, or a Legendary catch). Stars on registry cards, a ladder on the species page.
+- **Verification ladder** on catch detail: Unverified → Photo → Species → Size → Fully verified (photo,
+  species, time and GPS).
+- **PB deltas.** The verdict and the inbox say by how much a record fell; species pages show the gain this year.
+- **Badges** added: Ten / Twenty-five / Fifty Species, First Trophy, Five Personal Bests, Verified Century.
+  Badges introduced after a user's first session unlock quietly at boot (`backfillAch`).
 
 ## Data
 
@@ -74,6 +99,8 @@ Settings → Data has JSON export/import, "Load sample catches", and full erase.
 
 - `?demo=1` onboards a fresh device with the sample catches (screenshots, store listings, headless checks).
 - `#verdict/latest` replays the Verdict screen for the newest catch.
+- `.audit/frame.html?u=<app url>&w=375&h=812&js=<code>` frames the app and runs `js` inside it after boot, so a headless
+  shot can set up state first (choose a hunt, commit a catch, open the verdict).
 - `python3 -m http.server` plus headless Chrome renders any screen: headless clamps windows to 500px wide,
   so the checks in `.audit/` frame the app in a 375px iframe.
 
