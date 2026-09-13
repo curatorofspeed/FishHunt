@@ -720,14 +720,42 @@ const SPECIES = [
 const SP = Object.fromEntries(SPECIES.map(s=>[s.id,s]));
 const GROUP_LABEL = {salmon:'Salmon',trout:'Trout',char:'Char',bass:'Bass',panfish:'Panfish',walleye:'Walleye',pike:'Pike & Muskie',catfish:'Catfish',carp:'Carp & Suckers',sturgeon:'Sturgeon',other:'Other',rockfish:'Rockfish',flatfish:'Flatfish',bottom:'Bottomfish',pelagic:'Pelagic',shark:'Sharks'};
 
-const REGIONS = ['Puget Sound North','Puget Sound South','Olympic Peninsula','Washington Coast','Southwest Washington','Columbia Gorge','Yakima River Region','Central Cascades','North Cascades','Okanogan','Columbia Basin','Palouse / Snake River','Spokane Region','Outside Washington'];
-// rough lat/lng boxes for auto-region (WA only)
-const REGION_BOX = [
- ['Puget Sound North',47.7,49.0,-123.2,-121.9],['Puget Sound South',46.9,47.7,-123.2,-121.9],['Olympic Peninsula',47.2,48.4,-125,-123.2],['Washington Coast',46.2,47.2,-125,-123.5],
- ['Southwest Washington',45.5,46.6,-123.5,-122.0],['Columbia Gorge',45.5,46.2,-122.0,-120.5],['Yakima River Region',46.2,47.3,-121.2,-119.8],['Central Cascades',47.0,47.9,-121.9,-120.5],
- ['North Cascades',47.9,49.0,-121.9,-120.4],['Okanogan',47.9,49.0,-120.4,-118.8],['Columbia Basin',46.0,47.9,-120.5,-118.5],['Palouse / Snake River',46.0,47.2,-118.5,-116.9],['Spokane Region',47.2,49.0,-118.8,-116.9]
+// Regions: [name, state, water, latMin, latMax, lngMin, lngMax]. Order = GPS detection priority (WA first, then the
+// rest of the Pacific Northwest and California). A name may carry several boxes. Water drives the demo quick picks.
+const STATES={WA:['Washington','US'],OR:['Oregon','US'],ID:['Idaho','US'],MT:['Montana','US'],BC:['British Columbia','CA'],AK:['Alaska','US'],CA:['California','US'],
+ AL:['Alabama','US'],AR:['Arkansas','US'],AZ:['Arizona','US'],CO:['Colorado','US'],CT:['Connecticut','US'],DE:['Delaware','US'],FL:['Florida','US'],GA:['Georgia','US'],HI:['Hawaii','US'],IA:['Iowa','US'],IL:['Illinois','US'],IN:['Indiana','US'],KS:['Kansas','US'],KY:['Kentucky','US'],LA:['Louisiana','US'],MA:['Massachusetts','US'],MD:['Maryland','US'],ME:['Maine','US'],MI:['Michigan','US'],MN:['Minnesota','US'],MO:['Missouri','US'],MS:['Mississippi','US'],NC:['North Carolina','US'],ND:['North Dakota','US'],NE:['Nebraska','US'],NH:['New Hampshire','US'],NJ:['New Jersey','US'],NM:['New Mexico','US'],NV:['Nevada','US'],NY:['New York','US'],OH:['Ohio','US'],OK:['Oklahoma','US'],PA:['Pennsylvania','US'],RI:['Rhode Island','US'],SC:['South Carolina','US'],SD:['South Dakota','US'],TN:['Tennessee','US'],TX:['Texas','US'],UT:['Utah','US'],VA:['Virginia','US'],VT:['Vermont','US'],WI:['Wisconsin','US'],WV:['West Virginia','US'],WY:['Wyoming','US'],
+ AB:['Alberta','CA'],SK:['Saskatchewan','CA'],MB:['Manitoba','CA'],ON:['Ontario','CA'],QC:['Quebec','CA'],NB:['New Brunswick','CA'],NS:['Nova Scotia','CA'],PE:['Prince Edward Island','CA'],NL:['Newfoundland and Labrador','CA'],YT:['Yukon','CA'],NT:['Northwest Territories','CA'],NU:['Nunavut','CA']};
+const COASTAL=new Set(['AK','WA','OR','CA','HI','TX','LA','MS','AL','FL','GA','SC','NC','VA','MD','DE','NJ','NY','CT','RI','MA','NH','ME','BC','NS','NB','PE','NL','QC','NU','NT','YT']);
+const REGIONS=[
+ ['Puget Sound North','WA','mixed',47.7,49.0,-123.2,-121.9],['Puget Sound South','WA','mixed',46.9,47.7,-123.2,-121.9],['Olympic Peninsula','WA','mixed',47.2,48.4,-125.0,-123.2],['Washington Coast','WA','mixed',46.25,47.2,-125.0,-123.3],
+ ['Southwest Washington','WA','mixed',45.58,46.6,-123.3,-122.0],['Columbia Gorge','WA','fresh',45.5,46.2,-122.0,-120.5],['Yakima River Region','WA','fresh',46.2,47.3,-121.2,-119.8],['Central Cascades','WA','fresh',47.0,47.9,-121.9,-120.5],
+ ['North Cascades','WA','fresh',47.9,49.0,-121.9,-120.4],['Okanogan','WA','fresh',47.9,49.0,-120.4,-118.8],['Columbia Basin','WA','fresh',46.0,47.9,-120.5,-118.5],['Palouse / Snake River','WA','fresh',46.0,47.2,-118.5,-117.04],['Spokane Region','WA','fresh',47.2,49.0,-118.8,-117.04],
+ ['Oregon Coast','OR','mixed',42.0,46.25,-124.7,-123.5],['Willamette Valley','OR','fresh',43.8,45.58,-123.5,-122.2],['Central Oregon','OR','fresh',43.4,45.5,-121.9,-119.9],['Oregon Cascades','OR','fresh',42.6,45.58,-122.6,-121.4],['Southern Oregon & Klamath','OR','fresh',42.0,43.8,-124.0,-120.0],['Eastern Oregon','OR','fresh',42.0,46.0,-119.9,-117.0],
+ ['Idaho Panhandle','ID','fresh',46.6,49.0,-117.25,-116.05],['Clearwater & Lewiston','ID','fresh',45.6,46.6,-117.25,-114.5],['Salmon River Country','ID','fresh',44.2,45.6,-117.25,-113.4],['Eastern Idaho & Tetons','ID','fresh',43.3,44.6,-113.4,-111.0],['Snake River Plain','ID','fresh',41.99,44.2,-117.25,-111.0],
+ ['Flathead & Glacier','MT','fresh',47.4,49.0,-116.05,-112.8],['Missoula & Bitterroot','MT','fresh',45.6,47.4,-116.05,-113.0],['Upper Missouri','MT','fresh',45.75,48.6,-113.0,-109.5],['Bozeman, Madison & Gallatin','MT','fresh',44.35,45.75,-113.0,-111.0],['Bozeman, Madison & Gallatin','MT','fresh',45.0,45.75,-111.0,-110.0],['Yellowstone & Eastern Montana','MT','fresh',45.0,49.0,-110.0,-104.0],
+ ['Vancouver & Fraser Valley','BC','mixed',49.0,49.6,-123.5,-121.3],['Sunshine Coast & Sea to Sky','BC','mixed',49.4,50.7,-124.9,-122.7],['Vancouver Island','BC','mixed',48.3,50.9,-128.6,-123.3],['Okanagan & Thompson','BC','fresh',49.0,51.6,-121.3,-118.6],['Kootenays','BC','fresh',49.0,50.5,-118.6,-114.6],['Kootenays','BC','fresh',50.5,51.2,-118.6,-115.7],['Cariboo & Chilcotin','BC','fresh',51.6,53.5,-125.6,-120.0],['Central Coast','BC','salt',50.9,53.5,-128.6,-125.6],['Haida Gwaii','BC','salt',51.9,54.3,-133.5,-130.9],['Skeena & North Coast','BC','mixed',53.5,56.6,-131.6,-125.6],['Northern BC','BC','fresh',53.5,60.0,-125.6,-118.0],
+ ['Southeast Alaska','AK','mixed',54.5,60.0,-141.0,-129.5],['Anchorage & Mat-Su','AK','fresh',60.9,62.6,-151.0,-147.3],['Kenai Peninsula','AK','mixed',59.3,61.0,-152.0,-148.5],['Prince William Sound','AK','salt',60.0,61.5,-148.5,-144.5],['Kodiak','AK','mixed',56.5,58.8,-155.2,-151.8],['Bristol Bay','AK','mixed',57.5,60.6,-161.5,-153.5],['Alaska Peninsula & Aleutians','AK','salt',51.0,57.5,-179.9,-155.2],['Interior Alaska','AK','fresh',62.6,67.5,-152.0,-141.0],
+ ['San Francisco Bay','CA','salt',37.2,38.6,-123.05,-121.65],['Southern California Coast','CA','salt',32.5,34.6,-120.7,-117.0],['Central Coast','CA','salt',34.6,37.2,-122.6,-120.5],['North Coast','CA','mixed',38.6,42.0,-124.6,-123.0],['Sacramento Valley & Delta','CA','fresh',37.8,40.5,-122.6,-120.9],['Central Valley South','CA','fresh',35.0,37.8,-121.3,-119.4],['Central Valley South','CA','fresh',35.0,36.4,-119.4,-118.6],['Sierra Nevada','CA','fresh',35.5,40.6,-120.6,-118.0],['Shasta, Trinity & Northeast','CA','fresh',40.3,42.0,-123.0,-119.99],['Inland Southern California','CA','fresh',32.5,36.5,-117.0,-114.6]
 ];
-const WATERS = ['Cle Elum Lake','Yakima River','Lake Washington','Lake Sammamish','Puget Sound','Skagit River','Snoqualmie River','Cowlitz River','Columbia River','Lake Chelan','Banks Lake','Potholes Reservoir','Moses Lake','Lake Roosevelt','Rufus Woods Lake','Snake River','Hood Canal','Westport','Neah Bay','Sekiu','Lake Crescent','Quinault River','Hoh River','Sol Duc River','Lake Cushman','Kachess Lake','Keechelus Lake','Rattlesnake Lake','Lake Whatcom','Lake Stevens','Baker Lake','Ross Lake','Omak Lake','Lake Lenore','Rocky Ford Creek','Lake Wenatchee','Wenatchee River','Methow River','Lake Tapps','American Lake','Silver Lake','Riffe Lake','Mayfield Lake','Blue Lake','Lake Goodwin','Nisqually River','Deschutes River (WA)','Lake Roesiger','Rock Lake','Sprague Lake','Ilwaco','La Push','Tokeland','Grays Harbor','Willapa Bay','Point Defiance','Possession Bar','Shilshole','Edmonds Pier','Mukilteo','Deception Pass','San Juan Islands'];
+// Coarse fallback: state / province boxes, small ones first so a big neighbour does not swallow them.
+const STATE_BOX=[['ON',42.3,44.9,-82.9,-79.1],['CT',41.0,42.05,-73.7,-71.8],['RI',41.1,42.0,-71.9,-71.1],['DE',38.45,39.85,-75.8,-75.0],['NJ',38.9,41.4,-75.6,-73.9],['NH',42.7,45.3,-72.6,-70.7],['VT',42.7,45.0,-73.4,-71.5],['MA',41.2,42.9,-73.5,-69.9],['MD',37.9,39.7,-79.5,-75.0],['WV',37.2,40.6,-82.6,-77.7],['SC',32.0,35.2,-83.4,-78.5],['ME',43.0,47.5,-71.1,-66.9],['IN',37.8,41.8,-88.1,-84.8],['KY',36.5,39.15,-89.6,-81.9],['TN',35.0,36.7,-90.3,-81.6],['VA',36.5,39.5,-83.7,-75.2],['OH',38.4,42.0,-84.8,-80.5],['PA',39.7,42.3,-80.5,-74.7],['NY',40.5,45.0,-79.8,-71.9],['NC',33.8,36.6,-84.3,-75.4],['GA',30.4,35.0,-85.6,-80.8],['AL',30.2,35.0,-88.5,-84.9],['MS',30.2,35.0,-91.7,-88.1],['LA',28.9,33.0,-94.0,-88.8],['AR',33.0,36.5,-94.6,-89.6],['MO',36.0,40.6,-95.8,-89.1],['IA',40.4,43.5,-96.6,-90.1],['WI',42.5,47.1,-92.9,-86.8],['MI',41.7,48.3,-90.4,-82.4],['MN',43.5,49.4,-97.2,-89.5],['IL',37.0,42.5,-91.5,-87.5],['ND',45.9,49.0,-104.05,-96.6],['SD',42.5,45.9,-104.05,-96.4],['NE',40.0,43.0,-104.05,-95.3],['KS',37.0,40.0,-102.1,-94.6],['OK',33.6,37.0,-103.0,-94.4],['TX',25.8,36.5,-106.6,-93.5],['NM',31.3,37.0,-109.05,-103.0],['CO',37.0,41.0,-109.1,-102.0],['UT',37.0,42.0,-114.05,-109.05],['WY',41.0,45.0,-111.05,-104.05],['NV',35.0,42.0,-120.0,-114.0],['AZ',31.3,37.0,-114.8,-109.0],['HI',18.9,22.3,-160.3,-154.8],['FL',24.5,31.0,-87.6,-80.0],
+ ['WA',45.5,49.0,-124.9,-116.9],['OR',42.0,46.3,-124.7,-117.0],['ID',41.99,49.0,-117.25,-111.0],['MT',44.35,49.0,-116.05,-104.0],['CA',32.5,42.0,-124.6,-114.1],['AK',51.0,71.5,-179.9,-129.5],['AB',49.0,52.0,-115.7,-110.0],['AB',52.0,60.0,-120.0,-110.0],['BC',48.3,60.0,-139.1,-114.0],
+ ['PE',45.9,47.1,-64.5,-62.0],['NS',43.4,47.1,-66.4,-59.7],['NB',44.6,48.1,-69.1,-63.7],['SK',49.0,60.0,-110.0,-101.4],['MB',49.0,60.0,-102.0,-89.0],['ON',41.7,56.9,-95.2,-74.3],['QC',45.0,62.6,-79.8,-57.1],['NL',46.6,60.4,-67.8,-52.6],['YT',60.0,69.7,-141.0,-124.0],['NT',60.0,78.0,-136.0,-102.0],['NU',51.6,83.0,-120.0,-61.0]];
+const REGION_BY={};for(const r of REGIONS)if(!REGION_BY[r[0]])REGION_BY[r[0]]=r;
+const STATE_OF_NAME=Object.fromEntries(Object.entries(STATES).map(([k,v])=>[v[0],k]));
+function stateName(st){return (STATES[st]||[st])[0]}
+function regionState(name){const r=REGION_BY[name];return r?r[1]:(STATE_OF_NAME[name]||null)}
+function regionSalty(name){const r=REGION_BY[name];if(r)return r[2]!=='fresh';const st=STATE_OF_NAME[name];return st?COASTAL.has(st):false}
+function homeState(){return regionState(S.homeRegion)||'WA'}
+function homeStateName(){return stateName(homeState())}
+function homeLine(){return REGION_BY[S.homeRegion]?`${S.homeRegion}, ${homeState()}`:(S.homeRegion||'')}
+function regionCenter(name){const r=REGION_BY[name];if(r)return [(r[3]+r[4])/2,(r[5]+r[6])/2];const b=STATE_BOX.find(x=>x[0]===regionState(name));return b?[(b[1]+b[2])/2,(b[3]+b[4])/2]:[47.4,-121.6]}
+function regionFrom(lat,lng){if(lat==null)return null;for(const r of REGIONS){if(lat>=r[3]&&lat<=r[4]&&lng>=r[5]&&lng<=r[6])return r[0]}for(const [st,a,b,c,d] of STATE_BOX){if(lat>=a&&lat<=b&&lng>=c&&lng<=d)return stateName(st)}return 'Somewhere else'}
+function regionOptions(sel){const groups=new Map();for(const r of REGIONS){if(!groups.has(r[1]))groups.set(r[1],[]);const g=groups.get(r[1]);if(!g.includes(r[0]))g.push(r[0])}
+  let h='';for(const [st,names] of groups)h+=`<optgroup label="${esc(stateName(st))}">`+names.map(n=>`<option ${sel===n?'selected':''}>${esc(n)}</option>`).join('')+'</optgroup>';
+  const rest=Object.keys(STATES).filter(k=>!groups.has(k)).map(k=>STATES[k][0]).sort();
+  return h+'<optgroup label="Elsewhere">'+rest.map(n=>`<option ${sel===n?'selected':''}>${esc(n)}</option>`).join('')+`<option ${sel==='Somewhere else'?'selected':''}>Somewhere else</option></optgroup>`}
+const WATERS = ['Cle Elum Lake','Yakima River','Lake Washington','Lake Sammamish','Puget Sound','Skagit River','Snoqualmie River','Cowlitz River','Columbia River','Lake Chelan','Banks Lake','Potholes Reservoir','Moses Lake','Lake Roosevelt','Rufus Woods Lake','Snake River','Hood Canal','Westport','Neah Bay','Sekiu','Lake Crescent','Quinault River','Hoh River','Sol Duc River','Lake Cushman','Kachess Lake','Keechelus Lake','Rattlesnake Lake','Lake Whatcom','Lake Stevens','Baker Lake','Ross Lake','Omak Lake','Lake Lenore','Rocky Ford Creek','Lake Wenatchee','Wenatchee River','Methow River','Lake Tapps','American Lake','Silver Lake','Riffe Lake','Mayfield Lake','Blue Lake','Lake Goodwin','Nisqually River','Deschutes River (WA)','Lake Roesiger','Rock Lake','Sprague Lake','Ilwaco','La Push','Tokeland','Grays Harbor','Willapa Bay','Point Defiance','Possession Bar','Shilshole','Edmonds Pier','Mukilteo','Deception Pass','San Juan Islands','Deschutes River','Rogue River','Umpqua River','McKenzie River','Crater Lake','Diamond Lake','Detroit Lake','Tillamook Bay','Nehalem River','Siletz River','Depoe Bay','Newport','Willamette River','John Day River','Owyhee River','Wallowa Lake','Lake Coeur d\'Alene','Lake Pend Oreille','Priest Lake','Clearwater River','Salmon River','Henrys Fork','South Fork Snake River','Silver Creek','Boise River','Payette River','Lake Cascade','C.J. Strike Reservoir','Flathead Lake','Fort Peck Reservoir','Madison River','Gallatin River','Yellowstone River','Missouri River','Bighorn River','Blackfoot River','Bitterroot River','Rock Creek','Hebgen Lake','Canyon Ferry Reservoir','Fraser River','Skeena River','Campbell River','Kootenay Lake','Okanagan Lake','Shuswap Lake','Harrison Lake','Howe Sound','Strait of Georgia','Tofino','Port Alberni','Bulkley River','Dean River','Thompson River','Cowichan River','Kenai River','Russian River','Kasilof River','Resurrection Bay','Kachemak Bay','Cook Inlet','Ship Creek','Naknek River','Kvichak River','Situk River','Chilkoot River','Gastineau Channel','Prince William Sound','Sacramento River','American River','Feather River','Lake Tahoe','Shasta Lake','Trinity River','Klamath River','Smith River','Clear Lake','San Francisco Bay','Monterey Bay','Lake Berryessa','Lake Oroville','Owens River','Eagle Lake','Diamond Valley Lake'];
 
 const CHALLENGES = [
  {id:'wa-salmon',n:'Washington Salmon Challenge',region:'Washington',sp:['chinook','coho','sockeye','pink','chum','steelhead'],xp:5000,badge:'Salmon Slam'},
@@ -747,7 +775,8 @@ const ACHIEVEMENTS = [
  {id:'weekend',n:'Weekend Warrior',d:'Fish on 5+ weekends',ico:'tent',test:s=>weekends(s)>=5,p:s=>[Math.min(5,weekends(s)),5]},
  {id:'waters',n:'New Waters',d:'Fish 5 different waters',ico:'map',test:s=>waters(s)>=5,p:s=>[Math.min(5,waters(s)),5]},
  {id:'pbstreak',n:'Personal Best Streak',d:'3 new personal bests',ico:'trophy',test:s=>pbs(s)>=3,p:s=>[Math.min(3,pbs(s)),3]},
- {id:'explorer',n:'Washington Explorer',d:'Fish 5 Washington regions',ico:'mtn',test:s=>regions(s)>=5,p:s=>[Math.min(5,regions(s)),5]},
+ {id:'explorer',n:'Home State Explorer',d:'Fish 5 regions in your home state',ico:'mtn',test:s=>regions(s)>=5,p:s=>[Math.min(5,regions(s)),5]},
+ {id:'farwaters',n:'Far Waters',d:'Fish in 3 states or provinces',ico:'map',test:s=>statesFished(s)>=3,p:s=>[Math.min(3,statesFished(s)),3]},
  {id:'rare',n:'Rare Find',d:'Land a Rare or better',ico:'star',test:s=>s.catches.some(c=>TIER_ORDER.indexOf(c.tier)>=2),p:s=>[s.catches.some(c=>TIER_ORDER.indexOf(c.tier)>=2)?1:0,1]},
  {id:'legend',n:'Living Legend',d:'Land a Legendary catch',ico:'crown',test:s=>s.catches.some(c=>c.tier==='legendary'),p:s=>[s.catches.some(c=>c.tier==='legendary')?1:0,1]},
  {id:'release',n:'Catch & Release Hero',d:'Release 10 fish',ico:'release',test:s=>s.catches.filter(c=>c.released).length>=10,p:s=>[Math.min(10,s.catches.filter(c=>c.released).length),10]},
@@ -758,7 +787,8 @@ function cnt(s,g){return new Set(s.catches.map(c=>SP[c.sp]).filter(x=>x&&x.g===g
 function cntw(s,w){return new Set(s.catches.map(c=>SP[c.sp]).filter(x=>x&&x.w===w).map(x=>x.id)).size}
 function weekends(s){return new Set(s.catches.filter(c=>[0,6].includes(new Date(c.ts).getDay())).map(c=>{const d=new Date(c.ts);d.setDate(d.getDate()-d.getDay());return d.toDateString()})).size}
 function waters(s){return new Set(s.catches.map(c=>(c.water||'').trim().toLowerCase()).filter(Boolean)).size}
-function regions(s){return new Set(s.catches.map(c=>c.region).filter(r=>r&&r!=='Outside Washington')).size}
+function regions(s){const st=homeState();return new Set(s.catches.map(c=>c.region).filter(r=>r&&regionState(r)===st)).size}
+function statesFished(s){return new Set(s.catches.map(c=>regionState(c.region)).filter(Boolean)).size}
 function pbs(s){return s.catches.filter(c=>c.pb).length}
 
 // Demo community (local only)
@@ -770,7 +800,7 @@ const DEMO_FEED = [
  {id:'f5',user:'PNW_Fisher',ago:'3d ago',region:'Columbia Basin',sp:'walleye',len:27.5,wt:8.2,tier:'rare',txt:'Banks Lake walleye are stacking up on the humps.',tags:['walleye','bankslake'],likes:66,comments:9}
 ];
 const DEMO_LEADERS = {
- Washington:[['RiverRanger',38400],['PNW_Fisher',31900],['SaltyCast',27250],['DriftBoatDee',22100],['Kokanee_Kid',19800],['TideRunner',16300],['Cascade_Cass',14900],['MossyRock',12600]],
+ Local:[['RiverRanger',38400],['PNW_Fisher',31900],['SaltyCast',27250],['DriftBoatDee',22100],['Kokanee_Kid',19800],['TideRunner',16300],['Cascade_Cass',14900],['MossyRock',12600]],
  Global:[['NorthShoreNick',98000],['Tarpon_Tara',91200],['FjordFinn',64200],['RiverRanger',38400],['PNW_Fisher',31900],['SaltyCast',27250],['DriftBoatDee',22100],['Kokanee_Kid',19800]]
 };
 </script>
@@ -964,7 +994,6 @@ function levelInfo(){const L=levelFor(S.xp);const a=xpForLevel(L),b=xpForLevel(L
 function speciesCaught(){return new Set(S.catches.map(c=>c.sp))}
 function pbFor(spId,excludeId){let best=null;for(const c of S.catches){if(c.sp!==spId||c.id===excludeId||!c.len)continue;if(!best||c.len>best.len)best=c}return best}
 function challengeProgress(ch){const have=speciesCaught();return ch.sp.filter(s=>have.has(s)).length}
-function regionFrom(lat,lng){if(lat==null)return null;for(const [n,a,b,c,d] of REGION_BOX){if(lat>=a&&lat<=b&&lng>=c&&lng<=d)return n}return 'Outside Washington'}
 
 // Commit a reviewed catch: computes tier/xp/pb, updates state, evaluates achievements+challenges. Returns verdict object.
 function commitCatch(draft){
@@ -1051,7 +1080,7 @@ function locLine(c,owner=true){ // what location text to show for a catch
 }
 function avatarLetter(){return (S.name||'A').trim()[0].toUpperCase()}
 function pctLabel(){ // demo standing
-  const all=DEMO_LEADERS.Washington.map(x=>x[1]).concat([S.xp]).sort((a,b)=>b-a);const rank=all.indexOf(S.xp)+1;return Math.max(1,Math.round(rank/(all.length+40)*100))
+  const all=DEMO_LEADERS.Local.map(x=>x[1]).concat([S.xp]).sort((a,b)=>b-a);const rank=all.indexOf(S.xp)+1;return Math.max(1,Math.round(rank/(all.length+40)*100))
 }
 
 /* ---------- Router ---------- */
@@ -1264,14 +1293,14 @@ let feedTab='following';
 ROUTES.feed = ()=>{
   const mine=S.catches.filter(c=>c.privacy!=='private').slice(0,3).map(c=>({id:'me-'+c.id,user:S.name||'You',ago:ago(c.ts),region:locLine(c,false),sp:c.sp,len:c.len,wt:c.wt,tier:c.tier,txt:c.caption||'',tags:[SP[c.sp].n.toLowerCase().replace(/[^a-z]/g,'')],likes:0,comments:0,mine:true,cid:c.id}));
   let posts=[...DEMO_FEED];
-  if(feedTab==='nearby')posts=posts.filter(p=>p.region===S.homeRegion||p.region.includes('Puget')||p.region.includes('Cascades'));
+  if(feedTab==='nearby')posts=posts.filter(p=>p.region===S.homeRegion||regionState(p.region)===homeState());
   if(feedTab==='friends')posts=posts.filter(p=>S.follows[p.user]);
   if(feedTab==='top')posts=[...posts].sort((a,b)=>b.likes-a.likes);
   if(feedTab==='following')posts=[...mine,...posts];
   const tabs=[['following','Following',I.users],['nearby','Nearby',I.pin],['friends','Friends',I.users],['top','Top Catches',I.trophy]];
   return `${pageH('Community Feed','Real anglers. Real catches. A brighter tomorrow.')}
   <div class="chips">${tabs.map(([k,n,ic])=>`<button class="chip ${feedTab===k?'on':''}" data-ft="${k}">${ic}${n}</button>`).join('')}</div>
-  <div class="stack">${posts.length?posts.map(post).join(''):`<div class="card" style="text-align:center;padding:26px"><b style="color:#fff">No one here yet</b><p class="muted small" style="margin:6px 0 0">Follow anglers from the Following tab and their catches show up here.</p></div>`}
+  <div class="stack">${posts.length?posts.map(post).join(''):`<div class="card" style="text-align:center;padding:26px"><b style="color:#fff">${feedTab==='nearby'?'No catches near '+esc(homeStateName())+' yet':'No one here yet'}</b><p class="muted small" style="margin:6px 0 0">${feedTab==='nearby'?'The community preview only has Washington catches so far.':'Follow anglers from the Following tab and their catches show up here.'}</p></div>`}
   <p class="faint tiny" style="text-align:center;padding:8px 0 0">Community posts are a local preview. Your own catches appear here only when their privacy is set above Private.</p></div>`;
 };
 function post(p){const s=SP[p.sp];const liked=!!S.likes[p.id];const fol=!!S.follows[p.user];return `<article class="post"><div class="ph"><div class="av">${p.mine?avatarLetter():esc(p.user[0])}</div><div class="grow"><b>${esc(p.user)}</b><small>${esc(p.ago)} • ${I.pin.replace('<svg','<svg style="width:11px;height:11px;vertical-align:-1px"')} ${esc(p.region)}</small></div>${p.mine?'':`<button class="follow ${fol?'on':''}" data-follow="${esc(p.user)}" aria-label="${fol?'Following':'Follow'} ${esc(p.user)}">${fol?'Following':'Follow'}</button>`}</div>
@@ -1292,22 +1321,22 @@ ROUTES.more = ()=>{
 ROUTES.profile = ()=>{
   const li=levelInfo();const have=speciesCaught();const longest=S.catches.reduce((m,c)=>c.len>m?c.len:m,0);
   const pct=pctLabel();
-  const lb=(DEMO_LEADERS[profLB]||DEMO_LEADERS.Washington);const rows=[...lb.map(([n,x])=>({n,x})),{n:'You',x:S.xp,me:true}].sort((a,b)=>b.x-a.x);const meIdx=rows.findIndex(r=>r.me);
+  const lb=(DEMO_LEADERS[profLB]||DEMO_LEADERS.Local);const rows=[...lb.map(([n,x])=>({n,x})),{n:'You',x:S.xp,me:true}].sort((a,b)=>b.x-a.x);const meIdx=rows.findIndex(r=>r.me);
   const show=[...rows.slice(0,3)];if(meIdx>2)show.push(rows[meIdx]);
   const unlocked=ACHIEVEMENTS.filter(a=>S.achievements[a.id]).slice(-3);
   return `<div class="page-h"><div><h1>Profile</h1></div><button class="sub-h lnk" data-go="settings" style="padding:0;font-size:var(--fs-md);display:inline-flex;gap:6px;align-items:center">${I.edit.replace('<svg','<svg style="width:18px;height:18px"')} Edit Profile</button></div>
-  <div class="row pf-id" style="gap:16px;padding:4px 2px 14px"><div class="pf-avatar">${avatarLetter()}</div><div class="grow"><div class="pf-name">${esc(S.name||'Angler')}</div><div class="row small pf-loc" style="margin-top:6px;gap:6px">${I.pin.replace('<svg','<svg style="width:15px;height:15px"')} ${esc(S.homeRegion)}, WA</div><div class="small pf-quote" style="margin-top:4px">“Chasing fish and good days.”</div></div><div class="pf-tag">More fish.<br>Brighter days.</div></div>
+  <div class="row pf-id" style="gap:16px;padding:4px 2px 14px"><div class="pf-avatar">${avatarLetter()}</div><div class="grow"><div class="pf-name">${esc(S.name||'Angler')}</div><div class="row small pf-loc" style="margin-top:6px;gap:6px">${I.pin.replace('<svg','<svg style="width:15px;height:15px"')} ${esc(homeLine())}</div><div class="small pf-quote" style="margin-top:4px">“Chasing fish and good days.”</div></div><div class="pf-tag">More fish.<br>Brighter days.</div></div>
   <div class="card"><span class="eyebrow">Angler level</span><div class="level-card" style="margin-top:6px">${hexBadge(li.L)}<div class="lvl"><h3>Level ${li.L}</h3><div class="title">${esc(li.title)}</div><div class="xp"><span></span><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span></div><div class="prog"><i style="width:${li.pct}%"></i></div></div></div>
-    <div class="grid2 tiles" style="margin-top:12px"><div class="tile"><div class="ic">${I.mtn}</div><div><b>Pacific Northwest</b><span>Region</span></div></div><div class="tile" data-go="settings" style="cursor:pointer"><div class="ic">${I.tree}</div><div class="grow"><b>${esc(S.homeWaters||S.homeRegion)}</b><span>Home waters</span></div>${I.chev}</div></div></div>
+    <div class="grid2 tiles" style="margin-top:12px"><div class="tile" data-go="settings" style="cursor:pointer"><div class="ic">${I.mtn}</div><div class="grow"><b>${esc(S.homeRegion)}</b><span>${esc(REGION_BY[S.homeRegion]?homeStateName():'Home region')}</span></div>${I.chev}</div><div class="tile" data-go="settings" style="cursor:pointer"><div class="ic">${I.tree}</div><div class="grow"><b>${esc(S.homeWaters||'Set your home waters')}</b><span>Home waters</span></div>${I.chev}</div></div></div>
   <div class="sub-h"><h2>My Stats</h2><a data-go="trophy" href="#trophy">View All Stats ${I.arrow.replace('<svg','<svg style="width:15px;height:15px"')}</a></div>
   <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species Discovered</span></div><div>${I.ruler}<b>${longest?num(longest)+' in':'—'}</b><span>Longest Fish</span></div><div>${I.trophy}<b>${pbs(S)}</b><span>Personal Bests</span></div></div>
-  <div class="card" style="margin-top:14px"><div class="split"><h2 class="serif" style="font-size:var(--fs-2xl);color:#fff">Standing</h2><span class="small b" style="color:#fff">${profLB} leaderboard</span></div>
-    <div class="standing" style="margin-top:10px"><div><div class="medal"><svg aria-hidden="true" viewBox="0 0 64 76"><defs><linearGradient id="md" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6d284"/><stop offset="1" stop-color="#b8792a"/></linearGradient></defs><path d="M20 2h10l6 22h-10zM34 2h10l-6 22h-10z" fill="#c9302f"/><circle cx="32" cy="48" r="22" fill="url(#md)"/><circle cx="32" cy="48" r="16" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/><path d="M32 36l3.5 7.5 8 1-6 5.5 1.7 8L32 54l-7.2 4 1.7-8-6-5.5 8-1z" fill="#8a5a1a"/></svg><div class="pct">Top ${pct}%<small>in Washington</small></div></div><p class="muted small" style="margin:10px 0 0">You're in the top ${pct}% of anglers in Washington by XP.</p></div>
-    <div class="lb"><div class="seg" aria-label="Leaderboard scope"><button class="${profLB==='Washington'?'on':''}" data-lb="Washington">Washington</button><button class="${profLB==='Global'?'on':''}" data-lb="Global">Global</button></div>${show.map(r=>`<div class="r ${r.me?'me':''}"><span>${rows.indexOf(r)+1}</span><span class="av">${esc(r.n[0])}</span><span>${esc(r.n)}</span><span>${r.x.toLocaleString()} XP</span></div>`).join('')}</div></div></div>
+  <div class="card" style="margin-top:14px"><div class="split"><h2 class="serif" style="font-size:var(--fs-2xl);color:#fff">Standing</h2><span class="small b" style="color:#fff">${profLB==='Global'?'Global':esc(homeStateName())} leaderboard</span></div>
+    <div class="standing" style="margin-top:10px"><div><div class="medal"><svg aria-hidden="true" viewBox="0 0 64 76"><defs><linearGradient id="md" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6d284"/><stop offset="1" stop-color="#b8792a"/></linearGradient></defs><path d="M20 2h10l6 22h-10zM34 2h10l-6 22h-10z" fill="#c9302f"/><circle cx="32" cy="48" r="22" fill="url(#md)"/><circle cx="32" cy="48" r="16" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/><path d="M32 36l3.5 7.5 8 1-6 5.5 1.7 8L32 54l-7.2 4 1.7-8-6-5.5 8-1z" fill="#8a5a1a"/></svg><div class="pct">Top ${pct}%<small>in ${esc(homeStateName())}</small></div></div><p class="muted small" style="margin:10px 0 0">You're in the top ${pct}% of anglers in ${esc(homeStateName())} by XP.</p></div>
+    <div class="lb"><div class="seg" aria-label="Leaderboard scope"><button class="${profLB==='Local'?'on':''}" data-lb="Local">${esc(homeStateName())}</button><button class="${profLB==='Global'?'on':''}" data-lb="Global">Global</button></div>${show.map(r=>`<div class="r ${r.me?'me':''}"><span>${rows.indexOf(r)+1}</span><span class="av">${esc(r.n[0])}</span><span>${esc(r.n)}</span><span>${r.x.toLocaleString()} XP</span></div>`).join('')}</div></div></div>
   <div class="sub-h"><h2>Achievements</h2><a data-go="achievements" href="#achievements">View All ${I.arrow.replace('<svg','<svg style="width:15px;height:15px"')}</a></div>
   ${unlocked.length?`<div class="ach">${unlocked.map(a=>achCard(a,true)).join('')}</div>`:`<div class="card muted small">Your first achievement unlocks with your first catch.</div>`}`;
 };
-let profLB='Washington';
+let profLB='Local';
 document.addEventListener('click',e=>{const b=e.target.closest('[data-lb]');if(b){profLB=b.dataset.lb;render()}});
 function achCard(a,got){const [p,t]=a.p(S);return `<div class="${got?'':'locked'}" data-ach="${a.id}">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8',!got)}<b>${esc(a.n)}</b><span>${esc(a.d)}</span>${got?`<span class="chk">${I.check}</span>`:`<div class="prog" style="height:5px;margin-top:8px"><i style="width:${Math.round(p/t*100)}%"></i></div><span class="tiny">${p} / ${t}</span>`}</div>`}
 ROUTES.achievements = ()=>`<div class="centerh"><button class="back" data-go="profile">${I.back}</button><h1>Achievements</h1><p>${Object.keys(S.achievements).length} of ${ACHIEVEMENTS.length} unlocked</p></div><div class="ach">${ACHIEVEMENTS.map(a=>achCard(a,!!S.achievements[a.id])).join('')}</div>`;
@@ -1315,7 +1344,7 @@ ROUTES.inbox = ()=>{S.inbox.forEach(i=>i.read=true);save();const K={ach:I.trophy
 ROUTES.settings = ()=>`<div class="centerh"><button class="back" data-go="more">${I.back}</button><h1>Settings</h1><p>Profile, privacy and data.</p></div>
   <div class="card stack"><span class="eyebrow">Profile</span>
     <div class="field"><label>Display name</label><input class="inp" id="setName" value="${esc(S.name)}" placeholder="Your name"></div>
-    <div class="field"><label>Home region</label><select class="inp" id="setRegion">${REGIONS.map(r=>`<option ${S.homeRegion===r?'selected':''}>${r}</option>`).join('')}</select></div>
+    <div class="field"><label>Home region</label><select class="inp" id="setRegion">${regionOptions(S.homeRegion)}</select></div>
     <div class="field"><label>Home waters</label><input class="inp" id="setWaters" list="waters" value="${esc(S.homeWaters)}" placeholder="e.g. Lake Washington"></div>
   </div>
   <div class="card stack" style="margin-top:12px"><span class="eyebrow">Location privacy</span><p class="muted small" style="margin:0">Exact coordinates always stay on your device. This sets what new catches show to others.</p>
@@ -1350,7 +1379,7 @@ ROUTES.onboarding = ()=>{
   const logo=$('#topbar .brand svg').outerHTML.replace('<svg','<svg class="logo"');
   const steps=[
     `${logo}<h1>Every fish you catch becomes part of your collection.</h1><p>Fish Hunt is a registry of real catches. Take a photo, get the verdict, watch your collection grow.</p><div class="loop">${['Catch','Capture','Identify','Verdict','Collect','Progress'].map((s,i)=>`${i?I.chev:''}<span>${s}</span>`).join('')}</div>`,
-    `${logo}<h1>Who's holding the rod?</h1><p>Your name goes on your trophy room and your standing.</p><div class="stack" style="margin-top:16px"><div class="field"><label>Name</label><input class="inp" id="onbName" value="${esc(S.name)}" placeholder="First name or handle" autocomplete="nickname"></div><div class="field"><label>Home region</label><select class="inp" id="onbRegion">${REGIONS.map(r=>`<option ${S.homeRegion===r?'selected':''}>${r}</option>`).join('')}</select></div></div>`,
+    `${logo}<h1>Who's holding the rod?</h1><p>Your name goes on your trophy room and your standing.</p><div class="stack" style="margin-top:16px"><div class="field"><label>Name</label><input class="inp" id="onbName" value="${esc(S.name)}" placeholder="First name or handle" autocomplete="nickname"></div><div class="field"><label>Home region</label><select class="inp" id="onbRegion">${regionOptions(S.homeRegion)}</select></div></div>`,
     `${logo}<h1>Your spots stay yours.</h1><p>Fish Hunt stores the exact location of each catch on your device only. By default, nobody else sees where you fished. You can share a region or a water name later, catch by catch.</p><div class="card" style="margin-top:16px"><div class="split"><div><b id="onbDemoLbl" style="color:#fff">Start with sample catches</b><div class="muted small">See the app filled in. Remove them anytime in Settings.</div></div><button class="toggle ${onbDemo?'on':''}" id="onbDemo" role="switch" aria-checked="${onbDemo}" aria-labelledby="onbDemoLbl"></button></div></div>`
   ];
   return `<div class="onb">${steps[onbStep]}<div class="dots">${steps.map((_,i)=>`<i class="${i===onbStep?'on':''}"></i>`).join('')}</div><button class="btn" id="onbNext">${onbStep<2?'Continue':'Start collecting'}</button>${onbStep>0?`<button class="btn ghost" style="margin-top:10px" id="onbBack">Back</button>`:''}</div>`;
@@ -1460,7 +1489,7 @@ async function identify(blob){
   if(!S.apiKey){ // demo: never guess. The angler picks; quick picks come from their own history, then common local species.
     const counts={};for(const c of S.catches)counts[c.sp]=(counts[c.sp]||0)+1;
     const mine=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
-    const salty=/Coast|Sound|Olympic/.test(S.homeRegion);
+    const salty=regionSalty(S.homeRegion);
     const common=SPECIES.filter(s=>s.r<=2&&(salty||s.w!=='salt')).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n)).map(s=>s.id);
     return {demo:true,species:null,confidence:null,alternates:[...new Set([...mine,...common])].slice(0,4),length:null};
   }
@@ -1507,7 +1536,7 @@ ROUTES.review = ()=>{
   <div class="card stack" style="margin-top:12px">
     <div class="grid2"><div class="field"><label>Length (in)${d.method==='ai'?' · AI estimate':''}</label><input class="inp" id="revLen" type="number" inputmode="decimal" step="0.1" min="1" max="200" value="${d.len??''}" placeholder="e.g. 24.5"></div><div class="field"><label>Weight (lb)</label><input class="inp" id="revWt" type="number" inputmode="decimal" step="0.1" min="0" max="500" value="${d.wt??''}" placeholder="optional"></div></div>
     <div class="field"><label>Water</label><input class="inp" id="revWater" list="waters" value="${esc(d.water||'')}" placeholder="Lake, river or bay"></div>
-    <div class="field"><label>Region ${d.lat!=null?'<span class="faint">· from GPS</span>':''}</label><select class="inp" id="revRegion">${REGIONS.map(x=>`<option ${(d.region||S.homeRegion)===x?'selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="field"><label>Region ${d.lat!=null?'<span class="faint">· from GPS</span>':''}</label><select class="inp" id="revRegion">${regionOptions(d.region||S.homeRegion)}</select></div>
     <div class="field"><label>Catch time</label><input class="inp" id="revTs" type="datetime-local" value="${localISO(d.ts)}"></div>
     <div class="field"><label>Kept or released?</label><div class="seg" id="revRel"><button class="${d.released?'':'on'}" data-rel="0">Kept</button><button class="${d.released?'on':''}" data-rel="1">${I.release} Released</button></div></div>
     <div class="field"><label>Location privacy</label><div class="seg" id="revPriv">${Object.entries(PRIVACY).map(([k,n])=>`<button data-rp="${k}" class="${(d.privacy||S.privacy)===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div><div class="faint small">${d.lat!=null?'Exact coordinates are stored on this device only.':'No GPS fix — location will not be verified for this catch.'}</div></div>
@@ -1614,7 +1643,7 @@ ROUTES.map = ()=>{
   CUR.after=async()=>{
     try{await loadLeaflet()}catch(e){$('#map').innerHTML='<div style="display:grid;place-items:center;height:100%;color:var(--mist)">Map tiles need a connection.</div>';return}
     const el=$('#map');if(!el)return;const pts=list.filter(c=>c.lat!=null);
-    const rm=reduceMotion();const m=L.map(el,{zoomControl:false,attributionControl:true,zoomAnimation:!rm,fadeAnimation:!rm,markerZoomAnimation:!rm,inertia:!rm}).setView(pts.length?[pts[0].lat,pts[0].lng]:[47.4,-121.6],pts.length?9:7);
+    const rm=reduceMotion();const m=L.map(el,{zoomControl:false,attributionControl:true,zoomAnimation:!rm,fadeAnimation:!rm,markerZoomAnimation:!rm,inertia:!rm}).setView(pts.length?[pts[0].lat,pts[0].lng]:regionCenter(S.homeRegion),pts.length?9:7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'© OpenStreetMap'}).addTo(m);
     const b=[];for(const c of pts){const ic=L.divIcon({className:'',html:`<div class="fpin ${c.tier}">${I.fish}</div>`,iconSize:[36,36],iconAnchor:[18,36],popupAnchor:[0,-36]});const mk=L.marker([c.lat,c.lng],{icon:ic,title:`${SP[c.sp].n}, ${c.water||c.region||'catch'}`}).addTo(m);mk.getElement()?.setAttribute('aria-label',`${SP[c.sp].n}, ${c.water||c.region||'catch'}. Open details`);mk.bindPopup(`<b>${esc(c.water||c.region||'Catch')}</b><br>${esc(SP[c.sp].n)}${c.len?' · '+num(c.len)+' in':''}<br><a href="#catch/${c.id}" style="color:#8ec6ff">Open catch →</a>`);b.push([c.lat,c.lng])}
     if(b.length>1)m.fitBounds(b,{padding:[30,30]});

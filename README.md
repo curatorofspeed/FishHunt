@@ -56,6 +56,10 @@ Legendary +1,500, challenge complete +3,500–6,000. Level L needs `120(L−1)²
 
 ## Data
 
+Regions: 13 Washington sub-regions, plus sub-regions for Oregon, Idaho, Montana, British Columbia, Alaska and
+California, with every other US state and Canadian province as a fallback. GPS picks the region from bounding boxes,
+and the review screen always lets the angler correct it.
+
 All state is on-device: `localStorage` key `fh:state` (catches, XP, settings) and IndexedDB
 `fishhunt/photos` (downscaled JPEG blobs keyed by catch id). Exact coordinates never leave the
 device; the privacy level (Private / Region / Waterbody / Exact) controls what the feed shows.
