@@ -3,8 +3,8 @@
 Catch → Capture → Identify → Verdict → Collect → Progress.
 
 A single-file, installable web app (PWA) that implements the FishDex MVP brief:
-camera-first capture, AI species identification, the Catch Verdict reveal, a 164-species
-North American registry scoped to the angler's home waters, Trophy Room, XP/levels, achievements, challenges, a private-by-default
+camera-first capture, AI species identification, the Catch Verdict reveal, a 348-species
+worldwide registry scoped to the angler's home waters, Trophy Room, XP/levels, achievements, challenges, a private-by-default
 catch map, a local community feed preview, and profile/standing.
 
 ## Files
@@ -81,14 +81,28 @@ your home waters, level, new species this month, and then:
 
 ## Data
 
-Species: 164 across North America, each tagged with range zones (Pacific Northwest, Alaska, California, Rockies,
-Southwest, Plains, Great Lakes, Northeast, Southeast, Texas, Florida, boreal North, and the Pacific, Atlantic, Gulf
-and Hawaiian coasts). The registry shows the species for the angler's home state by default, with an "All species"
-switch; challenges sort the relevant ones first.
+Species: 348 worldwide. Every species carries range zones; the North American zones are joined by Australia (east, south,
+tropical north, Murray-Darling), New Zealand, the UK and Ireland, the Nordics, western and central Europe, the
+Mediterranean, Japan (with a Hokkaido/Tohoku zone), South Africa, Brazil and the Amazon, Mexico (Baja, Pacific, Gulf,
+Caribbean, inland), Central America, the Caribbean, and catch-all zones for the rest of Europe, Asia, Africa, South
+America and Oceania. Cosmopolitan fish carry regional names (`aka`: bluefish is also Tailor, Elf and Shad) that the
+species search matches. The Fishdex shows the species for the angler's home territory by default, with an "All species"
+switch; registry chips (Salmon, Coarse & Carp, Bream & Snapper, Reef & Jacks) appear only where those fish live.
 
-Regions: 13 Washington sub-regions, plus sub-regions for Oregon, Idaho, Montana, British Columbia, Alaska and
-California, with every other US state and Canadian province as a fallback. GPS picks the region from bounding boxes,
-and the review screen always lets the angler correct it.
+Territories: 13 Washington sub-regions plus sub-regions for Oregon, Idaho, Montana, British Columbia, Alaska and
+California; every other US state and Canadian province; and 63 territories abroad, from Australian states and New
+Zealand islands to UK nations, European countries, Japanese regions, South African provinces, Brazilian and Mexican
+regions, Central America and the Caribbean, with "Elsewhere in…" fallbacks per continent. GPS picks the region from
+bounding boxes (checked against 200 world cities in `.audit/global_data.py`), and the review screen always lets the
+angler correct it. The home-region picker groups sub-regions by state at home and by country abroad.
+
+Units: catches are stored in inches and pounds. Display and entry follow the angler's units, which default from home
+waters (inches and pounds in the US and Canada, centimetres and pounds in the UK and Ireland, centimetres and kilograms
+everywhere else) and can be overridden in Settings.
+
+Seasons and slams cover the new markets too: Snapper Season, Barra Run-off, the Coarse Season Opener, Pike Season,
+Midnight Sun Salmon, Ayu Season, the Sardine Run, the Amazon Dry Season, Mediterranean Tuna, Kiwi Summer and Baja Blue
+Water, plus 22 regional slams. Home shows only seasons relevant to your waters; Challenges lists at most two far ones.
 
 All state is on-device: `localStorage` key `fh:state` (catches, XP, settings) and IndexedDB
 `fishhunt/photos` (downscaled JPEG blobs keyed by catch id). Exact coordinates never leave the

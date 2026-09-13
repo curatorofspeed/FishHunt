@@ -218,3 +218,24 @@ Built from the FISHDEX memo. The collection is the reward; XP is the progression
 - Headless renders at 375: Home (both hunt states), Challenges, Species, Verdict, Achievements, FishDex.
 
 **Limits:** the pane stayed hidden, so screenshots came from headless Chrome. The state hooks run through `.audit/frame.html?js=`. Seasons and hunts key off the device clock; nothing was tested across a day boundary.
+
+## Global expansion (Sep 13 2026)
+
+Drew: "expand globally now, prioritize as you'd like." `.audit/global_patch.py` + `.audit/global_data.py` replay onto `.audit/index.global-orig.html`.
+
+**Changed**
+- 184 new species (348 total) in packs for Australia, New Zealand, the UK and Ireland, the Nordics, western/central Europe, the Mediterranean, Japan, South Africa, Brazil and the Amazon, Mexico, Central America, the Caribbean and the Indo-Pacific, plus zone shares and regional names (`aka`) on 60 existing cosmopolitan species. Five new groups: Coarse fish, Bream & Snapper, Reef fish, Trevally & Jacks, Eels.
+- 63 territories abroad with 120 named sub-regions and GPS boxes; per-continent "Elsewhere in…" fallbacks. Region picker groups by country abroad. Copy no longer assumes a state (Home Waters Explorer, "states, provinces or countries", place tags read "Sydney & Central Coast, Australia").
+- Units: inches/pounds stay the stored unit; display and entry convert to cm/kg (or cm/lb for the UK and Ireland) from the home territory, with a Settings override whose auto label follows the region select live.
+- 22 regional slams (40 challenges) and 11 seasons abroad (17 total); Home shows seasons relevant to home waters, Challenges caps far-from-home seasons at two. Registry chips follow the scope. Home collections gain Coarse & carp, Bream & snapper, Reef & jacks when at least three such species live in the scope.
+- The San Diego box no longer reaches below the border (Tijuana resolves to Baja California).
+
+**Verified**
+- Data: 348 unique ids, every art shape, group and water type valid, no orphan zones, every territory zoned, every challenge and season species id resolves. Scope counts: Washington 69, New South Wales 37, Northern Territory 43, Western Australia 68, North Island 27, England 50, Norway 38, Germany 45, France 71, Spain 50, Kanto 46, Hokkaido 54, Western Cape 41, Amazon 40, Baja 21, Caribbean 36.
+- GPS: 202 world cities resolve to the expected region or fallback (Sydney to Sapporo, Cape Town to Cancún), including the border cases that first failed (Timaru, Manchester, Cologne, Ljubljana, Windhoek, Veracruz, Tampico, Miami, St Petersburg, Guaymas, Tijuana, Maastricht).
+- Units: an Australian sees 107 cm / 14.2 kg / 0.41 kg; a UK angler 107 cm / 31.2 lb; the review screen shows Length (cm) 50.8 for a 20 in draft and stores 62 cm as 24.4 in; the camera sheet reads "Length in centimetres", saves 81 cm as 31.9 in, announces "Length 81 centimetres" and refuses 600 cm with "Length must be 2.5 cm to 508 cm"; Settings saves and clears the metric preset.
+- Contrast in a 375×812 frame as an Australian: Home 60 runs, Fishdex 70, Species 25, Challenges 303, Settings 32, 0 failures.
+- Headless renders at 375 as an Australian (Home, Fishdex, Snapper, Challenges) and a UK angler (Settings, catch detail).
+- One regression caught on the way: the first patch appended the species packs after a trailing comma, which left a hole in the array and blanked every screen; the anchor now absorbs the comma.
+
+**Known softness:** zone membership and box edges are judgement (Yuma resolves to Inland Southern California, Iquitos to the Amazon, Sarajevo to Croatia); "All species" is always one tap away and the review screen lets anglers correct the region. Inland Mexico has 7 species. The Claude ID prompt now lists all 348 species.
