@@ -1,4 +1,4 @@
-# Fish Hunt — Impeccable Design Pass
+# FishDex — Impeccable Design Pass
 
 **Scope:** `index.html` (every screen, sheet and the camera) · **Method:** judged against the product brief and the six mocks → screenshots plus an automated layout scan at 360, 375, 390 and 430px → one anchored patch script (`.audit/design_patch.py`) replayed onto the post-audit backup → every change re-checked live, with the contrast measurer re-run so the accessibility floor could not regress.
 
@@ -51,7 +51,7 @@ This pass follows `AUDIT.md`, which covered the accessibility floor. The visual 
 
 Real catch photos still replace the demo scenes.
 
-**Header wordmark detached from its logo.** The logo button's centered text alignment centered "Fish Hunt" inside the wider tagline box. → **Fixed:** a left-aligned lockup, as in the mocks.
+**Header wordmark detached from its logo.** The logo button's centered text alignment centered "FishDex" inside the wider tagline box. → **Fixed:** a left-aligned lockup, as in the mocks.
 
 **Page titles wrapped.** The script tagline squeezed the titles: "Community / Feed", "Catch / Map", "Welcome back, / Drew". → **Fixed:** the title spans the full row, and the subtitle and tagline share the next row. All titles now fit on one line at 360px.
 
@@ -156,7 +156,7 @@ The mocks put dark type on a pale, misty sky on five of six screens. The previou
 
 | Header copy on the sky | Before (white on the veil) | After (navy on the sky) |
 |---|---|---|
-| Wordmark "Fish Hunt" | 2.86 (exempt) | 15.2 |
+| Wordmark "FishDex" | 2.86 (exempt) | 15.2 |
 | Wordmark caps | 2.93 (exempt) | 9.91 |
 | Subtitles | 5.09 | 8.71 |
 | Tagline | 7.98 | 11.55 |
@@ -204,17 +204,17 @@ The Verdict header's "1 / 1" meant nothing. → Removed.
 Built from the FISHDEX memo. The collection is the reward; XP is the progression layer. `.audit/polish6_patch.py` replays it onto `.audit/index.polish6-orig.html`.
 
 **Changed**
-- Home is **Your Fishdex**: species / level / new-this-month strip, Today's hunts (pick one of three; +150 XP on the next qualifying catch; one per day), Your next hunts (derived: next species, group PB, five species this month, best challenge), Collections with an XP-priced next unlock, the active season for home waters, recent trophy.
+- Home is **Your FishDex**: species / level / new-this-month strip, Today's hunts (pick one of three; +150 XP on the next qualifying catch; one per day), Your next hunts (derived: next species, group PB, five species this month, best challenge), Collections with an XP-priced next unlock, the active season for home waters, recent trophy.
 - Species cards climb Caught → Verified → Trophy (stars on registry cards, ladder on the species page). Catch detail names its verification level (Unverified → Photo → Species → Size → Fully verified).
-- Verdict: where and when under the species, PB delta on the gold banner ("+3.9 in"), flag pills for Trophy fish / Hunt complete / Fully verified with their XP, "Added to your Fishdex", season progress and season-complete cards. Replays show flags without XP claims.
+- Verdict: where and when under the species, PB delta on the gold banner ("+3.9 in"), flag pills for Trophy fish / Hunt complete / Fully verified with their XP, "Added to your FishDex", season progress and season-complete cards. Replays show flags without XP claims.
 - Seasons table with yearly windows and permanent badges; Challenges lists active seasons first; Achievements gains a Seasonal trophies shelf and six new badges (10/25/50 species, First Trophy, Five PBs, Verified Century). Badges added later unlock quietly at boot.
-- "Species Registry" is now "Fishdex" on Explore, the registry title and the verdict.
+- "Species Registry" is now "FishDex" on Explore, the registry title and the verdict.
 
 **Verified (375×812 frame, animations forced to their end state)**
-- Contrast: 656 text runs across Home (hunt unchosen, chosen, done), Challenges, Species, Fishdex, Achievements with a seasonal trophy, live Verdict with every flag, Catch detail and Notifications. 0 failures. The first render put the "Seasons" heading on the pale sky (white on sky); the label moved into the season cards' eyebrows and the re-measure passes.
+- Contrast: 656 text runs across Home (hunt unchosen, chosen, done), Challenges, Species, FishDex, Achievements with a seasonal trophy, live Verdict with every flag, Catch detail and Notifications. 0 failures. The first render put the "Seasons" heading on the pale sky (white on sky); the label moved into the season cards' eyebrows and the re-measure passes.
 - Layout scan at 360, 375, 390 and 430: no new clipped labels, overlaps or horizontal overflow on the new screens. The registry filter chips still report as "overflow" because they scroll sideways by design, and one pre-existing 2px overrun sits inside a silhouette card at 360.
 - Flows driven in the page: picking a hunt marks the button pressed and the card "Chosen"; a new-species catch completes the species hunt exactly once (+150 XP, inbox note, "Done" on the card); a later qualifying catch does not complete it again; sample catches never complete a hunt. Coho + chum + pink on top of the sample chinook completes Fall Salmon Season once (+2,500 XP, `seasonsDone['fall-salmon-2026']`, inbox note, Salmon Runner under Seasonal trophies, "13 of 21 unlocked · 1 season"). A 46 in chinook: Trophy fish +1,000, PB +3.9 in on the banner and in the inbox, species level 3, First Trophy unlocked.
-- Keyboard: Enter on a Collections row opens the Fishdex with that filter (rows carry `role="link"`, `tabindex="0"`, and the Enter handler now includes `[data-coll]`). Hunt buttons are native buttons with `aria-pressed`.
-- Headless renders at 375: Home (both hunt states), Challenges, Species, Verdict, Achievements, Fishdex.
+- Keyboard: Enter on a Collections row opens the FishDex with that filter (rows carry `role="link"`, `tabindex="0"`, and the Enter handler now includes `[data-coll]`). Hunt buttons are native buttons with `aria-pressed`.
+- Headless renders at 375: Home (both hunt states), Challenges, Species, Verdict, Achievements, FishDex.
 
 **Limits:** the pane stayed hidden, so screenshots came from headless Chrome. The state hooks run through `.audit/frame.html?js=`. Seasons and hunts key off the device clock; nothing was tested across a day boundary.

@@ -1,4 +1,4 @@
-# Fish Hunt — Impeccable Audit & Polish Pass
+# FishDex — Impeccable Audit & Polish Pass
 
 **Scope:** `index.html` (the whole app: 24 screens and states, 3 sheets, the camera room) · **Method:** floor scan → contrast measured on the live render at four phone sizes → one anchored patch script run from the pristine backup → every fix driven in the browser.
 
@@ -116,14 +116,14 @@ The visible effect is a moodier sky behind the titles, and the mountains no long
 
 ### Exempt, left as is
 
-- **Header logo lockup.** "Fish Hunt / CATCH · EXPLORE · COLLECT" is a logotype, exempt under WCAG 1.4.3. It now measures 2.83 / 2.97, up from 2.34 / 2.04.
+- **Header logo lockup.** "FishDex / CATCH · EXPLORE · COLLECT" is a logotype, exempt under WCAG 1.4.3. It now measures 2.83 / 2.97, up from 2.34 / 2.04.
 - **VIDEO label.** It measures 2.76, and it's an inactive, `aria-hidden` indicator.
 - **Decoration.** Borders, dividers and progress tracks are decorative and were not changed.
 
 ## Verified
 
 - **Real Tab keypress.** The trophy card matched `:focus-visible` with the 2px ring and navy halo, confirmed by computed style. The screenshot shows the ring on the favorite button over a photo.
-- **Real Enter on a card** opened the catch, with focus on its heading and the tab title "Pink Salmon · Fish Hunt". Real Space on a link did nothing, as expected.
+- **Real Enter on a card** opened the catch, with focus on its heading and the tab title "Pink Salmon · FishDex". Real Space on a link did nothing, as expected.
 - **Favorite toggle.** Focus returned to the same button after re-render. Scroll stayed at 650px.
 - **Confirm dialog.**
   - Labelled "Delete this catch?", with focus on Cancel and the page behind inert.

@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#eef5fb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="description" content="Fish Hunt — catch, explore, collect. Every fish you catch becomes part of your collection.">
-<title>Fish Hunt</title>
+<meta name="description" content="FishDex — catch, explore, collect. Every fish you catch becomes part of your collection.">
+<title>FishDex</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -524,7 +524,7 @@ header.top .brand svg{color:#163a56}
 .pf-quote{color:var(--hdr-2);font-style:italic}
 .pf-tag{font-family:var(--script);font-weight:600;font-size:var(--fs-xl);color:var(--hdr);transform:rotate(-4deg);text-align:right;white-space:nowrap}
 .onb{background:linear-gradient(180deg,rgba(7,17,29,0) 0px,rgba(7,17,29,0) 120px,rgba(7,17,29,.9) 225px,var(--navy-950) 330px)} /* onboarding copy is bottom-anchored: on a short phone it starts near y 230, so the panel carries its own navy */
-/* ---------- Game layer: Fishdex home, hunts, species levels, seasons ---------- */
+/* ---------- Game layer: FishDex home, hunts, species levels, seasons ---------- */
 .stats.three{grid-template-columns:repeat(3,1fr)}
 .stats b small{font-size:var(--fs-md);opacity:.7;font-weight:600}
 .hunts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
@@ -580,14 +580,14 @@ header.top .brand svg{color:#163a56}
 
 <div id="app">
   <header class="top" id="topbar">
-    <button class="brand" data-go="home" aria-label="Fish Hunt home">
+    <button class="brand" data-go="home" aria-label="FishDex home">
       <svg viewBox="0 0 64 64" aria-hidden="true">
         <path d="M6 44 L20 18 L30 32 L38 14 L58 44 Z" fill="currentColor"/>
         <path d="M20 18 L24 26 L28 22 L30 32 L23 28Z M38 14 L42 24 L46 20 L50 30 L43 26Z" fill="#fff"/>
         <path d="M4 52 L10 40 L16 52Z M14 54 L21 38 L28 54Z M26 54 L32 42 L38 54Z M40 54 L47 38 L54 54Z M52 52 L57 42 L62 52Z" fill="currentColor" opacity=".82"/>
         <path d="M6 56h52" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".82"/>
       </svg>
-      <span class="wm"><b>Fish Hunt</b><small>CATCH · EXPLORE · COLLECT</small></span>
+      <span class="wm"><b>FishDex</b><small>CATCH · EXPLORE · COLLECT</small></span>
     </button>
     <button class="ico" data-go="inbox" aria-label="Notifications"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot" id="inboxDot" hidden></i></button>
     <button class="avatar" data-go="profile" aria-label="Profile" id="avatarBtn">D</button>
@@ -608,7 +608,7 @@ header.top .brand svg{color:#163a56}
 <input type="file" id="fileCamera" accept="image/*" capture="environment" hidden>
 <input type="file" id="fileImport" accept="application/json" hidden>
 <script>
-/* ===================== Fish Hunt — data ===================== */
+/* ===================== FishDex — data ===================== */
 'use strict';
 const I = { // inline icons (24px stroke)
   fish:'<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-6 10-6c4 0 7 2.5 9 6-2 3.5-5 6-9 6-6 0-10-6-10-6z"/><path d="M2 12l-1-5 4 3M2 12l-1 5 4-3"/><circle cx="16" cy="11" r="1" fill="currentColor"/></svg>',
@@ -954,7 +954,7 @@ const DEMO_LEADERS = {
 };
 </script>
 <script>
-/* ===================== Fish Hunt — core ===================== */
+/* ===================== FishDex — core ===================== */
 const $ = (s,el=document)=>el.querySelector(s);
 const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
 const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1305,7 +1305,7 @@ function render(){
 function settleFocus(sameRoute,prevRoute,prevFocus){
   const h1=$('#view h1');if(h1&&!h1.hasAttribute('tabindex'))h1.tabIndex=-1;
   const h1t=h1?h1.textContent.trim():'';
-  document.title=(h1&&!['home','onboarding'].includes(CUR.route)?h1t+' · ':'')+'Fish Hunt';
+  document.title=(h1&&!['home','onboarding'].includes(CUR.route)?h1t+' · ':'')+'FishDex';
   if(sameRoute&&h1t&&h1t!==lastH1)announce(h1t);lastH1=h1t;
   if(CUR.route==='capture')return; // the camera dialog places its own focus
   let t=null;
@@ -1321,7 +1321,7 @@ document.addEventListener('click',e=>{
 });
 </script>
 <script>
-/* ===================== Fish Hunt — screens ===================== */
+/* ===================== FishDex — screens ===================== */
 const tagline = `<div class="page-h"><div><h1 id="ph"></h1><p id="pp"></p></div><div class="tag">More fish.<br>Brighter days.</div></div>`;
 function pageH(t,p,tag=true){return `<div class="page-h std"><div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div>${tag?'<div class="tag">More fish.<br>Brighter days.</div>':''}</div>`}
 function quote(){return `<div class="hero-quote">More fish. Brighter days.<i></i></div>`}
@@ -1334,7 +1334,7 @@ ROUTES.home = ()=>{
   const first=S.catches.length===0;const newMonth=newSpeciesThisMonth();
   const hunts=dailyHunts();const picked=currentHunt();const colls=fishdexCollections();
   const season=activeSeasons().filter(x=>x.rel>=.5)[0];
-  return `${pageH('Your Fishdex', first?'Every fish you catch becomes a card in your collection.':'Every fish you catch is a card in your collection.')}
+  return `${pageH('Your FishDex', first?'Every fish you catch becomes a card in your collection.':'Every fish you catch is a card in your collection.')}
   <div class="stack">
     <div class="stats three"><div data-go="registry" style="cursor:pointer">${I.book}<b>${rp.have}<small> / ${rp.total}</small></b><span>${S.regScope==='all'?'All species':esc(homeStateName())+' species'}</span></div><div data-go="profile" style="cursor:pointer">${I.medal}<b>Lv ${li.L}</b><span>${esc(li.title)}</span><div class="prog" style="margin:8px 10px 0;height:5px"><i style="width:${li.pct}%"></i></div></div><div>${I.bolt.replace('<svg','<svg style="color:#ffd985"')}<b>${newMonth}</b><span>New this month</span></div></div>
     <div class="card">
@@ -1346,7 +1346,7 @@ ROUTES.home = ()=>{
       ${nextHunts().map(h=>`<div class="listrow" data-go="${h.go}" style="cursor:pointer" aria-label="${esc(h.t)}, ${esc(h.p)}"><div class="ic">${h.ico}</div><div class="grow"><div class="t">${esc(h.t)}</div><div class="s">${esc(h.s)}</div></div><span class="small b" style="color:#fff;white-space:nowrap">${esc(h.p)}</span>${I.chev}</div>`).join('')}
     </div>
     <div class="card">
-      <div class="split"><span class="eyebrow">Collections</span><a data-go="registry" href="#registry" class="small b" style="color:#fff">Open Fishdex ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+      <div class="split"><span class="eyebrow">Collections</span><a data-go="registry" href="#registry" class="small b" style="color:#fff">Open FishDex ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
       ${colls.map(c=>`<div class="coll" data-coll="${c.rf}" role="link" tabindex="0" aria-label="${esc(c.n)}, ${c.have} of ${c.total}"><div class="split"><b>${esc(c.n)}</b><span>${c.have} / ${c.total}</span></div><div class="prog${c.have===c.total?' gold':''}"><i style="width:${Math.round(c.have/Math.max(1,c.total)*100)}%"></i></div></div>`).join('')}
       ${next?`<div class="split" style="margin-top:12px"><span class="small muted">Next unlock</span><span class="small b" style="color:#5cf0a0">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP</span></div><div class="row" style="margin-top:6px" data-go="species/${next.id}" role="link" tabindex="0" aria-label="Next unlock: ${esc(next.n)}"><div class="nt-art" style="width:72px;height:48px">${fishPlate(next,{k:'nu',sil:true})}</div><div class="grow"><b style="color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div></div>${I.chev}</div>`:''}
     </div>
@@ -1367,7 +1367,7 @@ document.addEventListener('click',e=>{
 ROUTES.explore = ()=>{
   const have=speciesCaught();
   const tiles=[
-    ['registry','Fishdex',`${regProgress().have} / ${regProgress().total} discovered`,I.book],
+    ['registry','FishDex',`${regProgress().have} / ${regProgress().total} discovered`,I.book],
     ['map','Catch Map',`${new Set(S.catches.map(c=>c.water).filter(Boolean)).size} waters fished`,I.map],
     ['challenges','Challenges',`${CHALLENGES.filter(c=>S.challengesDone[c.id]).length} / ${CHALLENGES.length} complete`,I.flag],
     ['feed','Community Feed','Real anglers. Real catches.',I.users],
@@ -1393,7 +1393,7 @@ ROUTES.registry = ()=>{
   if(regSort==='az')list=[...list].sort((a,b)=>a.n.localeCompare(b.n));
   if(regSort==='rarity')list=[...list].sort((a,b)=>b.r-a.r);
   const pct=Math.round(rp.have/Math.max(1,rp.total)*100);
-  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Fishdex</h1><p>Track your catches. Complete the collection.</p><button id="regSort" aria-label="Sort species: ${({default:'Registry order',az:'A to Z',rarity:'Rarity'})[regSort]}" class="right hbtn">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
+  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>FishDex</h1><p>Track your catches. Complete the collection.</p><button id="regSort" aria-label="Sort species: ${({default:'Registry order',az:'A to Z',rarity:'Rarity'})[regSort]}" class="right hbtn">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
   <div class="card reg-head">
     <div><div class="big">${rp.have}<small> / ${rp.total}</small></div><div class="lbl">discovered</div><div class="row" style="margin-top:12px"><div class="prog grow"><i style="width:${pct}%"></i></div><span class="small b" style="color:#fff">${pct}%</span></div><div class="script" style="font-size:var(--fs-xl);color:var(--ice);margin-top:10px">“Different waters. A bigger story.”</div></div>
     <div class="chal" data-go="challenges" aria-label="${esc(chal.ch.n)}, ${chal.p} of ${chal.ch.sp.length}" style="cursor:pointer"><svg class="hexi" aria-hidden="true" viewBox="0 0 56 62"><path d="M28 2 L53 16 L53 46 L28 60 L3 46 L3 16Z" fill="#12283d" stroke="#3b8bff" stroke-width="2.5"/><g transform="translate(14 17) scale(1.2)" style="color:#fff">${sized(I.mtn)}</g></svg><b>${esc(chal.ch.n)}</b><span>${chal.p} / ${chal.ch.sp.length}</span>${I.chev}</div>
@@ -1505,7 +1505,7 @@ ROUTES.more = ()=>{
   return `${pageH('More','')}
   <div class="card" data-go="profile" aria-label="Profile: ${esc(S.name||'Angler')}, level ${li.L}" style="cursor:pointer"><div class="row"><div class="avatar" style="width:56px;height:56px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-weight:700;font-size:var(--fs-2xl);border:2px solid rgba(255,255,255,.6)">${avatarLetter()}</div><div class="grow"><b style="color:#fff;font-size:var(--fs-xl)">${esc(S.name||'Angler')}</b><div class="muted small">${esc(S.homeRegion)} · Level ${li.L}</div></div>${I.chev}</div></div>
   <div class="card" style="margin-top:12px;padding:4px 16px">${rows.map(([r,t,s,ic])=>`<div class="listrow" data-go="${r}" style="cursor:pointer"><div class="ic">${ic}</div><div class="grow"><div class="t">${t}</div><div class="s">${s}</div></div>${I.chev}</div>`).join('')}</div>
-  <p class="faint tiny" style="text-align:center;margin-top:18px">Fish Hunt MVP prototype · catch · explore · collect</p>`;
+  <p class="faint tiny" style="text-align:center;margin-top:18px">FishDex MVP prototype · catch · explore · collect</p>`;
 };
 ROUTES.profile = ()=>{
   const li=levelInfo();const have=speciesCaught();const longest=S.catches.reduce((m,c)=>c.len>m?c.len:m,0);
@@ -1560,16 +1560,16 @@ document.addEventListener('click',async e=>{
   if(e.target.closest('#btnDemo')){if(S.demo){if(await confirmSheet('Remove sample catches?','Your own recorded catches are kept.','Remove',true)){removeDemo();toast('Sample catches removed');render()}}else{seedDemo();toast('Sample catches loaded');go('home')}return}
   if(e.target.closest('#btnWipe')){if(await confirmSheet('Erase everything?','All catches, photos, XP and settings on this device are deleted.','Erase',true)){await DB.clear();localStorage.removeItem('fh:state');location.hash='';location.reload()}return}
 });
-$('#fileImport').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const o=JSON.parse(t);const st=o.state||o;if(!Array.isArray(st.catches))throw 0;S=Object.assign({},DEFAULT,st);save();toast('Imported '+S.catches.length+' catches');go('home')}).catch(()=>toast('That file is not a Fish Hunt export'));e.target.value=''});
+$('#fileImport').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const o=JSON.parse(t);const st=o.state||o;if(!Array.isArray(st.catches))throw 0;S=Object.assign({},DEFAULT,st);save();toast('Imported '+S.catches.length+' catches');go('home')}).catch(()=>toast('That file is not a FishDex export'));e.target.value=''});
 
 /* ---------- Onboarding ---------- */
 let onbStep=0;
 ROUTES.onboarding = ()=>{
   const logo=$('#topbar .brand svg').outerHTML.replace('<svg','<svg class="logo"');
   const steps=[
-    `${logo}<h1>Every fish you catch becomes part of your collection.</h1><p>Fish Hunt is a registry of real catches. Take a photo, get the verdict, watch your collection grow.</p><div class="loop">${['Catch','Capture','Identify','Verdict','Collect','Progress'].map((s,i)=>`${i?I.chev:''}<span>${s}</span>`).join('')}</div>`,
+    `${logo}<h1>Every fish you catch becomes part of your collection.</h1><p>FishDex is a registry of real catches. Take a photo, get the verdict, watch your collection grow.</p><div class="loop">${['Catch','Capture','Identify','Verdict','Collect','Progress'].map((s,i)=>`${i?I.chev:''}<span>${s}</span>`).join('')}</div>`,
     `${logo}<h1>Who's holding the rod?</h1><p>Your name goes on your trophy room and your standing.</p><div class="stack" style="margin-top:16px"><div class="field"><label>Name</label><input class="inp" id="onbName" value="${esc(S.name)}" placeholder="First name or handle" autocomplete="nickname"></div><div class="field"><label>Home region</label><select class="inp" id="onbRegion">${regionOptions(S.homeRegion)}</select></div></div>`,
-    `${logo}<h1>Your spots stay yours.</h1><p>Fish Hunt stores the exact location of each catch on your device only. By default, nobody else sees where you fished. You can share a region or a water name later, catch by catch.</p><div class="card" style="margin-top:16px"><div class="split"><div><b id="onbDemoLbl" style="color:#fff">Start with sample catches</b><div class="muted small">See the app filled in. Remove them anytime in Settings.</div></div><button class="toggle ${onbDemo?'on':''}" id="onbDemo" role="switch" aria-checked="${onbDemo}" aria-labelledby="onbDemoLbl"></button></div></div>`
+    `${logo}<h1>Your spots stay yours.</h1><p>FishDex stores the exact location of each catch on your device only. By default, nobody else sees where you fished. You can share a region or a water name later, catch by catch.</p><div class="card" style="margin-top:16px"><div class="split"><div><b id="onbDemoLbl" style="color:#fff">Start with sample catches</b><div class="muted small">See the app filled in. Remove them anytime in Settings.</div></div><button class="toggle ${onbDemo?'on':''}" id="onbDemo" role="switch" aria-checked="${onbDemo}" aria-labelledby="onbDemoLbl"></button></div></div>`
   ];
   return `<div class="onb">${steps[onbStep]}<div class="dots">${steps.map((_,i)=>`<i class="${i===onbStep?'on':''}"></i>`).join('')}</div><button class="btn" id="onbNext">${onbStep<2?'Continue':'Start collecting'}</button>${onbStep>0?`<button class="btn ghost" style="margin-top:10px" id="onbBack">Back</button>`:''}</div>`;
 };
@@ -1585,7 +1585,7 @@ document.addEventListener('click',e=>{
 });
 </script>
 <script>
-/* ===================== Fish Hunt — capture → review → verdict ===================== */
+/* ===================== FishDex — capture → review → verdict ===================== */
 let camStream=null, camGuess=null;
 ROUTES.capture = ()=>{
   CUR.draft={id:uid(),ts:Date.now(),privacy:S.privacy,released:false};
@@ -1596,7 +1596,7 @@ ROUTES.capture = ()=>{
     <video id="camVideo" autoplay playsinline muted aria-hidden="true"></video>
     <div class="cam-scrim" aria-hidden="true"></div>
     <div class="cam-frame"><i></i><i></i><i></i><i></i></div>
-    <div class="cam-top"><button class="back" data-go="home" style="color:#fff">${I.back}</button><div class="brand">${logo}<div><b>Fish Hunt</b><small style="display:block;font-size:9px;letter-spacing:.22em;color:var(--ice)">CATCH · EXPLORE · COLLECT</small></div></div><button class="x" data-go="home" aria-label="Close">${I.x}</button></div>
+    <div class="cam-top"><button class="back" data-go="home" style="color:#fff">${I.back}</button><div class="brand">${logo}<div><b>FishDex</b><small style="display:block;font-size:9px;letter-spacing:.22em;color:var(--ice)">CATCH · EXPLORE · COLLECT</small></div></div><button class="x" data-go="home" aria-label="Close">${I.x}</button></div>
     <div class="cam-title"><h1 id="camTitle">Record Catch</h1><p>Take a clear photo of your catch</p></div>
     <button type="button" class="cam-match" id="camMatch"><span class="mini">${fishSVG(SP.coho,{k:'m'})}</span><span class="cm-txt"><small>${S.apiKey?'AI species ID after the shot':'Demo mode — you pick the species after the shot'}</small><b id="camMatchName">Choose species</b></span>${I.chev}</button>
     <div class="cam-hint">${I.target}<div><b>Align fish within the frame</b><span>Best results in good light</span></div>${I.info.replace('<svg','<svg style="width:18px;height:18px;color:var(--mist)"')}</div>
@@ -1605,7 +1605,7 @@ ROUTES.capture = ()=>{
       <div class="cam-ctl"><button class="ib" id="btnGallery"><span class="sq">${I.image}</span>Gallery</button><button type="button" class="ib" id="btnFlash" disabled aria-pressed="false"><span class="sq">${I.bolt}</span>Flash<small id="flashLbl">Checking…</small></button><button class="shutter" id="btnShutter" aria-label="Take photo"><i></i></button><span></span><button class="ib" data-go="registry"><span class="sq">${I.book}</span>Species Guide</button></div>
       <div class="cam-mode" aria-hidden="true"><div><span class="on">PHOTO</span><span class="off" title="Video capture is not available yet">VIDEO</span></div></div>
     </div>
-    <div id="camFallback" class="hide" style="position:absolute;inset:0;display:grid;place-items:start center;background:linear-gradient(180deg,#1b4468,#0d2238);z-index:1;text-align:center;padding:calc(240px + var(--safe-t)) 24px 24px"><div><div style="width:64px;height:64px;margin:0 auto 12px;color:#fff">${I.cam}</div><b style="color:#fff;font-size:var(--fs-lg)">Camera not available here</b><p class="muted" style="margin:6px 0 0">Use Gallery to import a photo, or open Fish Hunt on your phone.</p></div></div>
+    <div id="camFallback" class="hide" style="position:absolute;inset:0;display:grid;place-items:start center;background:linear-gradient(180deg,#1b4468,#0d2238);z-index:1;text-align:center;padding:calc(240px + var(--safe-t)) 24px 24px"><div><div style="width:64px;height:64px;margin:0 auto 12px;color:#fff">${I.cam}</div><b style="color:#fff;font-size:var(--fs-lg)">Camera not available here</b><p class="muted" style="margin:6px 0 0">Use Gallery to import a photo, or open FishDex on your phone.</p></div></div>
   </div>`;
 };
 async function startCamera(){
@@ -1765,9 +1765,9 @@ ROUTES.verdict = ({id})=>{
   <div class="v-species"><div class="v-reveal" id="vr1"><span class="eyebrow">Species</span><h2>${esc(sp.n)}</h2><div class="sci">${esc(sp.sci)}</div><div class="small" style="margin-top:8px;color:var(--ice)">${esc(c.water||c.region||'Location not set')}${regionState(c.region)?', '+regionState(c.region):''}<br><span class="muted">${fmtDate(c.ts)}</span></div><div style="margin-top:8px"><span class="pill">${I.fish} ${GROUP_LABEL[sp.g]}${sp.tags.includes('game')?' · Game fish':''}</span></div></div>
     <div class="v-tier ${tier} v-reveal" id="vr2"><div class="nm tc-${tier}">${T.ico}${T.n.toUpperCase()}</div><div class="stars">${'★'.repeat(T.stars)}</div><div class="why">${T.why}</div></div></div>
   <div class="v-stats v-reveal" id="vr3"><div><div class="k">${I.ruler} LENGTH</div><div class="v">${c.len?num(c.len)+' in':'—'}</div></div><div><div class="k">${I.scale} WEIGHT</div><div class="v">${c.wt?num(c.wt)+' lb':'—'}</div></div><div><div class="k">${I.chart} PERCENTILE</div><div class="v">${pct?'Top '+pct+'%':'—'}</div><div class="s">${pct?'of registered '+esc(sp.n.split(' ')[0]):'add a length'}</div></div></div>
-  <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best${V.pbDelta?` · +${num(V.pbDelta)} in`:''}</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Added to your Fishdex</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span><span class="xpv">+<span id="xpNum">0</span> XP</span></span></div></div>
+  <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best${V.pbDelta?` · +${num(V.pbDelta)} in`:''}</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Added to your FishDex</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span><span class="xpv">+<span id="xpNum">0</span> XP</span></span></div></div>
   ${V.trophy||V.huntDone||fullyVerified(c)?`<div class="v-flags v-reveal in">${V.trophy?`<span class="pill" style="border-color:rgba(242,182,74,.6);color:#ffd985">${I.trophy} Trophy fish${V.replay?'':' · +'+XP.trophy.toLocaleString()+' XP'}</span>`:''}${V.huntDone?`<span class="pill" style="border-color:rgba(59,139,255,.7);color:#8ec6ff">${I.target} Hunt complete · +${XP.hunt} XP</span>`:''}${fullyVerified(c)?`<span class="pill" style="border-color:rgba(34,193,195,.6);color:#7fe3e4">${I.check} Fully verified${V.replay?'':' · +'+XP.verified+' XP'}</span>`:''}</div>`:''}
-  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}Added to your Fishdex <span class="muted">· ${esc(regProgress().label)} ${reg[0]} / ${reg[1]}</span></span><a data-go="species/${sp.id}" href="#species/${sp.id}">View species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}Added to your FishDex <span class="muted">· ${esc(regProgress().label)} ${reg[0]} / ${reg[1]}</span></span><a data-go="species/${sp.id}" href="#species/${sp.id}">View species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
     ${V.chal.length?`<div class="stack" style="margin-top:12px">${V.chal.map(({ch,p})=>`<div class="card" style="padding:12px 14px" data-go="challenges"><div class="split"><b style="color:#fff">${esc(ch.n)}</b><span class="small b" style="color:#fff">${p} / ${ch.sp.length}</span></div><div class="prog green" style="margin-top:8px;height:6px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div></div>`).join('')}</div>`:''}
     ${V.newAch.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Achievement unlocked</span>${V.newAch.map(a=>`<div class="row" style="margin-top:8px"><div style="width:44px">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8')}</div><div><b style="color:#fff">${esc(a.n)}</b><div class="muted small">${esc(a.d)}</div></div></div>`).join('')}</div>`:''}
     ${V.seasonHit?`<div class="card" style="margin-top:12px" data-go="challenges"><div class="split"><span class="eyebrow">Season</span><span class="small b" style="color:#fff">${V.seasonHit.p} / ${V.seasonHit.sea.sp.length}</span></div><b style="display:block;color:#fff;margin-top:4px">${esc(V.seasonHit.sea.n)}</b><div class="prog green" style="margin-top:8px;height:6px"><i style="width:${Math.round(V.seasonHit.p/V.seasonHit.sea.sp.length*100)}%"></i></div><div class="small muted" style="margin-top:6px">Ends ${fmtDate(V.seasonHit.win.b)} · ${esc(V.seasonHit.sea.badge)} badge</div></div>`:''}
@@ -1803,7 +1803,7 @@ async function shareCard(c){
   const ph={x:60,y:150,w:960,h:720};x.save();roundRect(x,ph.x,ph.y,ph.w,ph.h,36);x.clip();
   if(img.width){const r=Math.max(ph.w/img.width,ph.h/img.height);const w=img.width*r,h=img.height*r;x.drawImage(img,ph.x+(ph.w-w)/2,ph.y+(ph.h-h)/2,w,h)}else{x.fillStyle='#0d2238';x.fillRect(ph.x,ph.y,ph.w,ph.h)}
   x.restore();
-  x.fillStyle='#fff';x.font='700 54px "Playfair Display", Georgia, serif';x.fillText('Fish Hunt',60,90);x.font='600 22px Inter, system-ui, sans-serif';x.fillStyle='rgba(232,242,255,.85)';x.fillText('C A T C H   ·   E X P L O R E   ·   C O L L E C T',60,122);
+  x.fillStyle='#fff';x.font='700 54px "Playfair Display", Georgia, serif';x.fillText('FishDex',60,90);x.font='600 22px Inter, system-ui, sans-serif';x.fillStyle='rgba(232,242,255,.85)';x.fillText('C A T C H   ·   E X P L O R E   ·   C O L L E C T',60,122);
   x.textAlign='right';x.font='600 40px Caveat, cursive';x.fillStyle='#fff';x.fillText('More fish. Brighter days.',1020,100);x.textAlign='left';
   // species + tier
   const T=TIERS[c.tier];const col={common:'#c9d3df',uncommon:'#3ddc84',rare:'#7fb2ff',epic:'#d3a3ff',legendary:'#ffd985'}[c.tier];
@@ -1818,7 +1818,7 @@ async function shareCard(c){
   x.fillStyle='#a9bdd6';x.font='500 26px Inter, system-ui, sans-serif';x.fillText(fmtDate(c.ts)+'  ·  '+locLine(c,false),60,1308);
   x.textAlign='right';x.fillStyle='rgba(255,255,255,.6)';x.font='600 24px Inter';x.fillText((S.name||'').toUpperCase(),1020,1308);x.textAlign='left';
   const b=await new Promise(res=>cv.toBlob(res,'image/png'));if(!b)throw new Error('toBlob');const f=new File([b],'fish-hunt-verdict.png',{type:'image/png'});
-  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Fish Hunt verdict',text:`${sp.n} · ${T.n}${c.len?' · '+num(c.len)+' in':''} — Fish Hunt`});return}catch(e){if(e&&e.name==='AbortError')return}}
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'FishDex verdict',text:`${sp.n} · ${T.n}${c.len?' · '+num(c.len)+' in':''} — FishDex`});return}catch(e){if(e&&e.name==='AbortError')return}}
   const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;a.click();toast('Verdict card saved');
 }
 function roundRect(x,X,Y,W,H,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+H,r);x.arcTo(X+W,Y+H,X,Y+H,r);x.arcTo(X,Y+H,X,Y,r);x.arcTo(X,Y,X+W,Y,r);x.closePath()}

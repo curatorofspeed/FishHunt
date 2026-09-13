@@ -1,8 +1,8 @@
-# Fish Hunt — MVP prototype
+# FishDex — MVP prototype
 
 Catch → Capture → Identify → Verdict → Collect → Progress.
 
-A single-file, installable web app (PWA) that implements the Fish Hunt MVP brief:
+A single-file, installable web app (PWA) that implements the FishDex MVP brief:
 camera-first capture, AI species identification, the Catch Verdict reveal, a 164-species
 North American registry scoped to the angler's home waters, Trophy Room, XP/levels, achievements, challenges, a private-by-default
 catch map, a local community feed preview, and profile/standing.
@@ -58,7 +58,7 @@ Level L needs `120(L−1)² + 80(L−1)` cumulative XP. All of it lives in `XP`,
 
 ## The game layer
 
-The collection is the reward; XP is the progression layer. Home is **Your Fishdex**: species discovered in
+The collection is the reward; XP is the progression layer. Home is **Your FishDex**: species discovered in
 your home waters, level, new species this month, and then:
 
 - **Today's hunts.** Pick one of three each day (new species, PB, rarity). The next qualifying catch
@@ -66,7 +66,7 @@ your home waters, level, new species this month, and then:
 - **Your next hunts.** Derived, never stored: the easiest species you haven't caught in home waters, beating
   the PB in your most-fished group, five species this month, and the most relevant unfinished challenge.
 - **Collections.** Salmon, Trout & char, Bass & panfish and Saltwater within the registry scope. Each row opens
-  the Fishdex with that filter, and "Next unlock" prices the next discovery in XP.
+  the FishDex with that filter, and "Next unlock" prices the next discovery in XP.
 - **Seasons** (`SEASONS`). Date windows that repeat every year: Fall Salmon (Sep 1 – Nov 30), Winter Steelhead,
   Spring Trout, Summer Warmwater, Fall Redfish and Hard Water. Catching every listed species inside the window
   earns a permanent badge and XP once per year (`S.seasonsDone[id-year]`). Home shows the active season for your
