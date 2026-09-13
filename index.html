@@ -1305,7 +1305,7 @@ function render(){
 function settleFocus(sameRoute,prevRoute,prevFocus){
   const h1=$('#view h1');if(h1&&!h1.hasAttribute('tabindex'))h1.tabIndex=-1;
   const h1t=h1?h1.textContent.trim():'';
-  document.title=(h1&&!['home','onboarding'].includes(CUR.route)?h1t+' · ':'')+'FishDex';
+  document.title=(h1&&!['home','onboarding'].includes(CUR.route)&&h1t!=='FishDex'?h1t+' · ':'')+'FishDex';
   if(sameRoute&&h1t&&h1t!==lastH1)announce(h1t);lastH1=h1t;
   if(CUR.route==='capture')return; // the camera dialog places its own focus
   let t=null;
