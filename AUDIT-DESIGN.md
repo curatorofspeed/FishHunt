@@ -239,3 +239,23 @@ Drew: "expand globally now, prioritize as you'd like." `.audit/global_patch.py` 
 - One regression caught on the way: the first patch appended the species packs after a trailing comma, which left a hole in the array and blanked every screen; the anchor now absorbs the comma.
 
 **Known softness:** zone membership and box edges are judgement (Yuma resolves to Inland Southern California, Iquitos to the Amazon, Sarajevo to Croatia); "All species" is always one tap away and the review screen lets anglers correct the region. Inland Mexico has 7 species. The Claude ID prompt now lists all 348 species.
+
+## Design pass 2 (Sep 13 2026)
+
+Drew's new Home mock: dark photographic hero, bold sans headline, level pill, conditions, four stat tiles, hero catch card, scenic season card, image-led collections, FishDex in the nav. `.audit/design2_patch.py` replays onto `.audit/index.design2-orig.html`.
+
+**Changed**
+- **Header and scene.** The pale sky is gone. Every screen opens on a dark sunset scene (drawn in SVG so it ships offline: warm glow behind a snow peak, ranges, tree line, lake with reflection and mist) that hands over to the page through the existing `--ridge` veil. Titles and the wordmark are white; Playfair Display is retired for Inter 800 with tight tracking; the script face stays for quotes only. Theme colour and the iOS status bar are dark again.
+- **Level pill.** The avatar button became a status pill: avatar, level and a progress hairline ("Lv 14" under 430px, "Level 14 · Dedicated Angler" above), labelled for screen readers with the percentage to the next level.
+- **Home.** Welcome eyebrow and the tagline as the headline; a conditions card (temperature, sky, wind, sunrise and sunset from Open-Meteo for the centre of the home region, cached 30 minutes, degrees follow the units setting, the card opens the map); four stat tiles with progress hairlines (species, level, new this month, XP to next level); Today's hunts with tinted icon tiles; a hero Recent catch card (tier tag, date, name, length, weight, place, caption, "View catch card"); the season card on a mountain backdrop with a shield badge pill; Your next milestones; a horizontal Collections rail of fish plates with progress; the next-unlock row.
+- **Navigation.** The second tab is FishDex (the registry). Catch Map, Challenges & seasons, Community Feed and Regional Collections moved under More. Active tab is water blue. Page headers no longer carry the side tagline.
+- **Privacy.** The only new network call sends the home region's centre point (a public coordinate) to Open-Meteo, never a catch location or the device fix; Settings says so under Home region.
+
+**Verified (375×812 frame, animations at their end state)**
+- Contrast: Home 82 runs, Fishdex 103, Profile 68, Trophy Room 94, More 31, Challenges 313, Species, Verdict, Catch detail, Settings, Achievements and Notifications, 0 failures. The first render put the hero subline on the snow cap; the scene gained 100 units of sky and the hero 22px of breathing room, and the re-measure passes.
+- Header fits at 360, 375 and 430 with no overflow (pill 87px at 375). The first build showed the full pill label on narrow phones because a later rule re-enabled it; the rule order is fixed.
+- Conditions loaded live in the frame (Perth: 11°, clear skies, sunrise 6:15 AM) and the card degrades to "Checking conditions…" offline.
+- Keyboard: Enter on the conditions card, a stat tile, the season card, a collection card and the catch card navigates; each carries `role="link"` and `tabindex="0"`.
+- Headless renders at 375: Home, Fishdex, Profile, Verdict, More, Trophy Room, Challenges, Species, Onboarding, Camera; Home at 430 for the wide pill.
+
+**Not done:** tides (needs a station service; sun times stand in), real photography for the hero (the drawn scene is a drop-in for a `hero.jpg`), a two-column layout above 700px.

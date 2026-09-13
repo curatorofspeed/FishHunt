@@ -109,6 +109,14 @@ All state is on-device: `localStorage` key `fh:state` (catches, XP, settings) an
 device; the privacy level (Private / Region / Waterbody / Exact) controls what the feed shows.
 Settings → Data has JSON export/import, "Load sample catches", and full erase.
 
+## Design
+
+Dark-first. Every screen opens on a drawn sunset scene that fades into the page; titles are Inter 800. Home is the
+angler's status board: level pill, conditions for the home region (Open-Meteo, region centre only, cached 30 minutes,
+degrees follow the units setting), stat tiles, Today's hunts, the hero Recent catch card, the active season, next
+milestones and a Collections rail. The bottom nav is Home · FishDex · Record · Trophy Room · More; the map, challenges,
+feed and regional collections live under More.
+
 ## Dev hooks
 
 - `?demo=1` onboards a fresh device with the sample catches (screenshots, store listings, headless checks).
