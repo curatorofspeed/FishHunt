@@ -3,8 +3,8 @@
 Catch → Capture → Identify → Verdict → Collect → Progress.
 
 A single-file, installable web app (PWA) that implements the Fish Hunt MVP brief:
-camera-first capture, AI species identification, the Catch Verdict reveal, a 72-species
-Pacific Northwest registry, Trophy Room, XP/levels, achievements, challenges, a private-by-default
+camera-first capture, AI species identification, the Catch Verdict reveal, a 164-species
+North American registry scoped to the angler's home waters, Trophy Room, XP/levels, achievements, challenges, a private-by-default
 catch map, a local community feed preview, and profile/standing.
 
 ## Files
@@ -33,7 +33,7 @@ Two modes, switched in **Settings → Species identification**:
   species, with quick picks drawn from their own catch history and then common local species.
 - **Claude vision** (developer preview): paste an Anthropic API key. The photo is sent from the
   device straight to the Messages API (`claude-opus-5` by default, JSON-schema output) with the
-  72-species list; the reply carries `species_id`, `confidence`, up to 3 alternates, and an
+  164-species list with a note of the angler's home waters; the reply carries `species_id`, `confidence`, up to 3 alternates, and an
   optional length estimate when a size reference is visible.
   *For production this call moves into a Supabase edge function (like Tyre Hunt's `verify`) so no
   key ships in the client.*
@@ -55,6 +55,11 @@ XP: catch +50, new species +250, personal best +300, Uncommon +100, Rare +500, E
 Legendary +1,500, challenge complete +3,500–6,000. Level L needs `120(L−1)² + 80(L−1)` cumulative XP.
 
 ## Data
+
+Species: 164 across North America, each tagged with range zones (Pacific Northwest, Alaska, California, Rockies,
+Southwest, Plains, Great Lakes, Northeast, Southeast, Texas, Florida, boreal North, and the Pacific, Atlantic, Gulf
+and Hawaiian coasts). The registry shows the species for the angler's home state by default, with an "All species"
+switch; challenges sort the relevant ones first.
 
 Regions: 13 Washington sub-regions, plus sub-regions for Oregon, Idaho, Montana, British Columbia, Alaska and
 California, with every other US state and Canadian province as a fallback. GPS picks the region from bounding boxes,

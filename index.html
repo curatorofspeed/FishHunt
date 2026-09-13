@@ -715,10 +715,108 @@ const SPECIES = [
  {id:'sculpin',n:'Prickly Sculpin',sci:'Cottus asper',g:'other',w:'fresh',r:1,typ:4,tro:7,art:{s:'rockfish',c:['#3a3a2a','#7a7a5a','#c8c8a8'],sp:'verm',st:null},tags:['native']},
  {id:'lahontan',n:'Lahontan Cutthroat',sci:'Oncorhynchus clarkii henshawi',g:'trout',w:'fresh',r:3,typ:18,tro:28,art:{s:'trout',c:['#4a5a4a','#b0a878','#ece2c0'],sp:'dark',st:'#d88a3a'},tags:[]},
  {id:'redband',n:'Redband Trout',sci:'Oncorhynchus mykiss gairdneri',g:'trout',w:'fresh',r:3,typ:12,tro:20,art:{s:'trout',c:['#4a5a3a','#c0a870','#f0e0b0'],sp:'dark',st:'#d05a4a'},tags:['native']},
- {id:'atlantic',n:'Atlantic Salmon',sci:'Salmo salar',g:'salmon',w:'fresh',r:4,typ:20,tro:30,art:{s:'salmon',c:['#3a4a5a','#b0bcc8','#f2f4f6'],sp:'dark',st:null},tags:[]}
+ {id:'atlantic',n:'Atlantic Salmon',sci:'Salmo salar',g:'salmon',w:'fresh',r:4,typ:20,tro:30,art:{s:'salmon',c:['#3a4a5a','#b0bcc8','#f2f4f6'],sp:'dark',st:null},tags:[]},
+ // ---- beyond the Pacific Northwest ----
+ {id:'muskie',n:'Muskellunge',sci:'Esox masquinongy',g:'pike',w:'fresh',r:4,typ:38,tro:50,art:{s:'pike',c:["#3a4a2a", "#8a9a6a", "#dfe6c8"],sp:'bars',st:null},tags:["game", "trophy"]},
+ {id:'pickerel',n:'Chain Pickerel',sci:'Esox niger',g:'pike',w:'fresh',r:2,typ:18,tro:26,art:{s:'pike',c:["#2f4a2a", "#7a9a4a", "#d8e6b0"],sp:'verm',st:null},tags:["game"]},
+ {id:'spotted',n:'Spotted Bass',sci:'Micropterus punctulatus',g:'bass',w:'fresh',r:2,typ:13,tro:19,art:{s:'bass',c:["#3f5e2a", "#93ae5a", "#e7edc9"],sp:'dark',st:'#2a3a1a'},tags:["game"]},
+ {id:'guadalupe',n:'Guadalupe Bass',sci:'Micropterus treculii',g:'bass',w:'fresh',r:3,typ:11,tro:16,art:{s:'bass',c:["#3a5a2a", "#8aa65a", "#e0e8c0"],sp:'bars',st:null},tags:["native", "game"]},
+ {id:'whitebass',n:'White Bass',sci:'Morone chrysops',g:'bass',w:'fresh',r:1,typ:12,tro:17,art:{s:'bass',c:["#3a4a5a", "#b8c4cc", "#f4f6f8"],sp:'stripes',st:null},tags:["game"]},
+ {id:'wiper',n:'Hybrid Striped Bass',sci:'Morone saxatilis × chrysops',g:'bass',w:'fresh',r:2,typ:18,tro:26,art:{s:'bass',c:["#3a4a5a", "#b0bcc4", "#f4f6f8"],sp:'stripes',st:null},tags:["game"]},
+ {id:'whiteperch',n:'White Perch',sci:'Morone americana',g:'panfish',w:'fresh',r:1,typ:9,tro:13,art:{s:'perch',c:["#4a5a5a", "#b0b8a8", "#f0f0e8"],sp:'none',st:null},tags:[]},
+ {id:'redear',n:'Redear Sunfish',sci:'Lepomis microlophus',g:'panfish',w:'fresh',r:2,typ:8,tro:12,art:{s:'panfish',c:["#3a5a4a", "#a8b070", "#e8d890"],sp:'light',st:null},tags:[]},
+ {id:'greensunfish',n:'Green Sunfish',sci:'Lepomis cyanellus',g:'panfish',w:'fresh',r:1,typ:6,tro:9,art:{s:'panfish',c:["#2f4a3a", "#7a9a6a", "#d8c060"],sp:'verm',st:null},tags:[]},
+ {id:'warmouth',n:'Warmouth',sci:'Lepomis gulosus',g:'panfish',w:'fresh',r:2,typ:7,tro:10,art:{s:'panfish',c:["#3a3a20", "#8a7a4a", "#d8c8a0"],sp:'verm',st:null},tags:[]},
+ {id:'longear',n:'Longear Sunfish',sci:'Lepomis megalotis',g:'panfish',w:'fresh',r:2,typ:5,tro:8,art:{s:'panfish',c:["#2a4a6a", "#e08a3a", "#f0c060"],sp:'verm',st:null},tags:[]},
+ {id:'redbreast',n:'Redbreast Sunfish',sci:'Lepomis auritus',g:'panfish',w:'fresh',r:2,typ:6,tro:9,art:{s:'panfish',c:["#3a4a3a", "#c08a4a", "#f0c060"],sp:'verm',st:null},tags:[]},
+ {id:'sauger',n:'Sauger',sci:'Sander canadensis',g:'walleye',w:'fresh',r:2,typ:14,tro:20,art:{s:'perch',c:["#4a4a2a", "#c0a860", "#f0e6b8"],sp:'dark',st:null},tags:["game"]},
+ {id:'flathead',n:'Flathead Catfish',sci:'Pylodictis olivaris',g:'catfish',w:'fresh',r:3,typ:24,tro:40,art:{s:'catfish',c:["#4a4a2a", "#a09060", "#e8dcb0"],sp:'verm',st:null},tags:["game", "trophy"]},
+ {id:'bluecat',n:'Blue Catfish',sci:'Ictalurus furcatus',g:'catfish',w:'fresh',r:3,typ:24,tro:45,art:{s:'catfish',c:["#3a4a5a", "#8a9aa8", "#e8ecf0"],sp:'none',st:null},tags:["game", "trophy"]},
+ {id:'yellowbullhead',n:'Yellow Bullhead',sci:'Ameiurus natalis',g:'catfish',w:'fresh',r:1,typ:10,tro:14,art:{s:'catfish',c:["#4a4a20", "#a09040", "#e8d890"],sp:'none',st:null},tags:[]},
+ {id:'bowfin',n:'Bowfin',sci:'Amia calva',g:'other',w:'fresh',r:3,typ:20,tro:30,art:{s:'eel',c:["#2a3a2a", "#6a7a4a", "#c8c890"],sp:'verm',st:null},tags:["native"]},
+ {id:'alligatorgar',n:'Alligator Gar',sci:'Atractosteus spatula',g:'other',w:'fresh',r:5,typ:60,tro:90,art:{s:'pike',c:["#3a4a2a", "#7a8a4a", "#d8dcb0"],sp:'scale',st:null},tags:["trophy", "native"]},
+ {id:'longnosegar',n:'Longnose Gar',sci:'Lepisosteus osseus',g:'other',w:'fresh',r:3,typ:30,tro:45,art:{s:'pike',c:["#4a5a3a", "#9aa070", "#e0e4c8"],sp:'scale',st:null},tags:["native"]},
+ {id:'paddlefish',n:'Paddlefish',sci:'Polyodon spathula',g:'other',w:'fresh',r:5,typ:45,tro:65,art:{s:'sturgeon',c:["#4a5560", "#8a95a0", "#dfe4e8"],sp:'none',st:null},tags:["trophy", "native", "protected"]},
+ {id:'drum',n:'Freshwater Drum',sci:'Aplodinotus grunniens',g:'other',w:'fresh',r:1,typ:14,tro:22,art:{s:'panfish',c:["#4a5560", "#a0a8b0", "#e8ecf0"],sp:'none',st:null},tags:["native"]},
+ {id:'lakewhitefish',n:'Lake Whitefish',sci:'Coregonus clupeaformis',g:'other',w:'fresh',r:2,typ:16,tro:22,art:{s:'salmon',c:["#5d6b70", "#c4ccce", "#eff2f3"],sp:'none',st:null},tags:["native"]},
+ {id:'cisco',n:'Cisco',sci:'Coregonus artedi',g:'other',w:'fresh',r:3,typ:12,tro:16,art:{s:'salmon',c:["#4a5a6a", "#b8c8d0", "#f0f4f6"],sp:'none',st:null},tags:["native"]},
+ {id:'arcticchar',n:'Arctic Char',sci:'Salvelinus alpinus',g:'char',w:'fresh',r:4,typ:16,tro:26,art:{s:'trout',c:["#3a5a5a", "#8fa8a0", "#f0a060"],sp:'light',st:null},tags:["native"]},
+ {id:'splake',n:'Splake',sci:'Salvelinus fontinalis × namaycush',g:'char',w:'fresh',r:3,typ:15,tro:24,art:{s:'trout',c:["#3a4a3a", "#8a9a7a", "#f0d0a0"],sp:'light',st:null},tags:[]},
+ {id:'inconnu',n:'Inconnu (Sheefish)',sci:'Stenodus leucichthys',g:'other',w:'fresh',r:5,typ:30,tro:45,art:{s:'salmon',c:["#4a5a6a", "#c0ccd4", "#f4f6f8"],sp:'none',st:null},tags:["trophy", "native"]},
+ {id:'yellowstonecutt',n:'Yellowstone Cutthroat',sci:'Oncorhynchus clarkii bouvieri',g:'trout',w:'fresh',r:3,typ:14,tro:20,art:{s:'trout',c:["#5a5a3a", "#c8b070", "#f0e0b0"],sp:'dark',st:'#e0a03a'},tags:["native"]},
+ {id:'bonneville',n:'Bonneville Cutthroat',sci:'Oncorhynchus clarkii utah',g:'trout',w:'fresh',r:3,typ:12,tro:18,art:{s:'trout',c:["#4f5a3d", "#c8b878", "#f0e8c0"],sp:'dark',st:'#e0a040'},tags:["native"]},
+ {id:'coloradocutt',n:'Colorado River Cutthroat',sci:'Oncorhynchus clarkii pleuriticus',g:'trout',w:'fresh',r:4,typ:11,tro:16,art:{s:'trout',c:["#5a4a2a", "#d0a050", "#f0d090"],sp:'dark',st:'#e05a3a'},tags:["native"]},
+ {id:'riogrande',n:'Rio Grande Cutthroat',sci:'Oncorhynchus clarkii virginalis',g:'trout',w:'fresh',r:4,typ:10,tro:14,art:{s:'trout',c:["#5a5030", "#d0b060", "#f0e0a0"],sp:'dark',st:'#e06a3a'},tags:["native"]},
+ {id:'apache',n:'Apache Trout',sci:'Oncorhynchus apache',g:'trout',w:'fresh',r:5,typ:9,tro:13,art:{s:'trout',c:["#6a5a2a", "#e0b040", "#f0d880"],sp:'dark',st:null},tags:["native", "protected"]},
+ {id:'gila',n:'Gila Trout',sci:'Oncorhynchus gilae',g:'trout',w:'fresh',r:5,typ:9,tro:12,art:{s:'trout',c:["#6a5a30", "#d8a840", "#f0d080"],sp:'dark',st:null},tags:["native", "protected"]},
+ {id:'lakesturgeon',n:'Lake Sturgeon',sci:'Acipenser fulvescens',g:'sturgeon',w:'fresh',r:5,typ:40,tro:70,art:{s:'sturgeon',c:["#4a4a3a", "#8a8a70", "#d8d8c0"],sp:'scute',st:null},tags:["trophy", "native", "protected"]},
+ {id:'shovelnose',n:'Shovelnose Sturgeon',sci:'Scaphirhynchus platorynchus',g:'sturgeon',w:'fresh',r:3,typ:24,tro:32,art:{s:'sturgeon',c:["#5a5040", "#a09070", "#e0d8c0"],sp:'scute',st:null},tags:["native"]},
+ {id:'whitesucker',n:'White Sucker',sci:'Catostomus commersonii',g:'carp',w:'fresh',r:1,typ:14,tro:20,art:{s:'carp',c:["#4a4a3a", "#9a9a7a", "#e2e2cf"],sp:'scale',st:null},tags:["native"]},
+ {id:'buffalo',n:'Smallmouth Buffalo',sci:'Ictiobus bubalus',g:'carp',w:'fresh',r:2,typ:20,tro:30,art:{s:'carp',c:["#3a4a4a", "#8a9a90", "#dcdcd0"],sp:'scale',st:null},tags:["native"]},
+ {id:'tilapia',n:'Tilapia',sci:'Oreochromis spp.',g:'other',w:'fresh',r:2,typ:10,tro:15,art:{s:'panfish',c:["#4a5a5a", "#a0a898", "#e0dcc8"],sp:'bars',st:null},tags:[]},
+ {id:'peacock',n:'Butterfly Peacock Bass',sci:'Cichla ocellaris',g:'bass',w:'fresh',r:4,typ:14,tro:20,art:{s:'bass',c:["#3a5a2a", "#c8b040", "#f0d060"],sp:'bars',st:null},tags:["game"]},
+ {id:'snakehead',n:'Northern Snakehead',sci:'Channa argus',g:'other',w:'fresh',r:3,typ:24,tro:34,art:{s:'pike',c:["#3a3a2a", "#8a7a5a", "#d8ccb0"],sp:'verm',st:null},tags:[]},
+ {id:'americaneel',n:'American Eel',sci:'Anguilla rostrata',g:'other',w:'anadromous',r:3,typ:24,tro:36,art:{s:'eel',c:["#3a3a2a", "#7a7a5a", "#c8c8a8"],sp:'none',st:null},tags:["native"]},
+ {id:'rainbowsmelt',n:'Rainbow Smelt',sci:'Osmerus mordax',g:'other',w:'anadromous',r:2,typ:7,tro:10,art:{s:'salmon',c:["#4a5a6a", "#b8c8d0", "#f4f6f8"],sp:'none',st:null},tags:[]},
+ {id:'bluefish',n:'Bluefish',sci:'Pomatomus saltatrix',g:'pelagic',w:'salt',r:2,typ:20,tro:32,art:{s:'salmon',c:["#3a5a6a", "#8ab0b8", "#e8f4f4"],sp:'none',st:null},tags:["game"]},
+ {id:'fluke',n:'Summer Flounder (Fluke)',sci:'Paralichthys dentatus',g:'flatfish',w:'salt',r:2,typ:17,tro:26,art:{s:'flat',c:["#4a4030", "#8a7a5a", "#e8dcc0"],sp:'few',st:null},tags:["game"]},
+ {id:'winterflounder',n:'Winter Flounder',sci:'Pseudopleuronectes americanus',g:'flatfish',w:'salt',r:1,typ:12,tro:18,art:{s:'flat',c:["#4a4a3a", "#8a8a6a", "#e8e8d8"],sp:'none',st:null},tags:[]},
+ {id:'blackseabass',n:'Black Sea Bass',sci:'Centropristis striata',g:'bottom',w:'salt',r:2,typ:13,tro:20,art:{s:'rockfish',c:["#2a2f3a", "#5a6270", "#b8bfc8"],sp:'none',st:null},tags:[]},
+ {id:'tautog',n:'Tautog',sci:'Tautoga onitis',g:'bottom',w:'salt',r:3,typ:16,tro:24,art:{s:'rockfish',c:["#2a3a3a", "#5a6a6a", "#c0c8c8"],sp:'verm',st:null},tags:[]},
+ {id:'scup',n:'Scup (Porgy)',sci:'Stenotomus chrysops',g:'bottom',w:'salt',r:1,typ:10,tro:15,art:{s:'panfish',c:["#5a6a7a", "#c8d0d8", "#f4f6f8"],sp:'none',st:null},tags:[]},
+ {id:'atlcod',n:'Atlantic Cod',sci:'Gadus morhua',g:'bottom',w:'salt',r:3,typ:24,tro:40,art:{s:'cod',c:["#5a4a3a", "#a08a6a", "#eee4d0"],sp:'few',st:null},tags:["game"]},
+ {id:'haddock',n:'Haddock',sci:'Melanogrammus aeglefinus',g:'bottom',w:'salt',r:2,typ:20,tro:30,art:{s:'cod',c:["#3a3a4a", "#8a8a9a", "#e8e8ec"],sp:'none',st:'#111111'},tags:[]},
+ {id:'pollock',n:'Pollock',sci:'Pollachius virens',g:'bottom',w:'salt',r:2,typ:20,tro:32,art:{s:'cod',c:["#2a3a3a", "#6a7a7a", "#d0d8d8"],sp:'none',st:null},tags:[]},
+ {id:'atlmackerel',n:'Atlantic Mackerel',sci:'Scomber scombrus',g:'pelagic',w:'salt',r:1,typ:12,tro:18,art:{s:'tuna',c:["#2a4a5a", "#6aa0b0", "#e8f4f8"],sp:'verm',st:null},tags:[]},
+ {id:'bluefin',n:'Bluefin Tuna',sci:'Thunnus thynnus',g:'pelagic',w:'salt',r:5,typ:60,tro:100,art:{s:'tuna',c:["#1a2a4a", "#4a6a90", "#f0f4f8"],sp:'none',st:null},tags:["trophy", "game"]},
+ {id:'redfish',n:'Red Drum (Redfish)',sci:'Sciaenops ocellatus',g:'inshore',w:'salt',r:2,typ:22,tro:36,art:{s:'salmon',c:["#7a4a30", "#c8845a", "#f0d8c0"],sp:'few',st:null},tags:["game"]},
+ {id:'seatrout',n:'Spotted Seatrout',sci:'Cynoscion nebulosus',g:'inshore',w:'salt',r:1,typ:16,tro:24,art:{s:'trout',c:["#4a5a6a", "#a8b8c0", "#f0f4f4"],sp:'dark',st:null},tags:["game"]},
+ {id:'southernflounder',n:'Southern Flounder',sci:'Paralichthys lethostigma',g:'flatfish',w:'salt',r:2,typ:16,tro:24,art:{s:'flat',c:["#4a4030", "#8a7a5a", "#e8dcc0"],sp:'few',st:null},tags:["game"]},
+ {id:'sheepshead',n:'Sheepshead',sci:'Archosargus probatocephalus',g:'inshore',w:'salt',r:2,typ:14,tro:22,art:{s:'panfish',c:["#4a4a4a", "#c8c8c8", "#f4f4f4"],sp:'bars',st:null},tags:[]},
+ {id:'blackdrum',n:'Black Drum',sci:'Pogonias cromis',g:'inshore',w:'salt',r:2,typ:20,tro:36,art:{s:'panfish',c:["#3a3a3a", "#8a8a88", "#d8d8d0"],sp:'bars',st:null},tags:[]},
+ {id:'snook',n:'Common Snook',sci:'Centropomus undecimalis',g:'inshore',w:'salt',r:3,typ:24,tro:36,art:{s:'bass',c:["#5a6a5a", "#c8ccb8", "#f4f4ec"],sp:'none',st:'#111111'},tags:["game"]},
+ {id:'tarpon',n:'Tarpon',sci:'Megalops atlanticus',g:'inshore',w:'salt',r:5,typ:60,tro:90,art:{s:'salmon',c:["#3a4a5a", "#b8c4cc", "#f4f6f8"],sp:'scale',st:null},tags:["trophy", "game"]},
+ {id:'bonefish',n:'Bonefish',sci:'Albula vulpes',g:'inshore',w:'salt',r:4,typ:22,tro:30,art:{s:'salmon',c:["#6a7a7a", "#c8d0d0", "#f4f6f6"],sp:'stripes',st:null},tags:["game"]},
+ {id:'permit',n:'Permit',sci:'Trachinotus falcatus',g:'inshore',w:'salt',r:5,typ:24,tro:36,art:{s:'panfish',c:["#4a5a6a", "#c0c8cc", "#f4f4f4"],sp:'none',st:null},tags:["trophy", "game"]},
+ {id:'pompano',n:'Florida Pompano',sci:'Trachinotus carolinus',g:'inshore',w:'salt',r:2,typ:12,tro:18,art:{s:'panfish',c:["#5a6a6a", "#c8d0c8", "#f8f8f0"],sp:'none',st:null},tags:[]},
+ {id:'jackcrevalle',n:'Jack Crevalle',sci:'Caranx hippos',g:'pelagic',w:'salt',r:2,typ:20,tro:32,art:{s:'panfish',c:["#4a5a4a", "#b8b890", "#f0f0d8"],sp:'none',st:null},tags:["game"]},
+ {id:'redsnapper',n:'Red Snapper',sci:'Lutjanus campechanus',g:'bottom',w:'salt',r:3,typ:20,tro:32,art:{s:'rockfish',c:["#8a2a1a", "#e06a4a", "#f7c0a0"],sp:'none',st:null},tags:["game"]},
+ {id:'mangrove',n:'Mangrove Snapper',sci:'Lutjanus griseus',g:'bottom',w:'salt',r:1,typ:12,tro:18,art:{s:'rockfish',c:["#4a3a2a", "#a07a5a", "#e8d0b8"],sp:'few',st:null},tags:[]},
+ {id:'gag',n:'Gag Grouper',sci:'Mycteroperca microlepis',g:'bottom',w:'salt',r:3,typ:24,tro:36,art:{s:'rockfish',c:["#3a3a2a", "#7a7a5a", "#c8c8a8"],sp:'verm',st:null},tags:["game"]},
+ {id:'redgrouper',n:'Red Grouper',sci:'Epinephelus morio',g:'bottom',w:'salt',r:3,typ:20,tro:30,art:{s:'rockfish',c:["#7a3a2a", "#c07a5a", "#f0d0b8"],sp:'few',st:null},tags:[]},
+ {id:'goliath',n:'Goliath Grouper',sci:'Epinephelus itajara',g:'bottom',w:'salt',r:5,typ:60,tro:90,art:{s:'rockfish',c:["#4a4a2a", "#8a8a5a", "#d0d0a0"],sp:'bars',st:null},tags:["trophy", "protected"]},
+ {id:'cobia',n:'Cobia',sci:'Rachycentron canadum',g:'pelagic',w:'salt',r:3,typ:36,tro:50,art:{s:'shark',c:["#3a3a3a", "#6a6a6a", "#d8d8d8"],sp:'none',st:'#222222'},tags:["game"]},
+ {id:'kingmackerel',n:'King Mackerel',sci:'Scomberomorus cavalla',g:'pelagic',w:'salt',r:3,typ:30,tro:50,art:{s:'tuna',c:["#3a4a5a", "#a0b0b8", "#f0f4f4"],sp:'none',st:null},tags:["game"]},
+ {id:'spanishmackerel',n:'Spanish Mackerel',sci:'Scomberomorus maculatus',g:'pelagic',w:'salt',r:2,typ:18,tro:26,art:{s:'tuna',c:["#3a5a6a", "#a8c0c0", "#f4f6f4"],sp:'few',st:null},tags:[]},
+ {id:'amberjack',n:'Greater Amberjack',sci:'Seriola dumerili',g:'pelagic',w:'salt',r:3,typ:30,tro:45,art:{s:'tuna',c:["#4a5a5a", "#a8b0a8", "#f0f0e8"],sp:'none',st:'#c0a040'},tags:["game"]},
+ {id:'mahi',n:'Mahi-mahi',sci:'Coryphaena hippurus',g:'pelagic',w:'salt',r:4,typ:36,tro:50,art:{s:'grayling',c:["#2a6a4a", "#c8d840", "#f0e860"],sp:'few',st:null},tags:["game"]},
+ {id:'yellowfin',n:'Yellowfin Tuna (Ahi)',sci:'Thunnus albacares',g:'pelagic',w:'salt',r:4,typ:40,tro:70,art:{s:'tuna',c:["#1a2a4a", "#5a7aa0", "#f0f4f8"],sp:'none',st:'#f0c020'},tags:["trophy", "game"]},
+ {id:'skipjack',n:'Skipjack Tuna (Aku)',sci:'Katsuwonus pelamis',g:'pelagic',w:'salt',r:2,typ:20,tro:30,art:{s:'tuna',c:["#1a2a4a", "#6a8ab0", "#f0f4f8"],sp:'stripes',st:null},tags:[]},
+ {id:'wahoo',n:'Wahoo (Ono)',sci:'Acanthocybium solandri',g:'pelagic',w:'salt',r:4,typ:45,tro:65,art:{s:'tuna',c:["#1a3a5a", "#5a8ab0", "#e8f0f4"],sp:'bars',st:null},tags:["game"]},
+ {id:'sailfish',n:'Sailfish',sci:'Istiophorus platypterus',g:'pelagic',w:'salt',r:5,typ:70,tro:100,art:{s:'grayling',c:["#1a3a5a", "#5a8ab8", "#e0e8f0"],sp:'bars',st:null},tags:["trophy", "game"]},
+ {id:'bluemarlin',n:'Blue Marlin',sci:'Makaira nigricans',g:'pelagic',w:'salt',r:5,typ:100,tro:150,art:{s:'tuna',c:["#1a2a5a", "#3a6aa0", "#e8ecf4"],sp:'bars',st:null},tags:["trophy", "game"]},
+ {id:'barracuda',n:'Great Barracuda',sci:'Sphyraena barracuda',g:'pelagic',w:'salt',r:3,typ:30,tro:48,art:{s:'pike',c:["#3a4a5a", "#a0b0b8", "#f0f4f4"],sp:'few',st:null},tags:[]},
+ {id:'blacktip',n:'Blacktip Shark',sci:'Carcharhinus limbatus',g:'shark',w:'salt',r:3,typ:48,tro:70,art:{s:'shark',c:["#4a5a6a", "#8a9aa8", "#e8ecf0"],sp:'none',st:null},tags:["game"]},
+ {id:'bullshark',n:'Bull Shark',sci:'Carcharhinus leucas',g:'shark',w:'salt',r:4,typ:72,tro:100,art:{s:'shark',c:["#4a4a4a", "#7a7a7a", "#d8d8d8"],sp:'none',st:null},tags:["trophy"]},
+ {id:'ulua',n:'Giant Trevally (Ulua)',sci:'Caranx ignobilis',g:'pelagic',w:'salt',r:4,typ:30,tro:45,art:{s:'panfish',c:["#4a5a6a", "#b0b8c0", "#f0f0f0"],sp:'none',st:null},tags:["trophy", "game"]},
+ {id:'omilu',n:'Bluefin Trevally (Omilu)',sci:'Caranx melampygus',g:'pelagic',w:'salt',r:3,typ:16,tro:24,art:{s:'panfish',c:["#2a6a8a", "#5ab0c0", "#e0f0f4"],sp:'few',st:null},tags:["game"]},
+ {id:'uku',n:'Uku (Green Jobfish)',sci:'Aprion virescens',g:'bottom',w:'salt',r:3,typ:20,tro:30,art:{s:'salmon',c:["#3a6a5a", "#8ab0a0", "#e8f0e8"],sp:'none',st:null},tags:[]},
+ {id:'yellowtail',n:'California Yellowtail',sci:'Seriola dorsalis',g:'pelagic',w:'salt',r:3,typ:30,tro:44,art:{s:'tuna',c:["#3a4a5a", "#a8b0b8", "#f0f2f4"],sp:'none',st:'#e0c020'},tags:["game"]},
+ {id:'calico',n:'Kelp Bass (Calico)',sci:'Paralabrax clathratus',g:'bottom',w:'salt',r:2,typ:13,tro:20,art:{s:'rockfish',c:["#3a4a3a", "#8a9a6a", "#d8e0c0"],sp:'verm',st:null},tags:["game"]},
+ {id:'whiteseabass',n:'White Seabass',sci:'Atractoscion nobilis',g:'inshore',w:'salt',r:4,typ:30,tro:50,art:{s:'trout',c:["#4a5a6a", "#b0bcc4", "#f4f6f8"],sp:'none',st:null},tags:["game", "trophy"]},
+ {id:'cahalibut',n:'California Halibut',sci:'Paralichthys californicus',g:'flatfish',w:'salt',r:2,typ:22,tro:36,art:{s:'flat',c:["#4a4a3a", "#8a8a6a", "#e8e8d8"],sp:'few',st:null},tags:["game"]},
+ {id:'barredsurfperch',n:'Barred Surfperch',sci:'Amphistichus argenteus',g:'panfish',w:'salt',r:1,typ:10,tro:14,art:{s:'panfish',c:["#5a6a7a", "#c8d0d8", "#f4f6f8"],sp:'bars',st:null},tags:[]},
+ {id:'sheephead',n:'California Sheephead',sci:'Semicossyphus pulcher',g:'bottom',w:'salt',r:3,typ:16,tro:26,art:{s:'rockfish',c:["#3a2a2a", "#c04a3a", "#f0d8c0"],sp:'bars',st:null},tags:[]},
+ {id:'bonito',n:'Pacific Bonito',sci:'Sarda chiliensis',g:'pelagic',w:'salt',r:2,typ:20,tro:30,art:{s:'tuna',c:["#2a4a5a", "#7aa0b0", "#e8f4f8"],sp:'stripes',st:null},tags:[]},
+ {id:'pbarracuda',n:'Pacific Barracuda',sci:'Sphyraena argentea',g:'pelagic',w:'salt',r:2,typ:28,tro:40,art:{s:'pike',c:["#3a4a5a", "#a8b0b8", "#f0f4f4"],sp:'none',st:null},tags:[]},
 ];
 const SP = Object.fromEntries(SPECIES.map(s=>[s.id,s]));
-const GROUP_LABEL = {salmon:'Salmon',trout:'Trout',char:'Char',bass:'Bass',panfish:'Panfish',walleye:'Walleye',pike:'Pike & Muskie',catfish:'Catfish',carp:'Carp & Suckers',sturgeon:'Sturgeon',other:'Other',rockfish:'Rockfish',flatfish:'Flatfish',bottom:'Bottomfish',pelagic:'Pelagic',shark:'Sharks'};
+// Range zones: nw Pacific Northwest · ak Alaska · ca California fresh · rm Rockies · sw Southwest · gp Plains · gl Great Lakes · ne Northeast ·
+// se Southeast · tx Texas & lower Mississippi · fl Florida · no boreal North · pac north Pacific coast · pacs California coast · atl Atlantic · gulf Gulf · hi Hawaii
+const SPECIES_ZONES={chinook:'nw ak ca pac pacs gl',coho:'nw ak ca pac pacs gl',sockeye:'nw ak pac',pink:'nw ak pac gl',chum:'nw ak pac',steelhead:'nw ak ca pac pacs gl',rainbow:'nw ak ca rm sw gp gl ne se tx no',cutthroat:'nw ak ca',westslope:'nw rm',brown:'nw ca rm sw gp gl ne se tx no',brook:'nw ca rm gl ne se no',bull:'nw rm',lake:'nw rm gl ne no ak',dolly:'nw ak',kokanee:'nw ca rm',golden:'ca rm nw',tiger:'nw rm gl sw',whitefish:'nw rm',grayling:'ak no rm nw',largemouth:'nw ca rm sw gp gl ne se tx fl',smallmouth:'nw ca rm sw gp gl ne se tx',walleye:'nw rm gp gl ne se no sw',perch:'nw rm gp gl ne no sw ca',bcrappie:'nw ca rm sw gp gl ne se tx fl',wcrappie:'gp gl se tx sw ca nw',bluegill:'nw ca rm sw gp gl ne se tx fl',pumpkinseed:'nw gl ne no rm',rockbass:'gl ne se gp',pike:'nw rm gp gl ne no ak sw',tigermuskie:'nw rm gl gp sw',channelcat:'nw ca rm sw gp gl ne se tx fl',bullhead:'nw ca gl ne se gp',carp:'nw ca rm sw gp gl ne se tx',wsturgeon:'nw ca',burbot:'nw ak rm gl ne no',pikeminnow:'nw',sucker:'nw',shad:'nw ca atl',lamprey:'nw ca',searun:'nw ak',lingcod:'pac pacs ak',halibut:'pac ak',blackrock:'pac pacs ak',copperrock:'pac pacs',yelloweye:'pac pacs ak',canary:'pac pacs ak',quillback:'pac ak',vermilion:'pac pacs',greenling:'pac ak',cabezon:'pac pacs',pcod:'pac ak',albacore:'pac pacs',starry:'pac pacs ak',petrale:'pac pacs',surfperch:'pac pacs',seaperch:'pac pacs',sanddab:'pac pacs',herring:'pac pacs ak',dogfish:'pac pacs atl',sixgill:'pac pacs',salmonshark:'pac ak',mackerel:'pac pacs',wolfeel:'pac pacs ak',gsturgeon:'nw ca',striper:'atl ne se ca sw tx gulf',tench:'nw ca',grasscarp:'se tx gp gl',eulachon:'nw ak',sculpin:'nw',lahontan:'sw ca nw',redband:'nw ca',atlantic:'ne no nw',muskie:'gl ne gp se',pickerel:'ne se gl fl',spotted:'se tx sw ca gp',guadalupe:'tx',whitebass:'gp gl se tx sw',wiper:'se gp tx sw gl',whiteperch:'ne atl gl se',redear:'se tx sw ca fl',greensunfish:'gp gl se tx sw ca ne rm',warmouth:'se tx gl fl',longear:'se gp tx',redbreast:'se ne fl',sauger:'gp gl se rm',flathead:'gp se tx gl sw',bluecat:'se tx gp',yellowbullhead:'gl se gp tx ne',bowfin:'se gl ne tx fl',alligatorgar:'tx se',longnosegar:'se gl gp tx ne fl',paddlefish:'gp se tx',drum:'gl gp se tx ne',lakewhitefish:'gl no ne gp ak',cisco:'gl no ne',arcticchar:'ak no ne',splake:'gl ne no',inconnu:'ak no',yellowstonecutt:'rm',bonneville:'rm sw',coloradocutt:'rm',riogrande:'sw rm',apache:'sw',gila:'sw',lakesturgeon:'gl gp no ne',shovelnose:'gp se tx',whitesucker:'gl ne gp no rm se',buffalo:'gp se tx',tilapia:'fl tx sw',peacock:'fl',snakehead:'ne se',americaneel:'ne se gl atl fl',rainbowsmelt:'gl ne atl',bluefish:'atl gulf',fluke:'atl',winterflounder:'atl',blackseabass:'atl gulf',tautog:'atl',scup:'atl',atlcod:'atl',haddock:'atl',pollock:'atl',atlmackerel:'atl',bluefin:'atl pacs',redfish:'gulf atl fl',seatrout:'gulf atl fl',southernflounder:'gulf atl fl',sheepshead:'gulf atl fl',blackdrum:'gulf atl fl',snook:'fl gulf',tarpon:'fl gulf atl',bonefish:'fl hi',permit:'fl',pompano:'gulf atl fl',jackcrevalle:'gulf atl fl',redsnapper:'gulf atl',mangrove:'gulf fl atl',gag:'gulf atl fl',redgrouper:'gulf fl',goliath:'fl gulf',cobia:'gulf atl fl',kingmackerel:'gulf atl fl',spanishmackerel:'gulf atl fl',amberjack:'gulf atl fl hi',mahi:'fl gulf hi atl pacs',yellowfin:'hi gulf atl pacs',skipjack:'hi pacs gulf atl',wahoo:'hi fl gulf',sailfish:'fl gulf hi atl',bluemarlin:'hi atl gulf',barracuda:'fl hi gulf',blacktip:'gulf atl fl',bullshark:'gulf atl fl',ulua:'hi',omilu:'hi',uku:'hi',yellowtail:'pacs',calico:'pacs',whiteseabass:'pacs',cahalibut:'pacs',barredsurfperch:'pacs',sheephead:'pacs',bonito:'pacs',pbarracuda:'pacs'};
+const STATE_ZONES={WA:'nw pac',OR:'nw pac',ID:'nw rm',BC:'nw pac no',AK:'ak pac no',CA:'ca pac pacs',MT:'rm',WY:'rm',CO:'rm sw',UT:'rm sw',NV:'sw rm',AZ:'sw',NM:'sw',TX:'tx gp gulf',OK:'gp tx',AR:'se tx',LA:'se tx gulf',MS:'se gulf',AL:'se gulf',FL:'se fl gulf atl',GA:'se atl',SC:'se atl',NC:'se atl',VA:'se atl',MD:'se atl',DE:'se atl',WV:'se',KY:'se',TN:'se',MO:'se gp',KS:'gp',NE:'gp',SD:'gp',ND:'gp no',MN:'gl gp no',IA:'gp gl',WI:'gl',MI:'gl',IL:'gl',IN:'gl',OH:'gl',PA:'gl ne',NY:'gl ne atl',NJ:'ne atl',CT:'ne atl',RI:'ne atl',MA:'ne atl',VT:'ne',NH:'ne atl',ME:'ne atl',ON:'gl ne no',QC:'ne no atl',NB:'ne atl',NS:'ne atl',PE:'ne atl',NL:'no atl',MB:'gp no',SK:'gp no',AB:'rm no',YT:'no',NT:'no',NU:'no',HI:'hi'};
+for(const s of SPECIES)s.z=(SPECIES_ZONES[s.id]||'nw').split(' ');
+const GROUP_LABEL = {salmon:'Salmon',trout:'Trout',char:'Char',bass:'Bass',panfish:'Panfish',walleye:'Walleye',pike:'Pike & Muskie',catfish:'Catfish',carp:'Carp & Suckers',sturgeon:'Sturgeon',other:'Other',rockfish:'Rockfish',flatfish:'Flatfish',bottom:'Bottomfish',pelagic:'Pelagic',shark:'Sharks',inshore:'Inshore'};
 
 // Regions: [name, state, water, latMin, latMax, lngMin, lngMax]. Order = GPS detection priority (WA first, then the
 // rest of the Pacific Northwest and California). A name may carry several boxes. Water drives the demo quick picks.
@@ -747,6 +845,12 @@ function stateName(st){return (STATES[st]||[st])[0]}
 function regionState(name){const r=REGION_BY[name];return r?r[1]:(STATE_OF_NAME[name]||null)}
 function regionSalty(name){const r=REGION_BY[name];if(r)return r[2]!=='fresh';const st=STATE_OF_NAME[name];return st?COASTAL.has(st):false}
 function homeState(){return regionState(S.homeRegion)||'WA'}
+function homeZones(){return new Set((STATE_ZONES[homeState()]||'nw pac').split(' '))}
+function inHome(sp){const z=homeZones();return sp.z.some(x=>z.has(x))}
+function scopeSpecies(){return S.regScope==='all'?SPECIES:SPECIES.filter(inHome)}
+function regProgress(){const list=scopeSpecies();const have=speciesCaught();return {have:list.filter(s=>have.has(s.id)).length,total:list.length,label:S.regScope==='all'?'all waters':homeStateName()+' waters'}}
+function chRelevance(ch){return ch.sp.filter(id=>SP[id]&&inHome(SP[id])).length/ch.sp.length}
+function chSorted(){return CHALLENGES.map(ch=>({ch,p:challengeProgress(ch),rel:chRelevance(ch)})).sort((a,b)=>(b.rel>=.5)-(a.rel>=.5)||b.p/b.ch.sp.length-a.p/a.ch.sp.length||b.rel-a.rel)}
 function homeStateName(){return stateName(homeState())}
 function homeLine(){return REGION_BY[S.homeRegion]?`${S.homeRegion}, ${homeState()}`:(S.homeRegion||'')}
 function regionCenter(name){const r=REGION_BY[name];if(r)return [(r[3]+r[4])/2,(r[5]+r[6])/2];const b=STATE_BOX.find(x=>x[0]===regionState(name));return b?[(b[1]+b[2])/2,(b[3]+b[4])/2]:[47.4,-121.6]}
@@ -763,7 +867,19 @@ const CHALLENGES = [
  {id:'sound-bottom',n:'Puget Sound Bottomfish',region:'Puget Sound',sp:['lingcod','cabezon','blackrock','copperrock','greenling'],xp:3500,badge:'Bottom Dweller'},
  {id:'warmwater',n:'Warmwater Grand Slam',region:'Washington',sp:['largemouth','smallmouth','walleye','perch','bcrappie','bluegill'],xp:3500,badge:'Warmwater Slam'},
  {id:'columbia-giants',n:'Columbia Giants',region:'Columbia River',sp:['wsturgeon','chinook','walleye','tigermuskie'],xp:6000,badge:'River Giant'},
- {id:'coast',n:'Coastal Big Three',region:'Washington Coast',sp:['halibut','lingcod','albacore'],xp:4500,badge:'Blue Water'}
+ {id:'coast',n:'Coastal Big Three',region:'Washington Coast',sp:['halibut','lingcod','albacore'],xp:4500,badge:'Blue Water'},
+ {id:'cutt-slam',n:'Cutthroat Slam',region:'Rocky Mountains',sp:['yellowstonecutt','bonneville','coloradocutt','westslope'],xp:5000,badge:'Cutt Slam'},
+ {id:'desert-natives',n:'Desert Natives',region:'Southwest',sp:['apache','gila','riogrande','bonneville'],xp:6000,badge:'High Desert'},
+ {id:'great-lakes',n:'Great Lakes Slam',region:'Great Lakes',sp:['walleye','lake','steelhead','smallmouth','muskie','perch'],xp:5000,badge:'Lakes Slam'},
+ {id:'northwoods',n:'Northwoods Trio',region:'Boreal North',sp:['pike','lake','arcticchar'],xp:4000,badge:'Northwoods'},
+ {id:'southern-cats',n:'Southern Cats',region:'Southeast',sp:['channelcat','bluecat','flathead'],xp:3500,badge:'Whisker Slam'},
+ {id:'river-giants',n:'River Giants',region:'Mississippi & Texas',sp:['alligatorgar','paddlefish','bluecat','buffalo'],xp:6000,badge:'River Giant'},
+ {id:'inshore-slam',n:'Inshore Slam',region:'Gulf & South Atlantic',sp:['redfish','seatrout','southernflounder'],xp:3500,badge:'Inshore Slam'},
+ {id:'florida-grand-slam',n:'Florida Grand Slam',region:'Florida',sp:['tarpon','bonefish','permit'],xp:7500,badge:'Grand Slam'},
+ {id:'northeast-surf',n:'Northeast Surf',region:'Atlantic Coast',sp:['striper','bluefish','fluke','blackseabass'],xp:4000,badge:'Surfcaster'},
+ {id:'offshore',n:'Blue Water Five',region:'Offshore',sp:['mahi','yellowfin','wahoo','sailfish','kingmackerel'],xp:7500,badge:'Blue Water'},
+ {id:'hawaii-five',n:'Hawaii Big Five',region:'Hawaii',sp:['mahi','wahoo','yellowfin','ulua','uku'],xp:7500,badge:'Aloha Slam'},
+ {id:'socal',n:'SoCal Saltwater',region:'Southern California',sp:['yellowtail','calico','whiteseabass','cahalibut'],xp:4500,badge:'Kelp Line'}
 ];
 
 const ACHIEVEMENTS = [
@@ -818,7 +934,7 @@ const num = (n,d=1)=>n==null||isNaN(n)?'—':Number(n).toFixed(d).replace(/\.0$/
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 /* ---------- Store ---------- */
-const DEFAULT = {v:1,onboarded:false,name:'',homeRegion:'Puget Sound North',homeWaters:'',privacy:'private',units:'in',xp:0,catches:[],achievements:{},challengesDone:{},likes:{},follows:{},inbox:[],apiKey:'',model:'claude-opus-5',idEndpoint:'',demo:false,createdAt:Date.now()};
+const DEFAULT = {v:1,onboarded:false,name:'',homeRegion:'Puget Sound North',regScope:'home',homeWaters:'',privacy:'private',units:'in',xp:0,catches:[],achievements:{},challengesDone:{},likes:{},follows:{},inbox:[],apiKey:'',model:'claude-opus-5',idEndpoint:'',demo:false,createdAt:Date.now()};
 let S = load();
 function load(){try{const raw=localStorage.getItem('fh:state');if(raw){const o=JSON.parse(raw);return Object.assign({},DEFAULT,o)}}catch(e){}return Object.assign({},DEFAULT)}
 let saveT;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem('fh:state',JSON.stringify(S))}catch(e){toast('Storage full — photo not saved')}},60)}
@@ -1019,7 +1135,7 @@ function commitCatch(draft){
   if(pb)S.inbox.unshift({id:uid(),ts:Date.now(),k:'pb',t:'New personal best · '+sp.n,s:num(c.len)+' in'});
   save();
   const chal=CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,sp.id));
-  return {c,sp,newSpecies,pb,prevPB,tier,pct,parts,xp,newAch,chDone,chal,registry:[speciesCaught().size,SPECIES.length]};
+  return {c,sp,newSpecies,pb,prevPB,tier,pct,parts,xp,newAch,chDone,chal,registry:[regProgress().have,regProgress().total]};
 }
 function ch_has(ch,id){return ch.sp.includes(id)}
 
@@ -1143,17 +1259,17 @@ function quote(){return `<div class="hero-quote">More fish. Brighter days.<i></i
 /* ---------- Home ---------- */
 ROUTES.home = ()=>{
   const li=levelInfo();const have=speciesCaught();
-  const homeSp=SPECIES.filter(s=>!have.has(s.id)).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n));
+  const homeSp=SPECIES.filter(s=>inHome(s)&&!have.has(s.id)).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n));const rp=regProgress();
   const next=homeSp[0];
-  const chal=CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>!S.challengesDone[x.ch.id]).sort((a,b)=>b.p/b.ch.sp.length-a.p/a.ch.sp.length)[0];
+  const chal=chSorted().filter(x=>!S.challengesDone[x.ch.id])[0];
   const recent=[...S.catches].sort((a,b)=>TIER_ORDER.indexOf(b.tier)-TIER_ORDER.indexOf(a.tier)||b.ts-a.ts)[0];
   const first=S.catches.length===0;
   return `${pageH(`Welcome back${S.name?', '+esc(S.name.split(' ')[0]):''}`, first?'Your collection starts with one cast.':'Here is where your collection stands.')}
   <div class="stack">
     <div class="card">
       <div class="split"><span class="eyebrow">Registry progress</span><a data-go="registry" href="#registry" class="small b" style="color:#fff">View Registry ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
-      <div class="row" style="margin-top:10px;align-items:baseline"><span class="serif" style="font-size:var(--fs-display);font-weight:700;color:#fff;line-height:1">${have.size}<span style="font-size:var(--fs-2xl);opacity:.7"> / ${SPECIES.length}</span></span><span class="muted">species discovered</span></div>
-      <div class="prog" style="margin-top:10px"><i style="width:${Math.round(have.size/SPECIES.length*100)}%"></i></div>
+      <div class="row" style="margin-top:10px;align-items:baseline"><span class="serif" style="font-size:var(--fs-display);font-weight:700;color:#fff;line-height:1">${rp.have}<span style="font-size:var(--fs-2xl);opacity:.7"> / ${rp.total}</span></span><span class="muted">species discovered in ${esc(rp.label)}</span></div>
+      <div class="prog" style="margin-top:10px"><i style="width:${Math.round(rp.have/Math.max(1,rp.total)*100)}%"></i></div>
     </div>
     ${next?`<div class="card" data-go="species/${next.id}" aria-label="Next target: ${esc(next.n)}, ${TIERS[TIER_ORDER[next.r-1]].n}, plus ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery" style="cursor:pointer">
       <div class="split"><span class="eyebrow">Next target</span>${tierTag(TIER_ORDER[next.r-1])}</div>
@@ -1194,25 +1310,26 @@ ROUTES.collections = ()=>{
   const have=speciesCaught();
   const groups=[['Salmon',s=>s.g==='salmon'],['Trout & Char',s=>['trout','char'].includes(s.g)],['Bass & Panfish',s=>['bass','panfish','walleye'].includes(s.g)],['Freshwater',s=>s.w==='fresh'],['Saltwater',s=>s.w==='salt'],['Anadromous',s=>s.w==='anadromous'],['Native species',s=>s.tags.includes('native')],['Trophy species',s=>s.tags.includes('trophy')]];
   return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Collections</h1><p>Complete a set. Earn the badge.</p></div>
-  <div class="stack">${groups.map(([n,f])=>{const all=SPECIES.filter(f);const got=all.filter(s=>have.has(s.id)).length;return `<div class="card" data-go="registry" style="cursor:pointer"><div class="split"><b style="color:#fff;font-size:var(--fs-lg)">${n}</b><span class="small b" style="color:#fff">${got} / ${all.length}</span></div><div class="prog${got===all.length?' gold':''}" style="margin-top:10px"><i style="width:${Math.round(got/all.length*100)}%"></i></div></div>`}).join('')}</div>`;
+  <div class="stack">${groups.map(([n,f])=>{const all=scopeSpecies().filter(f);const got=all.filter(s=>have.has(s.id)).length;return `<div class="card" data-go="registry" style="cursor:pointer"><div class="split"><b style="color:#fff;font-size:var(--fs-lg)">${n}</b><span class="small b" style="color:#fff">${got} / ${all.length}</span></div><div class="prog${got===all.length?' gold':''}" style="margin-top:10px"><i style="width:${Math.round(got/all.length*100)}%"></i></div></div>`}).join('')}</div>`;
 };
 
 /* ---------- Registry ---------- */
 let regFilter='all', regSort='default';
 ROUTES.registry = ()=>{
   const have=speciesCaught();
-  const chal=CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>!S.challengesDone[x.ch.id]).sort((a,b)=>b.p/b.ch.sp.length-a.p/a.ch.sp.length)[0]||{ch:CHALLENGES[0],p:challengeProgress(CHALLENGES[0])};
+  const chal=chSorted().filter(x=>!S.challengesDone[x.ch.id])[0]||chSorted()[0];const rp=regProgress();
   const filters=[['all','All'],['salmon','Salmon'],['trout','Trout'],['bass','Bass & Panfish'],['fresh','Freshwater'],['salt','Saltwater'],['caught','Caught'],['missing','Not yet']];
-  let list=SPECIES.filter(s=>{switch(regFilter){case 'salmon':return s.g==='salmon';case 'trout':return ['trout','char'].includes(s.g);case 'bass':return ['bass','panfish','walleye'].includes(s.g);case 'fresh':return s.w==='fresh';case 'salt':return s.w==='salt';case 'caught':return have.has(s.id);case 'missing':return !have.has(s.id);default:return true}});
+  let list=scopeSpecies().filter(s=>{switch(regFilter){case 'salmon':return s.g==='salmon';case 'trout':return ['trout','char'].includes(s.g);case 'bass':return ['bass','panfish','walleye'].includes(s.g);case 'fresh':return s.w==='fresh';case 'salt':return s.w==='salt';case 'caught':return have.has(s.id);case 'missing':return !have.has(s.id);default:return true}});
   if(regSort==='az')list=[...list].sort((a,b)=>a.n.localeCompare(b.n));
   if(regSort==='rarity')list=[...list].sort((a,b)=>b.r-a.r);
-  const pct=Math.round(have.size/SPECIES.length*100);
+  const pct=Math.round(rp.have/Math.max(1,rp.total)*100);
   return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Species Registry</h1><p>Track your catches. Complete the collection.</p><button id="regSort" aria-label="Sort species: ${({default:'Registry order',az:'A to Z',rarity:'Rarity'})[regSort]}" class="right hbtn">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
   <div class="card reg-head">
-    <div><div class="big">${have.size}<small> / ${SPECIES.length}</small></div><div class="lbl">discovered</div><div class="row" style="margin-top:12px"><div class="prog grow"><i style="width:${pct}%"></i></div><span class="small b" style="color:#fff">${pct}%</span></div><div class="script" style="font-size:var(--fs-xl);color:var(--ice);margin-top:10px">“Different waters. A bigger story.”</div></div>
+    <div><div class="big">${rp.have}<small> / ${rp.total}</small></div><div class="lbl">discovered</div><div class="row" style="margin-top:12px"><div class="prog grow"><i style="width:${pct}%"></i></div><span class="small b" style="color:#fff">${pct}%</span></div><div class="script" style="font-size:var(--fs-xl);color:var(--ice);margin-top:10px">“Different waters. A bigger story.”</div></div>
     <div class="chal" data-go="challenges" aria-label="${esc(chal.ch.n)}, ${chal.p} of ${chal.ch.sp.length}" style="cursor:pointer"><svg class="hexi" aria-hidden="true" viewBox="0 0 56 62"><path d="M28 2 L53 16 L53 46 L28 60 L3 46 L3 16Z" fill="#12283d" stroke="#3b8bff" stroke-width="2.5"/><g transform="translate(14 17) scale(1.2)" style="color:#fff">${sized(I.mtn)}</g></svg><b>${esc(chal.ch.n)}</b><span>${chal.p} / ${chal.ch.sp.length}</span>${I.chev}</div>
   </div>
-  <div class="chips" style="margin-top:12px">${filters.map(([k,n])=>`<button class="chip ${regFilter===k?'on':''}" data-rf="${k}">${n}</button>`).join('')}</div>
+  <div class="seg reg-scope" role="group" aria-label="Registry scope" style="margin-top:12px"><button data-rs="home" class="${S.regScope!=='all'?'on':''}" aria-pressed="${S.regScope!=='all'}">${esc(homeStateName())} waters</button><button data-rs="all" class="${S.regScope==='all'?'on':''}" aria-pressed="${S.regScope==='all'}">All species</button></div>
+  <div class="chips" style="margin-top:8px">${filters.map(([k,n])=>`<button class="chip ${regFilter===k?'on':''}" data-rf="${k}">${n}</button>`).join('')}</div>
   <div class="grid3" id="regGrid">${list.map(s=>regCard(s,have.has(s.id))).join('')}</div>
   ${quote()}`;
 };
@@ -1221,7 +1338,7 @@ function regCard(s,got){
   const bestTier=got?S.catches.filter(c=>c.sp===s.id).map(c=>c.tier).sort((a,b)=>TIER_ORDER.indexOf(b)-TIER_ORDER.indexOf(a))[0]:TIER_ORDER[s.r-1];
   return `<div class="fcard ${got?'':'sil'}" data-go="species/${s.id}" aria-label="${esc(s.n)}, ${got?'caught':'not yet caught'}, ${TIERS[bestTier].n}${pb?', personal best '+num(pb.len)+' inches':''}${first?', first caught '+fmtDate(first.ts):''}"><div class="art">${fishPlate(s,{sil:!got,k:'r'})}${got?`<span class="chk">${I.check}</span>`:''}</div><div class="body"><div class="name">${esc(s.n)}</div><div style="margin-top:6px">${tierTag(bestTier)}</div><div class="meta">${got?`<span>${I.ruler}${pb?num(pb.len)+' in':'—'}</span><span>${I.cal}${first?new Date(first.ts).toLocaleDateString('en-US',{month:'short',year:'numeric'}):''}</span>`:'<span>Not yet caught</span>'}</div></div></div>`;
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-rf]');if(b){regFilter=b.dataset.rf;render()}if(e.target.closest('#regSort')){regSort=regSort==='default'?'az':regSort==='az'?'rarity':'default';toast('Sorted: '+({default:'Registry order',az:'A → Z',rarity:'Rarity'}[regSort]));render()}});
+document.addEventListener('click',e=>{const rs=e.target.closest('[data-rs]');if(rs){S.regScope=rs.dataset.rs;save();render();return}const b=e.target.closest('[data-rf]');if(b){regFilter=b.dataset.rf;render()}if(e.target.closest('#regSort')){regSort=regSort==='default'?'az':regSort==='az'?'rarity':'default';toast('Sorted: '+({default:'Registry order',az:'A → Z',rarity:'Rarity'}[regSort]));render()}});
 
 /* ---------- Species detail ---------- */
 ROUTES.species = ({id})=>{
@@ -1281,8 +1398,8 @@ document.addEventListener('click',async e=>{
 /* ---------- Challenges ---------- */
 ROUTES.challenges = ()=>{
   const have=speciesCaught();
-  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Challenges</h1><p>A reason to go back out.</p></div>
-  <div class="stack">${CHALLENGES.map(ch=>{const p=challengeProgress(ch);const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}</span><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:var(--fs-xl)">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600;white-space:nowrap">+${ch.xp.toLocaleString()} XP</div></div></div>
+  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Challenges</h1><p>Your waters first. Everything else below.</p></div>
+  <div class="stack">${chSorted().map(({ch,p,rel})=>{const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}${rel<.5?' · far from home':''}</span><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:var(--fs-xl)">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600;white-space:nowrap">+${ch.xp.toLocaleString()} XP</div></div></div>
   <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${ch.sp.map(id=>`<span class="pill" data-go="species/${id}" aria-label="${esc(SP[id].n)}, ${have.has(id)?'caught':'not yet caught'}" style="cursor:pointer;${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.65'}">${have.has(id)?'✓ ':''}${esc(SP[id].n)}</span>`).join('')}</div>
   <div class="prog ${done?'gold':'green'}" style="margin-top:12px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div>
   <div class="split" style="margin-top:8px"><span class="small muted">Reward: ${esc(ch.badge)} badge</span>${done?`<span class="pill" style="border-color:rgba(242,182,74,.6);color:#ffd985">${I.trophy} Complete</span>`:''}</div></div>`}).join('')}</div>`;
@@ -1490,7 +1607,7 @@ async function identify(blob){
     const counts={};for(const c of S.catches)counts[c.sp]=(counts[c.sp]||0)+1;
     const mine=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
     const salty=regionSalty(S.homeRegion);
-    const common=SPECIES.filter(s=>s.r<=2&&(salty||s.w!=='salt')).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n)).map(s=>s.id);
+    const common=SPECIES.filter(s=>inHome(s)&&s.r<=2&&(salty||s.w!=='salt')).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n)).map(s=>s.id);
     return {demo:true,species:null,confidence:null,alternates:[...new Set([...mine,...common])].slice(0,4),length:null};
   }
   const b64=await blobToB64(blob);
@@ -1501,7 +1618,7 @@ async function identify(blob){
   const body={model:S.model||'claude-opus-5',max_tokens:1024,
     output_config:{format:{type:'json_schema',schema},effort:'medium'},
     system:'You identify fish for a Pacific Northwest angling registry. Return only the JSON requested. Choose species_id from the provided list; use "unknown" when no fish is visible or none of the listed species fits. Estimate total length in inches only when a reliable size reference (hand, ruler, rod grip, known object) is visible; otherwise null. Keep note under 20 words.',
-    messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:blob.type||'image/jpeg',data:b64}},{type:'text',text:'Identify the fish in this photo.\n\nSpecies list:\n'+list}]}]};
+    messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:blob.type||'image/jpeg',data:b64}},{type:'text',text:`Identify the fish in this photo. The angler's home waters: ${S.homeRegion} (${homeStateName()}); species that occur there are more likely, but any listed species is possible.\n\nSpecies list:\n`+list}]}]};
   const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
   if(!r.ok){const t=await r.text().catch(()=>'');throw new Error('ID request failed ('+r.status+') '+t.slice(0,160))}
   const j=await r.json();
@@ -1558,7 +1675,7 @@ document.addEventListener('click',async e=>{
 function speciesPicker(cb){
   const bg=sheet(`<h3>Choose species</h3><label class="sr" for="spq">Search species</label><input class="inp" id="spq" placeholder="Search 72 species…" autocomplete="off"><div id="splist" style="margin-top:10px"></div>`);
   const list=$('#splist',bg),q=$('#spq',bg);
-  const draw=()=>{const t=q.value.trim().toLowerCase();const have=speciesCaught();const rows=SPECIES.filter(s=>!t||s.n.toLowerCase().includes(t)||s.sci.toLowerCase().includes(t)||GROUP_LABEL[s.g].toLowerCase().includes(t)).slice(0,40);list.innerHTML=rows.map(s=>`<div class="listrow" data-pick="${s.id}" role="button" aria-label="${esc(s.n)}${have.has(s.id)?', caught':', new species'}" style="cursor:pointer"><div style="width:64px;height:40px;border-radius:8px;overflow:hidden;background:#0d2238;flex:none">${fishSVG(s,{k:'p',sil:!have.has(s.id)})}</div><div class="grow"><div class="t">${esc(s.n)}</div><div class="s" style="font-style:italic">${esc(s.sci)}</div></div>${have.has(s.id)?`<span class="pill" style="color:#5cf0a0">✓</span>`:`<span class="pill">New</span>`}</div>`).join('')||'<p class="muted">No match.</p>';enhance(list)};
+  const draw=()=>{const t=q.value.trim().toLowerCase();const have=speciesCaught();const rows=SPECIES.filter(s=>!t||s.n.toLowerCase().includes(t)||s.sci.toLowerCase().includes(t)||GROUP_LABEL[s.g].toLowerCase().includes(t)).sort((a,b)=>inHome(b)-inHome(a)).slice(0,40);list.innerHTML=rows.map(s=>`<div class="listrow" data-pick="${s.id}" role="button" aria-label="${esc(s.n)}${have.has(s.id)?', caught':', new species'}" style="cursor:pointer"><div style="width:64px;height:40px;border-radius:8px;overflow:hidden;background:#0d2238;flex:none">${fishSVG(s,{k:'p',sil:!have.has(s.id)})}</div><div class="grow"><div class="t">${esc(s.n)}</div><div class="s" style="font-style:italic">${esc(s.sci)}</div></div>${have.has(s.id)?`<span class="pill" style="color:#5cf0a0">✓</span>`:`<span class="pill">New</span>`}</div>`).join('')||'<p class="muted">No match.</p>';enhance(list)};
   q.addEventListener('input',draw);draw();
   list.addEventListener('click',e=>{const r=e.target.closest('[data-pick]');if(r){bg.close();cb(r.dataset.pick)}});
 }
@@ -1566,7 +1683,7 @@ function speciesPicker(cb){
 /* ---------- Verdict ---------- */
 ROUTES.verdict = ({id})=>{
   let V=CUR.verdict;
-  if(!V&&id){const c=id==='latest'?S.catches[0]:S.catches.find(x=>x.id===id);if(c){V={c,sp:SP[c.sp],newSpecies:false,pb:c.pb,tier:c.tier,pct:c.pct,parts:[['XP earned',c.xp||0]],xp:c.xp||0,newAch:[],chDone:[],chal:CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,c.sp)),registry:[speciesCaught().size,SPECIES.length],replay:true}}}
+  if(!V&&id){const c=id==='latest'?S.catches[0]:S.catches.find(x=>x.id===id);if(c){V={c,sp:SP[c.sp],newSpecies:false,pb:c.pb,tier:c.tier,pct:c.pct,parts:[['XP earned',c.xp||0]],xp:c.xp||0,newAch:[],chDone:[],chal:CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,c.sp)),registry:[regProgress().have,regProgress().total],replay:true}}}
   if(!V)return ROUTES.home();
   const {c,sp,tier,pct}=V;const T=TIERS[tier];const reg=V.registry;const have=speciesCaught();const spIdx=SPECIES.findIndex(s=>s.id===sp.id)+1;
   CUR.after=()=>{revealSequence(V);};
@@ -1577,7 +1694,7 @@ ROUTES.verdict = ({id})=>{
     <div class="v-tier ${tier} v-reveal" id="vr2"><div class="nm tc-${tier}">${T.ico}${T.n.toUpperCase()}</div><div class="stars">${'★'.repeat(T.stars)}</div><div class="why">${T.why}</div></div></div>
   <div class="v-stats v-reveal" id="vr3"><div><div class="k">${I.ruler} LENGTH</div><div class="v">${c.len?num(c.len)+' in':'—'}</div></div><div><div class="k">${I.scale} WEIGHT</div><div class="v">${c.wt?num(c.wt)+' lb':'—'}</div></div><div><div class="k">${I.chart} PERCENTILE</div><div class="v">${pct?'Top '+pct+'%':'—'}</div><div class="s">${pct?'of registered '+esc(sp.n.split(' ')[0]):'add a length'}</div></div></div>
   <div class="v-rowb"><div class="v-reveal" id="vr4">${V.pb?`<span class="banner gold">${I.trophy} New personal best</span>`:V.newSpecies?`<span class="banner gold">${I.book} New species discovered</span>`:`<span class="banner" style="border-color:var(--line-2);color:var(--ice)">${I.check} Logged to your registry</span>`}</div><div class="v-reveal" id="vr5"><span class="banner xp"><span class="xpc">XP</span><span class="xpv">+<span id="xpNum">0</span> XP</span></span></div></div>
-  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}Species Registry: <b>${V.newSpecies?'#':''}${reg[0]} / ${reg[1]}</b>${V.newSpecies?' <span class="muted">new</span>':''}</span><a data-go="species/${sp.id}" href="#species/${sp.id}">View species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
+  <div class="v-reveal" id="vr6"><div class="v-reg"><span>${I.book}${esc(regProgress().label)}: <b>${V.newSpecies?'#':''}${reg[0]} / ${reg[1]}</b>${V.newSpecies?' <span class="muted">new</span>':''}</span><a data-go="species/${sp.id}" href="#species/${sp.id}">View species ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
     ${V.chal.length?`<div class="stack" style="margin-top:12px">${V.chal.map(({ch,p})=>`<div class="card" style="padding:12px 14px" data-go="challenges"><div class="split"><b style="color:#fff">${esc(ch.n)}</b><span class="small b" style="color:#fff">${p} / ${ch.sp.length}</span></div><div class="prog green" style="margin-top:8px;height:6px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div></div>`).join('')}</div>`:''}
     ${V.newAch.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Achievement unlocked</span>${V.newAch.map(a=>`<div class="row" style="margin-top:8px"><div style="width:44px">${shieldBadge(ACH_ICON[a.ico]||'fish',ACH_COLOR[a.ico]||'#2d6fb8')}</div><div><b style="color:#fff">${esc(a.n)}</b><div class="muted small">${esc(a.d)}</div></div></div>`).join('')}</div>`:''}
     ${V.chDone.length?`<div class="card" style="margin-top:12px;border-color:rgba(242,182,74,.5)"><span class="eyebrow">Challenge complete</span>${V.chDone.map(ch=>`<b style="display:block;color:#fff;margin-top:6px">${esc(ch.n)} · +${ch.xp.toLocaleString()} XP</b>`).join('')}</div>`:''}
