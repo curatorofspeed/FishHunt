@@ -135,3 +135,66 @@ The remaining orphans are natural two-word wraps in three-column cards, such as 
 - **Header look.** The mocks show dark text on a light misty sky. That's still a design decision for Drew.
 - **Phone check.** Test the camera layout on a real phone, with a notch and home indicator.
 - **Re-running this pass.** `.audit/design_patch.py` replays onto `.audit/index.design-orig.html`, so it's only for reproducing this pass, never after later edits to `index.html`.
+
+---
+
+# Follow-up pass — header direction, honest demo ID, clean seeding, type scale
+
+**Scope:** `index.html`, `manifest.webmanifest`, `README.md` · **Method:** one anchored patch script (`.audit/polish3_patch.py`) replayed onto `.audit/index.polish3-orig.html`, then contrast re-measured on the live render, the layout scan at 375 and 360, keyboard and flow checks in the browser, and every screen rendered with headless Chrome at 375 and 360.
+
+## What changed and why
+
+### Header direction: light sky, navy type
+
+The mocks put dark type on a pale, misty sky on five of six screens. The previous dark veil existed only to make white type pass contrast. → **Changed:**
+- The scene is a pale sky with a far, misty ridge under the title band and a darker range, forest and lake under the cards. The hand-over point moves per screen: 205px on screens with a page title, 175px on centred headers, 300px on Profile, 120px on onboarding.
+- Header type is navy: wordmark, bell, titles, subtitles, tagline, back buttons, sort button, "Edit Profile", and the profile identity row.
+- Cards went from 72% to 93% navy so the first card reads the same as the rest. Chips are solid navy pills, as in the Feed mock.
+- The logo is one artwork coloured by context: navy on the sky, light on the camera.
+- Onboarding carries its own navy behind the copy, since the copy is bottom-anchored and starts near 230px on short phones.
+- `theme-color` and the manifest colour follow the sky, and the iOS status bar style is `default`.
+
+| Header copy on the sky | Before (white on the veil) | After (navy on the sky) |
+|---|---|---|
+| Wordmark "Fish Hunt" | 2.86 (exempt) | 15.2 |
+| Wordmark caps | 2.93 (exempt) | 9.91 |
+| Subtitles | 5.09 | 8.71 |
+| Tagline | 7.98 | 11.55 |
+| Profile name / quote | 3.38 / 4.6 | 14.6 / 9.06 |
+
+### Demo species ID no longer guesses
+
+Without an API key, the review screen used to propose a random species with a small "Demo ID" tag. → **Changed:** demo mode proposes nothing. The species button reads "Choose species" with "Demo mode does not identify photos. Tap to pick." Quick picks come from the angler's own catch history, then common local species. Get Verdict stays disabled until a species is chosen. The camera bar and the screen-reader announcement say the same thing.
+
+### Sample data no longer spams the inbox
+
+Seeding 24 catches left 17 unread notifications. → **Changed:** the seed clears what it generated and leaves one note, "Sample catches loaded". Removing the samples removes the note.
+
+### Vestigial counter
+
+The Verdict header's "1 / 1" meant nothing. → Removed.
+
+### Type scale
+
+27 distinct sizes from 9 to 44px. → **Changed:** ten tokens on the root: 10, 11, 12.5, 14, 15, 17, 20, 24, 30 and 40px, plus a 16px input floor for phones. All 119 size declarations map to a token. The two logotype captions stay at 9px as artwork. Numerals in the four- and three-column strips step down one token so "42.1 in" keeps to one line.
+
+## Verified
+
+- **Contrast, full app at 375×812.** 1,062 text runs, 0 non-exempt failures. The two remaining flags are the inactive VIDEO label and a disabled button, both exempt.
+- **Contrast at 360×740.** Onboarding copy 7.53, feed captions over the brightest photo 7.95, tier tags over photos 4.75, no failures on Home, Profile, Registry, Feed, More or Trophy Room.
+- **Layout scan at 375 and 360.** 0 clipped labels, 0 text overlaps, 0 oversized icons, no horizontal overflow. Font sizes in use: 9 10 11 12.5 14 15 17 20 24 30 40.
+- **Wordmark** fits its row at 375 and 360.
+- **Demo flow.** After a photo with no key: species empty, "Demo mode" pill, "Choose species", four quick picks drawn from the catch history, Get Verdict disabled, announcement "Demo mode. Choose the species yourself." After picking: enabled, label "Or:", three alternates.
+- **Seeding.** Inbox holds 1 unread item, and the bell reads "Notifications, 1 unread".
+- **Meta.** `theme-color` `#eef5fb`, status bar `default`, manifest `theme_color` updated.
+- **Screens rendered with headless Chrome** at 375 and 360: Home, Registry, Trophy Room, Profile, Feed, Species, Verdict, Explore, Challenges, Settings, onboarding and the camera.
+
+**Limits of this verification:**
+- The preview pane stayed hidden, so no pane screenshots. Headless Chrome stood in. It clamps windows to 500px, so screens were framed in a 375px iframe.
+- The measurer only sees photo scrims when they are hit-testable, which is why one intermediate run reported feed captions at 1:1. The final runs include that rule.
+- The status bar treatment in an installed iOS app still needs a phone check.
+
+## Recommended (not done)
+
+- **Real photography** for sample data and store screenshots.
+- **Phone check** of the light header under a notch and of the camera screen.

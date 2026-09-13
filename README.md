@@ -29,8 +29,8 @@ Open http://localhost:8790. The camera needs `localhost` or HTTPS. On a phone, d
 
 Two modes, switched in **Settings → Species identification**:
 
-- **Demo mode** (default, no key): after the photo the app proposes a species and the angler
-  confirms or searches the registry. Confidence is not shown.
+- **Demo mode** (default, no key): the app never guesses. After the photo the angler picks the
+  species, with quick picks drawn from their own catch history and then common local species.
 - **Claude vision** (developer preview): paste an Anthropic API key. The photo is sent from the
   device straight to the Messages API (`claude-opus-5` by default, JSON-schema output) with the
   72-species list; the reply carries `species_id`, `confidence`, up to 3 alternates, and an
@@ -60,6 +60,13 @@ All state is on-device: `localStorage` key `fh:state` (catches, XP, settings) an
 `fishhunt/photos` (downscaled JPEG blobs keyed by catch id). Exact coordinates never leave the
 device; the privacy level (Private / Region / Waterbody / Exact) controls what the feed shows.
 Settings → Data has JSON export/import, "Load sample catches", and full erase.
+
+## Dev hooks
+
+- `?demo=1` onboards a fresh device with the sample catches (screenshots, store listings, headless checks).
+- `#verdict/latest` replays the Verdict screen for the newest catch.
+- `python3 -m http.server` plus headless Chrome renders any screen: headless clamps windows to 500px wide,
+  so the checks in `.audit/` frame the app in a 375px iframe.
 
 ## Not in this prototype
 

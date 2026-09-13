@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b1a2b">
+<meta name="theme-color" content="#eef5fb">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="description" content="Fish Hunt — catch, explore, collect. Every fish you catch becomes part of your collection.">
 <title>Fish Hunt</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -19,16 +19,18 @@
   --navy-950:#07111d; --navy-900:#0b1a2b; --navy-800:#10233a; --navy-700:#16304c; --navy-600:#1e3f63;
   --water:#1f7ae0; --water-2:#3ba0ff; --teal:#22c1c3; --ice:#e8f2ff; --mist:#a9bdd6; --fog:#798ea9;
   --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
-  --glass:rgba(13,29,48,.72); --glass-2:rgba(16,35,58,.86);
+  --glass:rgba(13,29,48,.93); --glass-2:rgba(16,35,58,.96);
   --common:#8a97a8; --uncommon:#3ddc84; --rare:#3b8bff; --epic:#b45cff; --legendary:#f2b64a;
   --common-bg:rgba(138,151,168,.16); --uncommon-bg:rgba(61,220,132,.14); --rare-bg:rgba(59,139,255,.16); --epic-bg:rgba(180,92,255,.18); --legendary-bg:rgba(242,182,74,.18);
   --gold:#f2b64a; --danger:#ff5d6c; --ok:#3ddc84;
+  --hdr:#0b1a2b; --hdr-2:#22395a; --sky-0:#eef5fb;
   --serif:"Playfair Display",Georgia,"Times New Roman",serif; --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --script:"Caveat","Bradley Hand","Segoe Script",cursive;
+  --fs-micro:10px; --fs-xs:11px; --fs-sm:12.5px; --fs-md:14px; --fs-base:15px; --fs-lg:17px; --fs-xl:20px; --fs-2xl:24px; --fs-3xl:30px; --fs-display:40px; --fs-input:16px;
   --r:18px; --r-sm:12px; --shadow:0 10px 30px rgba(0,0,0,.35);
   --nav-h:76px; --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;background:var(--navy-950);color:var(--ice);font-family:var(--sans);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased}
+html,body{margin:0;padding:0;background:var(--navy-950);color:var(--ice);font-family:var(--sans);font-size:var(--fs-base);line-height:1.4;-webkit-font-smoothing:antialiased}
 body{overscroll-behavior-y:none;min-height:100dvh}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
@@ -44,29 +46,32 @@ h1,h2,h3{margin:0;font-weight:600}
 /* ---------- App shell ---------- */
 #app{max-width:520px;margin:0 auto;min-height:100dvh;position:relative;background:transparent;display:flex;flex-direction:column}
 #scene{position:absolute;top:0;left:0;right:0;height:100vh;z-index:0;pointer-events:none;overflow:hidden}
-#scene .sky{position:absolute;inset:0;background:
-  radial-gradient(120% 60% at 50% -10%, #cfe3f5 0%, #8fb4d6 22%, #35608a 46%, var(--navy-900) 70%, var(--navy-950) 100%)}
-#scene svg{position:absolute;left:50%;transform:translateX(-50%);top:0;width:max(100%,900px);height:auto;opacity:.95}
-#scene .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,17,29,.08) 0px,rgba(7,17,29,.31) 70px,rgba(7,17,29,.66) 120px,rgba(7,17,29,.66) 240px,rgba(7,17,29,.87) 340px,var(--navy-950) 487px)}
+body{--ridge:205px}
+body[data-hdr="center"]{--ridge:175px}
+body[data-hdr="profile"]{--ridge:300px}
+body[data-hdr="onb"]{--ridge:120px}
+#scene .sky{position:absolute;inset:0;background:linear-gradient(180deg,var(--sky-0) 0px,#dbe9f5 calc(var(--ridge) - 90px),#c3d8ea var(--ridge),#9db8d2 calc(var(--ridge) + 110px),#3f6288 calc(var(--ridge) + 200px),var(--navy-950) calc(var(--ridge) + 320px))}
+#scene svg{position:absolute;left:50%;transform:translateX(-50%);top:calc(var(--ridge) - 100px);width:max(100%,900px);height:auto}
+#scene .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,17,29,0) 0px,rgba(7,17,29,0) calc(var(--ridge) + 90px),rgba(7,17,29,.62) calc(var(--ridge) + 190px),var(--navy-950) calc(var(--ridge) + 300px))}
 #app>*{position:relative;z-index:1}
 
 header.top{display:flex;align-items:center;gap:12px;padding:calc(10px + var(--safe-t)) 18px 8px}
 header.top .brand{display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:10px;flex:1;min-width:0}
 header.top .brand svg{width:46px;height:46px;flex:none}
 header.top .wm{line-height:1}
-header.top .wm b{display:block;font-family:var(--serif);font-size:24px;font-weight:700;color:#fff;letter-spacing:.2px}
-header.top .wm small{display:block;font-size:9px;letter-spacing:.17em;white-space:nowrap;color:var(--ice);opacity:.85;margin-top:3px;font-weight:500}
-header.top .ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;position:relative}
+header.top .wm b{display:block;font-family:var(--serif);font-size:var(--fs-2xl);font-weight:700;color:var(--hdr);letter-spacing:.2px}
+header.top .wm small{display:block;font-size:9px;letter-spacing:.17em;white-space:nowrap;color:var(--hdr-2);margin-top:3px;font-weight:600}
+header.top .ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--hdr);position:relative}
 header.top .ico svg{width:22px;height:22px}
-header.top .ico .dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--water-2);border:2px solid var(--navy-900)}
-header.top .avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.7);background:var(--navy-700);display:grid;place-items:center;font-weight:700;font-size:15px}
+header.top .ico .dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--water-2);border:2px solid var(--sky-0)}
+header.top .avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid rgba(11,26,43,.3);background:var(--navy-700);display:grid;place-items:center;font-weight:700;font-size:var(--fs-base)}
 header.top .avatar img{width:100%;height:100%;object-fit:cover}
 
 main#view{flex:1;padding:4px 16px calc(var(--nav-h) + var(--safe-b) + 24px);animation:fade .25s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 nav.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:520px;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(7,17,29,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;z-index:50}
-nav.bottom button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 0 10px;color:var(--mist);font-size:11.5px;font-weight:500;position:relative}
+nav.bottom button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 0 10px;color:var(--mist);font-size:var(--fs-xs);font-weight:500;position:relative}
 nav.bottom button svg{width:24px;height:24px}
 nav.bottom button.on{color:#fff}
 nav.bottom button.on::after{content:"";position:absolute;bottom:4px;width:22px;height:3px;border-radius:3px;background:var(--water-2)}
@@ -77,20 +82,20 @@ nav.bottom .rec span{margin-top:-2px}
 
 /* ---------- Common blocks ---------- */
 .page-h{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:10px 2px 14px}
-.page-h h1{font-family:var(--serif);font-size:32px;font-weight:700;color:#fff;letter-spacing:.2px;line-height:1.05}
-.page-h p{margin:6px 0 0;color:var(--ice);opacity:.85;font-size:14px}
-.page-h .tag{font-family:var(--script);font-size:20px;color:#fff;text-align:right;line-height:1;opacity:.95;transform:rotate(-4deg);white-space:nowrap}
+.page-h h1{font-family:var(--serif);font-size:var(--fs-3xl);font-weight:700;color:var(--hdr);letter-spacing:.2px;line-height:1.05}
+.page-h p{margin:6px 0 0;color:var(--hdr-2);font-size:var(--fs-md)}
+.page-h .tag{font-family:var(--script);font-size:var(--fs-xl);color:var(--hdr);text-align:right;line-height:1;opacity:.95;transform:rotate(-4deg);white-space:nowrap}
 .sub-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 2px 10px}
-.sub-h h2{font-family:var(--serif);font-size:22px;color:#fff}
-.sub-h h2.sans{font-family:var(--sans);font-size:19px;font-weight:600}
-.sub-h a,.sub-h button.lnk{color:#fff;font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.sub-h h2{font-family:var(--serif);font-size:var(--fs-2xl);color:#fff}
+.sub-h h2.sans{font-family:var(--sans);font-size:var(--fs-xl);font-weight:600}
+.sub-h a,.sub-h button.lnk{color:#fff;font-size:var(--fs-md);font-weight:500;display:inline-flex;align-items:center;gap:6px}
 .sub-h a svg,.sub-h button.lnk svg{width:16px;height:16px}
-.back{display:inline-flex;align-items:center;gap:6px;color:#fff;font-weight:500;font-size:14px;padding:6px 0}
+.back{display:inline-flex;align-items:center;gap:6px;color:#fff;font-weight:500;font-size:var(--fs-md);padding:6px 0}
 .back svg{width:20px;height:20px}
 .centerh{text-align:center;padding:6px 0 14px;position:relative}
-.centerh h1{font-family:var(--serif);font-size:26px;color:#fff}
-.centerh p{margin:4px 0 0;color:var(--ice);opacity:.85;font-size:14px}
-.centerh .back{position:absolute;left:0;top:8px}
+.centerh h1{font-family:var(--serif);font-size:var(--fs-2xl);color:var(--hdr)}
+.centerh p{margin:4px 0 0;color:var(--hdr-2);font-size:var(--fs-md)}
+.centerh .back{position:absolute;left:0;top:8px;color:var(--hdr)}
 .centerh .right{position:absolute;right:0;top:8px}
 
 .card{background:var(--glass);border:1px solid var(--line-2);border-radius:var(--r);padding:16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -101,24 +106,24 @@ nav.bottom .rec span{margin-top:-2px}
 .grow{flex:1;min-width:0}
 .muted{color:var(--mist)}
 .faint{color:var(--fog)}
-.small{font-size:12.5px}
-.tiny{font-size:11px}
+.small{font-size:var(--fs-sm)}
+.tiny{font-size:var(--fs-xs)}
 .b{font-weight:600}
-.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);font-weight:600}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line-2);background:rgba(255,255,255,.06);color:#fff;white-space:nowrap}
+.eyebrow{font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--mist);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:var(--fs-sm);font-weight:600;border:1px solid var(--line-2);background:rgba(255,255,255,.06);color:#fff;white-space:nowrap}
 .pill svg{width:13px;height:13px}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:6px 6px 10px;margin:-2px -4px 0;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:none;padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);background:rgba(255,255,255,.06);color:#fff;font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:7px}
+.chip{flex:none;padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);background:rgba(13,29,48,.9);color:#fff;font-size:var(--fs-md);font-weight:500;display:inline-flex;align-items:center;gap:7px}
 .chip svg{width:15px;height:15px}
 .chip.on{background:linear-gradient(180deg,#3177c0,#1f6fd0);border-color:transparent;box-shadow:0 4px 14px rgba(31,122,224,.4)}
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px 18px;border-radius:14px;font-weight:600;font-size:16px;color:#fff;background:linear-gradient(180deg,#3177c0,#1f6fd0);box-shadow:0 8px 22px rgba(31,122,224,.35);transition:transform .12s}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px 18px;border-radius:14px;font-weight:600;font-size:var(--fs-lg);color:#fff;background:linear-gradient(180deg,#3177c0,#1f6fd0);box-shadow:0 8px 22px rgba(31,122,224,.35);transition:transform .12s}
 .btn:active{transform:scale(.985)}
 .btn svg{width:20px;height:20px}
 .btn.ghost{background:rgba(255,255,255,.05);border:1px solid var(--line-2);box-shadow:none}
 .btn.gold{background:linear-gradient(180deg,#f3c161,#d8961f);color:#2b1a00}
 .btn.danger{background:rgba(255,93,108,.14);border:1px solid rgba(255,93,108,.4);color:#ff8c98;box-shadow:none}
-.btn.sm{padding:10px 14px;font-size:14px;width:auto;border-radius:11px}
+.btn.sm{padding:10px 14px;font-size:var(--fs-md);width:auto;border-radius:11px}
 .btn[disabled]{opacity:.5;pointer-events:none}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -128,7 +133,7 @@ nav.bottom .rec span{margin-top:-2px}
 .prog.gold i{background:linear-gradient(90deg,#f6cf7a,#d8961f)}
 
 /* tier */
-.tier{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid}
+.tier{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:var(--fs-xs);font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid}
 .tier svg{width:13px;height:13px}
 .tier.common{color:#c9d3df;background:var(--common-bg);border-color:rgba(138,151,168,.45)}
 .tier.uncommon{color:var(--uncommon);background:var(--uncommon-bg);border-color:rgba(61,220,132,.45)}
@@ -142,8 +147,8 @@ nav.bottom .rec span{margin-top:-2px}
 .stats>div{padding:16px 6px 14px;text-align:center;border-right:1px solid var(--line)}
 .stats>div:last-child{border-right:0}
 .stats svg{width:26px;height:26px;color:#fff;margin-bottom:6px}
-.stats b{display:block;font-size:22px;font-weight:700;color:#fff;line-height:1;white-space:nowrap}
-.stats span{display:block;font-size:12px;color:var(--mist);margin-top:5px;line-height:1.15}
+.stats b{display:block;font-size:var(--fs-xl);font-weight:700;color:#fff;line-height:1;white-space:nowrap}
+.stats span{display:block;font-size:var(--fs-sm);color:var(--mist);margin-top:5px;line-height:1.15}
 
 /* fish cards */
 .fcard{position:relative;border-radius:16px;overflow:hidden;background:var(--navy-800);border:1px solid var(--line-2);display:flex;flex-direction:column}
@@ -156,10 +161,10 @@ nav.bottom .rec span{margin-top:-2px}
 .fcard .art .fav svg{width:18px;height:18px}
 .fcard .art .fav.on{color:#ff4d5e}
 .fcard .body{padding:10px 11px 11px}
-.fcard .name{font-weight:600;font-size:14px;color:#fff;line-height:1.2}
-.fcard .name.caps{text-transform:uppercase;letter-spacing:.02em;font-size:13.5px}
-.fcard .meta{display:flex;align-items:center;gap:6px 8px;margin-top:6px;color:var(--mist);font-size:11px;flex-wrap:wrap}
-.fcard .tier{font-size:9.5px;padding:3px 7px;letter-spacing:.04em;max-width:100%}
+.fcard .name{font-weight:600;font-size:var(--fs-md);color:#fff;line-height:1.2}
+.fcard .name.caps{text-transform:uppercase;letter-spacing:.02em;font-size:var(--fs-md)}
+.fcard .meta{display:flex;align-items:center;gap:6px 8px;margin-top:6px;color:var(--mist);font-size:var(--fs-xs);flex-wrap:wrap}
+.fcard .tier{font-size:var(--fs-micro);padding:3px 7px;letter-spacing:.04em;max-width:100%}
 .fcard .tier svg{display:none}
 .fcard .meta svg{width:12px;height:12px;vertical-align:-2px;margin-right:3px}
 .fcard .arrow{position:absolute;right:10px;bottom:12px;color:#fff;opacity:.8}
@@ -170,13 +175,13 @@ nav.bottom .rec span{margin-top:-2px}
 
 /* forms */
 .field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:12.5px;font-weight:600;color:var(--mist)}
+.field label{font-size:var(--fs-sm);font-weight:600;color:var(--mist)}
 .inp{width:100%;padding:13px 14px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line-2);color:#fff}
 .inp:focus{border-color:var(--water-2)}
 select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#fff 50%),linear-gradient(135deg,#fff 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
 textarea.inp{min-height:80px;resize:vertical}
 .seg{display:flex;background:rgba(255,255,255,.06);border:1px solid var(--line-2);border-radius:12px;padding:4px;gap:4px}
-.seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:13px;font-weight:600;color:var(--mist)}
+.seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:var(--fs-sm);font-weight:600;color:var(--mist)}
 .seg button.on{background:#1e76d9;color:#fff}
 .toggle{width:52px;height:30px;border-radius:30px;background:rgba(255,255,255,.14);position:relative;transition:.2s;flex:none}
 .toggle::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}
@@ -186,8 +191,8 @@ textarea.inp{min-height:80px;resize:vertical}
 .listrow:last-child{border-bottom:0}
 .listrow .ic{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.07);display:grid;place-items:center;color:#fff;flex:none}
 .listrow .ic svg{width:20px;height:20px}
-.listrow .t{font-weight:600;color:#fff;font-size:14.5px}
-.listrow .s{color:var(--mist);font-size:12.5px;margin-top:2px}
+.listrow .t{font-weight:600;color:#fff;font-size:var(--fs-base)}
+.listrow .s{color:var(--mist);font-size:var(--fs-sm);margin-top:2px}
 .listrow>svg.chev{width:18px;height:18px;color:var(--mist)}
 
 /* sheet / modal */
@@ -195,35 +200,35 @@ textarea.inp{min-height:80px;resize:vertical}
 .sheet{width:100%;max-width:520px;max-height:88dvh;overflow:auto;background:var(--navy-900);border-radius:22px 22px 0 0;border:1px solid var(--line-2);padding:10px 18px calc(18px + var(--safe-b));animation:up .25s cubic-bezier(.2,.8,.2,1)}
 @keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 .sheet .grab{width:44px;height:5px;border-radius:5px;background:rgba(255,255,255,.25);margin:4px auto 14px}
-.sheet h3{font-family:var(--serif);font-size:20px;color:#fff;margin-bottom:10px}
-.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--safe-b) + 16px);transform:translateX(-50%);background:#eaf3ff;color:#0b1a2b;padding:11px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:90;box-shadow:var(--shadow);animation:up .25s;max-width:90%;text-align:center}
+.sheet h3{font-family:var(--serif);font-size:var(--fs-xl);color:#fff;margin-bottom:10px}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--safe-b) + 16px);transform:translateX(-50%);background:#eaf3ff;color:#0b1a2b;padding:11px 16px;border-radius:12px;font-weight:600;font-size:var(--fs-md);z-index:90;box-shadow:var(--shadow);animation:up .25s;max-width:90%;text-align:center}
 
 /* home */
-.hero-quote{font-family:var(--script);font-size:22px;color:#fff;text-align:center;opacity:.95;padding:6px 0 4px}
+.hero-quote{font-family:var(--script);font-size:var(--fs-2xl);color:#fff;text-align:center;opacity:.95;padding:6px 0 4px}
 .hero-quote i{display:block;width:34px;height:2px;background:#fff;margin:4px auto 0;opacity:.7}
 .level-card{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
 .badge-hex{width:74px;height:82px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .badge-hex svg.shape{position:absolute;inset:0;width:100%;height:100%}
-.badge-hex .n{position:relative;font-family:var(--serif);font-weight:700;font-size:24px;color:#fff;line-height:1}
+.badge-hex .n{position:relative;font-family:var(--serif);font-weight:700;font-size:var(--fs-2xl);color:#fff;line-height:1}
 .badge-hex .f{position:relative;color:#fff;width:20px;height:20px;display:block}
-.lvl h3{font-size:26px;font-weight:700;color:#fff;line-height:1}
+.lvl h3{font-size:var(--fs-2xl);font-weight:700;color:#fff;line-height:1}
 .lvl .title{font-style:italic;color:var(--mist);margin-top:2px}
-.lvl .xp{display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px;font-size:12.5px;color:var(--ice)}
+.lvl .xp{display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px;font-size:var(--fs-sm);color:var(--ice)}
 .tile{border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line-2);padding:12px;display:flex;align-items:center;gap:12px}
 .tile .ic{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.08);display:grid;place-items:center;color:#fff;flex:none}
 .tile .ic svg{width:22px;height:22px}
-.tile{min-width:0}.tile>div{min-width:0}.tile>svg.chev{width:18px;height:18px;flex:none;color:#fff}.tile b{display:block;color:#fff;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tile span{display:block;font-size:11px;color:var(--mist);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.tile{min-width:0}.tile>div{min-width:0}.tile>svg.chev{width:18px;height:18px;flex:none;color:#fff}.tile b{display:block;color:#fff;font-size:var(--fs-base);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile span{display:block;font-size:var(--fs-xs);color:var(--mist);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
 
 /* registry */
 .reg-head{display:grid;grid-template-columns:1fr auto;gap:12px}
-.reg-head .big{font-family:var(--serif);font-size:44px;font-weight:700;color:#fff;line-height:1}
-.reg-head .big small{font-size:26px;opacity:.8}
-.reg-head .lbl{font-size:22px;color:var(--ice);margin-top:-2px}
+.reg-head .big{font-family:var(--serif);font-size:var(--fs-display);font-weight:700;color:#fff;line-height:1}
+.reg-head .big small{font-size:var(--fs-2xl);opacity:.8}
+.reg-head .lbl{font-size:var(--fs-2xl);color:var(--ice);margin-top:-2px}
 .reg-head .chal{width:150px;border:1px solid var(--line-2);border-radius:14px;background:rgba(255,255,255,.05);padding:12px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
 .reg-head .chal .hexi{width:56px;height:62px}
-.reg-head .chal b{font-size:14.5px;color:#fff;line-height:1.2}
-.reg-head .chal span{font-size:13px;color:var(--ice)}
+.reg-head .chal b{font-size:var(--fs-base);color:#fff;line-height:1.2}
+.reg-head .chal span{font-size:var(--fs-sm);color:var(--ice)}
 .reg-head .chal svg.chev{position:absolute;right:8px;bottom:8px;width:16px;height:16px;color:#fff}
 
 /* verdict */
@@ -233,7 +238,7 @@ textarea.inp{min-height:80px;resize:vertical}
 .v-reveal{opacity:0;transform:translateY(14px) scale(.98);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
 .v-reveal.in{opacity:1;transform:none}
 .v-species{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:stretch;margin-top:14px}
-.v-species h2{font-family:var(--serif);font-size:30px;font-weight:700;color:#fff;line-height:1.05;text-transform:uppercase;letter-spacing:.01em}
+.v-species h2{font-family:var(--serif);font-size:var(--fs-3xl);font-weight:700;color:#fff;line-height:1.05;text-transform:uppercase;letter-spacing:.01em}
 .v-species .sci{font-style:italic;color:var(--mist);margin-top:4px}
 .v-tier{min-width:150px;border-radius:16px;padding:14px 12px;text-align:center;border:1px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;overflow:hidden}
 .v-tier.common{background:linear-gradient(180deg,rgba(138,151,168,.22),rgba(138,151,168,.08));border-color:rgba(138,151,168,.5)}
@@ -241,25 +246,25 @@ textarea.inp{min-height:80px;resize:vertical}
 .v-tier.rare{background:linear-gradient(180deg,rgba(59,139,255,.28),rgba(59,139,255,.08));border-color:rgba(59,139,255,.55)}
 .v-tier.epic{background:linear-gradient(180deg,rgba(180,92,255,.32),rgba(180,92,255,.08));border-color:rgba(180,92,255,.6)}
 .v-tier.legendary{background:linear-gradient(180deg,rgba(242,182,74,.34),rgba(242,182,74,.08));border-color:rgba(242,182,74,.65)}
-.v-tier .nm{font-size:19px;font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.v-tier .nm{font-size:var(--fs-xl);font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
 .v-tier .nm svg{width:22px;height:22px}
-.v-tier .stars{color:var(--gold);font-size:18px;letter-spacing:2px}
-.v-tier .why{font-size:12px;color:var(--ice);opacity:.9}
+.v-tier .stars{color:var(--gold);font-size:var(--fs-lg);letter-spacing:2px}
+.v-tier .why{font-size:var(--fs-sm);color:var(--ice);opacity:.9}
 .v-tier.legendary::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0 70%,rgba(255,255,255,.35) 80%,transparent 90%);animation:spin 3s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .v-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px;background:var(--glass);border:1px solid var(--line-2);border-radius:16px;overflow:hidden}
 .v-stats>div{padding:14px 10px;border-right:1px solid var(--line)}
 .v-stats>div:last-child{border-right:0}
-.v-stats .k{font-size:10.5px;letter-spacing:.12em;color:var(--mist);font-weight:600;display:flex;align-items:center;gap:6px}
+.v-stats .k{font-size:var(--fs-xs);letter-spacing:.12em;color:var(--mist);font-weight:600;display:flex;align-items:center;gap:6px}
 .v-stats .k svg{width:14px;height:14px}
-.v-stats .v{font-size:22px;font-weight:700;color:#fff;margin-top:6px;line-height:1}
-.v-stats .s{font-size:11px;color:var(--mist);margin-top:4px}
+.v-stats .v{font-size:var(--fs-xl);font-weight:700;color:#fff;margin-top:6px;line-height:1}
+.v-stats .s{font-size:var(--fs-xs);color:var(--mist);margin-top:4px}
 .v-rowb{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:12px}
-.banner{display:inline-flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1px solid;font-weight:700;letter-spacing:.06em;font-size:13px;text-transform:uppercase}
+.banner{display:inline-flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1px solid;font-weight:700;letter-spacing:.06em;font-size:var(--fs-sm);text-transform:uppercase}
 .banner.gold{background:rgba(242,182,74,.14);border-color:rgba(242,182,74,.5);color:#ffd985}
-.banner.xp{background:rgba(61,220,132,.12);border-color:rgba(61,220,132,.5);color:#5cf0a0;letter-spacing:0;font-size:16px}
+.banner.xp{background:rgba(61,220,132,.12);border-color:rgba(61,220,132,.5);color:#5cf0a0;letter-spacing:0;font-size:var(--fs-lg)}
 .banner svg{width:20px;height:20px}
-.xpc{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:2px solid currentColor;font-size:9px;font-weight:800}
+.xpc{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:2px solid currentColor;font-size:var(--fs-micro);font-weight:800}
 .v-reg{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 2px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:14px;color:var(--ice)}
 .v-reg svg{width:20px;height:20px;vertical-align:-4px;margin-right:8px}
 .v-reg a{color:#fff;font-weight:500}
@@ -273,17 +278,17 @@ textarea.inp{min-height:80px;resize:vertical}
 .cam-top{position:relative;z-index:2;padding:calc(12px + var(--safe-t)) 16px 8px;background:linear-gradient(180deg,rgba(0,0,0,.6),transparent);display:flex;align-items:center;gap:10px}
 .cam-top .brand{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}
 .cam-top .brand svg{width:34px;height:34px}
-.cam-top .brand b{font-family:var(--serif);font-size:20px;color:#fff}
+.cam-top .brand b{font-family:var(--serif);font-size:var(--fs-xl);color:#fff}
 .cam-top .x{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;color:#fff}
 .cam-top .x svg{width:20px;height:20px}
 .cam-title{position:relative;z-index:2;text-align:center;color:#fff;padding:0 16px}
-.cam-title h1{font-family:var(--serif);font-size:26px}
-.cam-title p{margin:2px 0 0;opacity:.9;font-size:14px}
+.cam-title h1{font-family:var(--serif);font-size:var(--fs-2xl)}
+.cam-title p{margin:2px 0 0;opacity:.9;font-size:var(--fs-md)}
 .cam-match{position:relative;z-index:2;margin:12px 16px 0;background:rgba(7,17,29,.78);border:1px solid var(--line-2);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(10px)}
 .cam-match .mini{width:64px;height:40px;border-radius:8px;overflow:hidden;background:#123;flex:none}
 .cam-match .mini svg{width:100%;height:100%}
-.cam-match small{display:block;color:var(--mist);font-size:12px}
-.cam-match b{font-size:18px;color:#fff}
+.cam-match small{display:block;color:var(--mist);font-size:var(--fs-sm)}
+.cam-match b{font-size:var(--fs-lg);color:#fff}
 .cam-match b em{font-style:normal;color:var(--water-2);margin-left:8px}
 .cam-match svg.chev{width:18px;height:18px;color:#fff;margin-left:auto}
 .cam-frame{position:absolute;inset:0;z-index:1;pointer-events:none}
@@ -294,27 +299,27 @@ textarea.inp{min-height:80px;resize:vertical}
 .cam-frame i:nth-child(4){bottom:34%;right:8%;border-left:0;border-top:0;border-radius:0 0 6px 0}
 .cam-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:31%;z-index:2;background:rgba(7,17,29,.82);border:1px solid var(--line-2);border-radius:999px;padding:9px 16px;display:flex;align-items:center;gap:10px;color:#fff;white-space:nowrap}
 .cam-hint svg{width:20px;height:20px}
-.cam-hint b{display:block;font-size:13.5px}
-.cam-hint span{display:block;font-size:11.5px;color:var(--mist)}
+.cam-hint b{display:block;font-size:var(--fs-md)}
+.cam-hint span{display:block;font-size:var(--fs-xs);color:var(--mist)}
 .cam-bottom{margin-top:auto;position:relative;z-index:2;background:linear-gradient(180deg,rgba(7,17,29,.62),rgba(7,17,29,.94) 24%,#07111d);padding:26px 16px calc(16px + var(--safe-b))}
 .cam-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
 .cam-opts button{background:rgba(255,255,255,.06);border:1px solid var(--line-2);border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;text-align:left}
 .cam-opts button.ok{border-color:rgba(61,220,132,.5)}
 .cam-opts svg{width:22px;height:22px;color:#fff;flex:none}
-.cam-opts b{display:block;font-size:12.5px;color:#fff}
-.cam-opts span{display:block;font-size:11px;color:var(--mist)}
+.cam-opts b{display:block;font-size:var(--fs-sm);color:#fff}
+.cam-opts span{display:block;font-size:var(--fs-xs);color:var(--mist)}
 .cam-opts button.ok span{color:var(--uncommon)}
 .cam-ctl{display:grid;grid-template-columns:1fr 1fr auto 1fr 1fr;align-items:center;gap:6px}
-.cam-ctl .ib{display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;font-size:12px}
+.cam-ctl .ib{display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;font-size:var(--fs-sm)}
 .cam-ctl .ib .sq{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid var(--line-2);display:grid;place-items:center}
 .cam-ctl .ib svg{width:22px;height:22px}
-.cam-ctl .ib small{color:var(--mist);font-size:11px}
+.cam-ctl .ib small{color:var(--mist);font-size:var(--fs-xs)}
 .shutter{width:78px;height:78px;border-radius:50%;border:5px solid #fff;display:grid;place-items:center;background:transparent;margin:0 8px}
 .shutter i{width:58px;height:58px;border-radius:50%;background:#fff;transition:transform .1s}
 .shutter:active i{transform:scale(.88)}
 .cam-mode{display:flex;justify-content:center;margin-top:14px}
 .cam-mode div{background:rgba(255,255,255,.08);border-radius:999px;padding:4px;display:flex}
-.cam-mode span{padding:7px 22px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--mist)}
+.cam-mode span{padding:7px 22px;border-radius:999px;font-size:var(--fs-sm);font-weight:700;letter-spacing:.08em;color:var(--mist)}
 .cam-mode span.on{background:rgba(31,122,224,.35);color:#8ec6ff}
 .review-photo{border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:#0d2238;border:1px solid var(--line-2)}
 .review-photo img{width:100%;height:100%;object-fit:cover}
@@ -325,21 +330,21 @@ textarea.inp{min-height:80px;resize:vertical}
 .post .ph{display:flex;align-items:center;gap:10px;padding:12px 14px}
 .post .ph .av{width:42px;height:42px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-weight:700;color:#fff;overflow:hidden}
 .post .ph .av img{width:100%;height:100%;object-fit:cover}
-.post .ph b{display:block;color:#fff;font-size:15px}
-.post .ph small{color:var(--mist);font-size:12px}
-.post .ph .follow{padding:7px 14px;border-radius:999px;border:1px solid var(--water-2);color:#8ec6ff;font-weight:600;font-size:13px}
+.post .ph b{display:block;color:#fff;font-size:var(--fs-base)}
+.post .ph small{color:var(--mist);font-size:var(--fs-sm)}
+.post .ph .follow{padding:7px 14px;border-radius:999px;border:1px solid var(--water-2);color:#8ec6ff;font-weight:600;font-size:var(--fs-sm)}
 .post .ph .follow.on{background:#1e76d9;color:#fff;border-color:transparent}
 .post .pic{position:relative;aspect-ratio:4/3;margin:0 10px;border-radius:14px;overflow:hidden;background:#0d2238}
 .post .pic>img,.post .pic>svg,.post .pic>span>img,.post .pic>span>svg{width:100%;height:100%;object-fit:cover}
 .post .pic .tiertag{position:absolute;top:10px;right:10px}
 .post .pic .cap{position:absolute;left:12px;bottom:12px;color:#fff}
-.post .pic .cap b{display:block;font-size:20px;letter-spacing:.02em;text-shadow:0 2px 8px rgba(0,0,0,.6)}
-.post .pic .cap i{font-size:13px;opacity:.9;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.post .pic .cap b{display:block;font-size:var(--fs-xl);letter-spacing:.02em;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.post .pic .cap i{font-size:var(--fs-sm);opacity:.9;text-shadow:0 2px 8px rgba(0,0,0,.6)}
 .post .pic .mm{position:absolute;right:10px;bottom:10px;display:flex;gap:6px}
-.post .pic .mm span{background:rgba(7,17,29,.72);border:1px solid var(--line-2);padding:6px 10px;border-radius:10px;font-weight:600;font-size:13px;color:#fff}
-.post .txt{padding:12px 14px 4px;color:#fff;font-size:14px}
+.post .pic .mm span{background:rgba(7,17,29,.72);border:1px solid var(--line-2);padding:6px 10px;border-radius:10px;font-weight:600;font-size:var(--fs-sm);color:#fff}
+.post .txt{padding:12px 14px 4px;color:#fff;font-size:var(--fs-md)}
 .post .txt .h{color:#8ec6ff}
-.post .acts{display:flex;align-items:center;gap:20px;padding:10px 14px 12px;border-top:1px solid var(--line);margin-top:8px;color:#fff;font-size:14px}
+.post .acts{display:flex;align-items:center;gap:20px;padding:10px 14px 12px;border-top:1px solid var(--line);margin-top:8px;color:#fff;font-size:var(--fs-md)}
 .post .acts button{display:inline-flex;align-items:center;gap:7px;color:#fff}
 .post .acts button svg{width:20px;height:20px}
 .post .acts button.liked svg{color:#ff4d5e;fill:#ff4d5e}
@@ -354,22 +359,22 @@ textarea.inp{min-height:80px;resize:vertical}
 .fpin.epic{border-color:var(--epic)}.fpin.legendary{border-color:var(--legendary)}.fpin.rare{border-color:var(--rare)}.fpin.uncommon{border-color:var(--uncommon)}
 .leaflet-popup-content-wrapper{background:var(--navy-900);color:#fff;border-radius:12px;border:1px solid var(--line-2)}
 .leaflet-popup-tip{background:var(--navy-900)}
-.leaflet-popup-content{margin:10px 12px;font-size:13px}
+.leaflet-popup-content{margin:10px 12px;font-size:var(--fs-sm)}
 .catchrow{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--glass);border:1px solid var(--line-2);border-radius:16px;padding:10px;position:relative}
 .catchrow .im{border-radius:12px;overflow:hidden;aspect-ratio:1/1;background:#0d2238}
 .catchrow .im img,.catchrow .im svg{width:100%;height:100%;object-fit:cover}
-.catchrow .w{font-weight:600;color:#fff;font-size:15px;display:flex;justify-content:space-between;gap:6px}
-.catchrow .w small{font-weight:400;color:var(--mist);font-size:12px}
-.catchrow .loc{color:var(--mist);font-size:12px;margin-top:2px}
-.catchrow .sp{color:#fff;font-weight:600;font-size:15px;margin-top:5px}
-.catchrow .mm{display:flex;align-items:center;gap:10px;margin-top:6px;font-size:13px;color:var(--ice);flex-wrap:wrap}
+.catchrow .w{font-weight:600;color:#fff;font-size:var(--fs-base);display:flex;justify-content:space-between;gap:6px}
+.catchrow .w small{font-weight:400;color:var(--mist);font-size:var(--fs-sm)}
+.catchrow .loc{color:var(--mist);font-size:var(--fs-sm);margin-top:2px}
+.catchrow .sp{color:#fff;font-weight:600;font-size:var(--fs-base);margin-top:5px}
+.catchrow .mm{display:flex;align-items:center;gap:10px;margin-top:6px;font-size:var(--fs-sm);color:var(--ice);flex-wrap:wrap}
 
 /* achievements */
 .ach{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .ach>div{background:var(--glass);border:1px solid var(--line-2);border-radius:16px;padding:12px 8px;text-align:center;position:relative}
 .ach .shield{width:70px;height:78px;margin:0 auto 8px}
-.ach b{display:block;font-size:13px;color:#fff;line-height:1.2}
-.ach span{display:block;font-size:11px;color:var(--mist);margin-top:3px;line-height:1.2}
+.ach b{display:block;font-size:var(--fs-sm);color:#fff;line-height:1.2}
+.ach span{display:block;font-size:var(--fs-xs);color:var(--mist);margin-top:3px;line-height:1.2}
 .ach .chk{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--ok);display:grid;place-items:center}
 .ach .chk svg{width:13px;height:13px;color:#062}
 .ach>div.locked .shield{filter:grayscale(1) brightness(.6)}
@@ -378,35 +383,35 @@ textarea.inp{min-height:80px;resize:vertical}
 .standing{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .standing .medal{display:flex;align-items:center;gap:10px}
 .standing .medal svg{width:64px;height:76px;flex:none}
-.standing .pct{font-family:var(--serif);font-size:34px;font-weight:700;color:#fff;line-height:1}
-.standing .pct small{display:block;font-family:var(--sans);font-size:15px;font-weight:600;margin-top:2px}
+.standing .pct{font-family:var(--serif);font-size:var(--fs-3xl);font-weight:700;color:#fff;line-height:1}
+.standing .pct small{display:block;font-family:var(--sans);font-size:var(--fs-base);font-weight:600;margin-top:2px}
 .lb{border:1px solid var(--line-2);border-radius:14px;background:rgba(255,255,255,.04);overflow:hidden}
 .lb .seg{margin:8px;padding:3px}
-.lb .seg button{padding:7px 4px;font-size:12.5px}
-.lb .r{display:grid;grid-template-columns:22px 28px 1fr auto;align-items:center;gap:8px;padding:7px 10px;font-size:12.5px;color:#fff}
-.lb .r .av{width:26px;height:26px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-size:10px;font-weight:700}
+.lb .seg button{padding:7px 4px;font-size:var(--fs-sm)}
+.lb .r{display:grid;grid-template-columns:22px 28px 1fr auto;align-items:center;gap:8px;padding:7px 10px;font-size:var(--fs-sm);color:#fff}
+.lb .r .av{width:26px;height:26px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-size:var(--fs-micro);font-weight:700}
 .lb .r.me{background:#1f6fd0;font-weight:700}
-.lb .r span:last-child{color:var(--ice);font-size:12px}
+.lb .r span:last-child{color:var(--ice);font-size:var(--fs-sm)}
 
 /* onboarding */
 .onb{min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 22px calc(22px + var(--safe-b))}
-.onb h1{font-family:var(--serif);font-size:38px;color:#fff;line-height:1.05}
-.onb p{color:var(--ice);opacity:.9;font-size:16px;margin:10px 0 0}
+.onb h1{font-family:var(--serif);font-size:var(--fs-display);color:#fff;line-height:1.05}
+.onb p{color:var(--ice);opacity:.9;font-size:var(--fs-lg);margin:10px 0 0}
 .onb .logo{width:96px;height:96px;margin-bottom:auto}
 .dots{display:flex;gap:6px;margin:18px 0}
 .dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}
 .dots i.on{background:#fff;width:22px;border-radius:8px}
 .loop{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px}
-.loop span{padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);font-size:12.5px;font-weight:600;color:#fff;background:rgba(255,255,255,.06)}
+.loop span{padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);font-size:var(--fs-sm);font-weight:600;color:#fff;background:rgba(255,255,255,.06)}
 .loop svg{width:14px;height:14px;color:var(--mist)}
 
 .split{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .kv>div{background:rgba(255,255,255,.05);border:1px solid var(--line-2);border-radius:13px;padding:11px 12px}
-.kv .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);font-weight:600}
-.kv .v{font-size:17px;font-weight:700;color:#fff;margin-top:4px}
+.kv .k{font-size:var(--fs-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--mist);font-weight:600}
+.kv .v{font-size:var(--fs-lg);font-weight:700;color:#fff;margin-top:4px}
 .verify{display:flex;flex-direction:column;gap:6px}
-.verify div{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ice)}
+.verify div{display:flex;align-items:center;gap:8px;font-size:var(--fs-md);color:var(--ice)}
 .verify svg{width:16px;height:16px;color:var(--ok)}
 .verify .no svg{color:var(--fog)}
 .verify .no{color:var(--fog)}
@@ -422,8 +427,8 @@ textarea.inp{min-height:80px;resize:vertical}
 .hist .h{flex:none;width:110px;border-radius:12px;overflow:hidden;background:var(--navy-800);border:1px solid var(--line-2)}
 .hist .h .im{aspect-ratio:1/1;background:#0d2238}
 .hist .h .im img,.hist .h .im svg{width:100%;height:100%;object-fit:cover}
-.hist .h div.t{padding:7px 8px;font-size:12px;color:#fff}
-.hist .h div.t small{display:block;color:var(--mist);font-size:11px}
+.hist .h div.t{padding:7px 8px;font-size:var(--fs-sm);color:#fff}
+.hist .h div.t small{display:block;color:var(--mist);font-size:var(--fs-xs)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 /* ---------- Quality floor: focus, states, overlays ---------- */
 ::selection{background:rgba(59,160,255,.38);color:#fff}
@@ -453,7 +458,7 @@ button.cam-match{text-align:left;font:inherit;color:inherit}
 .leaflet-container .leaflet-control-attribution a{color:#005c81}
 .lb .r.me span:last-child{color:#fff}
 .ach>div.locked b{color:var(--mist)}
-@media (max-width:760px){input,select,textarea,select.chip{font-size:16px}}
+@media (max-width:760px){input,select,textarea,select.chip{font-size:var(--fs-input)}}
 /* ---------- Design pass: layout, hierarchy, imagery ---------- */
 svg.chev{width:18px;height:18px;flex:none}
 .seg button svg{width:15px;height:15px;vertical-align:-3px;margin-right:3px}
@@ -487,11 +492,11 @@ svg.chev{width:18px;height:18px;flex:none}
 .th-img>span:first-child{display:block;width:100%;height:100%}
 .th-img>span:first-child>img,.th-img>span:first-child>svg{width:100%;height:100%;object-fit:cover;display:block}
 .th-img .tiertag{position:absolute;top:10px;left:10px}
-.th-pb{position:absolute;top:10px;right:10px;padding:5px 10px;border-radius:999px;background:rgba(7,17,29,.82);border:1px solid rgba(242,182,74,.55);color:#ffd985;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.th-pb{position:absolute;top:10px;right:10px;padding:5px 10px;border-radius:999px;background:rgba(7,17,29,.82);border:1px solid rgba(242,182,74,.55);color:#ffd985;font-size:var(--fs-xs);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .th-body{padding:12px 16px 14px}
-.th-name{font-family:var(--serif);font-size:22px;font-weight:700;color:#fff;margin-top:4px;line-height:1.15}
-.th-body .mm{display:flex;align-items:center;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-size:13.5px;color:var(--ice)}
-.th-body .loc{color:var(--mist);font-size:12.5px;margin-top:4px}
+.th-name{font-family:var(--serif);font-size:var(--fs-2xl);font-weight:700;color:#fff;margin-top:4px;line-height:1.15}
+.th-body .mm{display:flex;align-items:center;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-size:var(--fs-md);color:var(--ice)}
+.th-body .loc{color:var(--mist);font-size:var(--fs-sm);margin-top:4px}
 .nt-art{width:96px;height:64px;border-radius:12px;overflow:hidden;flex:none;border:1px solid var(--line-2)}
 .nt-art svg,.sd-art svg{width:100%;height:100%;display:block}
 .sd-art{aspect-ratio:16/9;background:#0b2233}
@@ -503,9 +508,22 @@ svg.chev{width:18px;height:18px;flex:none}
 .cam-opts button{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 10px 9px}
 .cam-opts b{line-height:1.2}
 .tiles{grid-template-columns:1fr}
-nav.bottom button{white-space:nowrap;font-size:11px}
+nav.bottom button{white-space:nowrap;font-size:var(--fs-xs)}
 .reg-head .big{line-height:1.12}
 .no-cam .cam-frame,.no-cam .cam-hint{visibility:hidden}
+/* ---------- Light header (mock direction): navy type on the sky band, cards stay navy ---------- */
+header.top .brand svg{color:#163a56}
+.cam-top .brand svg{color:#e8f2ff}
+.onb .logo{color:#163a56}
+.page-h button.lnk{color:var(--hdr)}
+.hbtn{width:40px;height:40px;border-radius:10px;background:rgba(11,26,43,.08);border:1px solid rgba(11,26,43,.14);color:var(--hdr);display:grid;place-items:center}
+.map-priv .pill{background:rgba(13,29,48,.9)}
+.pf-avatar{width:96px;height:96px;border-radius:50%;background:var(--navy-600);border:3px solid rgba(11,26,43,.3);display:grid;place-items:center;font-family:var(--serif);font-size:var(--fs-display);font-weight:700;color:#fff;flex:none}
+.pf-name{font-family:var(--serif);font-size:var(--fs-3xl);font-weight:700;color:var(--hdr);line-height:1}
+.pf-loc{color:var(--hdr)}
+.pf-quote{color:var(--hdr-2);font-style:italic}
+.pf-tag{font-family:var(--script);font-weight:600;font-size:var(--fs-xl);color:var(--hdr);transform:rotate(-4deg);text-align:right;white-space:nowrap}
+.onb{background:linear-gradient(180deg,rgba(7,17,29,0) 0px,rgba(7,17,29,0) 120px,rgba(7,17,29,.9) 225px,var(--navy-950) 330px)} /* onboarding copy is bottom-anchored: on a short phone it starts near y 230, so the panel carries its own navy */
 </style>
 </head>
 <body>
@@ -513,19 +531,22 @@ nav.bottom button{white-space:nowrap;font-size:11px}
   <div class="sky"></div>
   <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMin slice">
     <defs>
-      <linearGradient id="mtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9f1f8"/><stop offset=".25" stop-color="#9fb8d0"/><stop offset="1" stop-color="#2f4f70"/></linearGradient>
-      <linearGradient id="mtn2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d9bbb"/><stop offset="1" stop-color="#1e3a58"/></linearGradient>
-      <linearGradient id="trees" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b3a3d"/><stop offset="1" stop-color="#0d2131"/></linearGradient>
-      <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d5f8a"/><stop offset="1" stop-color="#0b1a2b"/></linearGradient>
+      <linearGradient id="far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8f0f8"/><stop offset=".45" stop-color="#c6d8e8"/><stop offset="1" stop-color="#a3b9ce"/></linearGradient>
+      <linearGradient id="fog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3f8fc" stop-opacity="0"/><stop offset=".5" stop-color="#f3f8fc" stop-opacity=".62"/><stop offset="1" stop-color="#f3f8fc" stop-opacity="0"/></linearGradient>
+      <linearGradient id="near" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f9dbb"/><stop offset=".55" stop-color="#3f5f82"/><stop offset="1" stop-color="#1f3a58"/></linearGradient>
+      <linearGradient id="trees" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14344a"/><stop offset="1" stop-color="#08192a"/></linearGradient>
+      <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e4468"/><stop offset="1" stop-color="#0b1a2b"/></linearGradient>
     </defs>
-    <path d="M0 250 L120 120 L190 170 L260 90 L330 160 L400 70 L470 150 L540 100 L620 180 L700 110 L780 190 L860 130 L900 170 L900 420 L0 420Z" fill="url(#mtn)"/>
-    <path d="M120 120 L150 150 L170 135 L190 170 L160 160 Z M400 70 L430 105 L455 95 L470 150 L420 120 Z M700 110 L730 150 L750 140 L780 190 L720 150 Z" fill="#fff" opacity=".85"/>
-    <path d="M0 290 L80 210 L160 260 L240 200 L320 270 L420 190 L520 265 L610 215 L700 275 L800 220 L900 270 L900 420 L0 420Z" fill="url(#mtn2)"/>
+    <path d="M0 210 L90 140 L160 175 L230 105 L300 165 L380 95 L450 160 L530 120 L610 180 L690 115 L770 185 L850 135 L900 170 L900 420 L0 420Z" fill="url(#far)"/>
+    <path d="M230 105 L252 132 L268 122 L288 150 L262 138 Z M380 95 L404 126 L422 116 L440 146 L410 128 Z M690 115 L712 142 L728 132 L748 160 L720 146 Z" fill="#fff" opacity=".9"/>
+    <rect x="0" y="120" width="900" height="130" fill="url(#fog)"/>
+    <path d="M0 300 L70 235 L150 275 L230 210 L320 280 L410 200 L500 270 L590 225 L680 285 L770 230 L860 280 L900 255 L900 420 L0 420Z" fill="url(#near)"/>
+    <path d="M230 210 L246 236 L260 228 L276 252 L250 240 Z M410 200 L428 230 L444 220 L462 246 L434 232 Z M770 230 L786 254 L800 246 L816 268 L792 256 Z" fill="#e4edf5" opacity=".5"/>
     <g fill="url(#trees)">
       <path d="M0 420 L0 330 L20 300 L40 330 L60 290 L80 335 L100 300 L120 340 L140 305 L160 340 L180 300 L200 345 L220 310 L240 345 L260 300 L280 340 L300 310 L320 345 L340 305 L360 345 L380 300 L400 340 L420 310 L440 345 L460 300 L480 340 L500 305 L520 345 L540 300 L560 340 L580 310 L600 345 L620 300 L640 340 L660 305 L680 345 L700 300 L720 340 L740 310 L760 345 L780 300 L800 340 L820 305 L840 345 L860 300 L880 340 L900 310 L900 420Z"/>
     </g>
     <rect x="0" y="345" width="900" height="80" fill="url(#lake)"/>
-    <g stroke="#9fd0ff" stroke-opacity=".25" stroke-width="1.5"><path d="M120 362h60M300 375h90M520 358h70M700 380h60M400 395h50"/></g>
+    <g stroke="#9fd0ff" stroke-opacity=".22" stroke-width="1.5"><path d="M120 362h60M300 375h90M520 358h70M700 380h60M400 395h50"/></g>
   </svg>
   <div class="veil"></div>
 </div>
@@ -534,11 +555,10 @@ nav.bottom button{white-space:nowrap;font-size:11px}
   <header class="top" id="topbar">
     <button class="brand" data-go="home" aria-label="Fish Hunt home">
       <svg viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M6 44 L20 18 L30 32 L38 14 L58 44 Z" fill="#dfe9f3"/>
+        <path d="M6 44 L20 18 L30 32 L38 14 L58 44 Z" fill="currentColor"/>
         <path d="M20 18 L24 26 L28 22 L30 32 L23 28Z M38 14 L42 24 L46 20 L50 30 L43 26Z" fill="#fff"/>
-        <path d="M6 44 L20 18 L30 32 L38 14 L58 44 Z" fill="none" stroke="#3a5f83" stroke-width="2"/>
-        <path d="M4 52 L10 40 L16 52Z M14 54 L21 38 L28 54Z M26 54 L32 42 L38 54Z M40 54 L47 38 L54 54Z M52 52 L57 42 L62 52Z" fill="#1f4b62"/>
-        <path d="M6 56h52" stroke="#1f4b62" stroke-width="3" stroke-linecap="round"/>
+        <path d="M4 52 L10 40 L16 52Z M14 54 L21 38 L28 54Z M26 54 L32 42 L38 54Z M40 54 L47 38 L54 54Z M52 52 L57 42 L62 52Z" fill="currentColor" opacity=".82"/>
+        <path d="M6 56h52" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".82"/>
       </svg>
       <span class="wm"><b>Fish Hunt</b><small>CATCH · EXPLORE · COLLECT</small></span>
     </button>
@@ -1056,6 +1076,7 @@ function render(){
   const navKey={home:'home',explore:'explore',registry:'explore',species:'explore',map:'explore',challenges:'explore',feed:'explore',trophy:'trophy',catch:'trophy',more:'more',profile:'more',achievements:'more',settings:'more',inbox:'more'}[CUR.route];
   $$('#nav button').forEach(b=>{const on=b.dataset.nav===navKey;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   $('#topbar').classList.toggle('hide',['capture','onboarding'].includes(CUR.route)); // before paint: focus restoration needs these visible
+  document.body.dataset.hdr=CUR.route==='profile'?'profile':CUR.route==='onboarding'?'onb':['home','explore','trophy','feed','more','map'].includes(CUR.route)?'page':'center'; // where the sky hands over to the cards
   $('#nav').classList.toggle('hide',['capture','onboarding','review','verdict'].includes(CUR.route));
   const fn=ROUTES[CUR.route]||ROUTES.home;
   const v=$('#view');
@@ -1102,23 +1123,23 @@ ROUTES.home = ()=>{
   <div class="stack">
     <div class="card">
       <div class="split"><span class="eyebrow">Registry progress</span><a data-go="registry" href="#registry" class="small b" style="color:#fff">View Registry ${I.arrow.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')}</a></div>
-      <div class="row" style="margin-top:10px;align-items:baseline"><span class="serif" style="font-size:40px;font-weight:700;color:#fff;line-height:1">${have.size}<span style="font-size:22px;opacity:.7"> / ${SPECIES.length}</span></span><span class="muted">species discovered</span></div>
+      <div class="row" style="margin-top:10px;align-items:baseline"><span class="serif" style="font-size:var(--fs-display);font-weight:700;color:#fff;line-height:1">${have.size}<span style="font-size:var(--fs-2xl);opacity:.7"> / ${SPECIES.length}</span></span><span class="muted">species discovered</span></div>
       <div class="prog" style="margin-top:10px"><i style="width:${Math.round(have.size/SPECIES.length*100)}%"></i></div>
     </div>
     ${next?`<div class="card" data-go="species/${next.id}" aria-label="Next target: ${esc(next.n)}, ${TIERS[TIER_ORDER[next.r-1]].n}, plus ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery" style="cursor:pointer">
       <div class="split"><span class="eyebrow">Next target</span>${tierTag(TIER_ORDER[next.r-1])}</div>
-      <div class="row" style="margin-top:10px"><div class="nt-art">${fishPlate(next,{k:'nt',sil:true})}</div><div class="grow"><b style="font-size:18px;color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div><div class="small" style="margin-top:4px;color:#5cf0a0;font-weight:600">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery</div></div>${I.chev.replace('class="chev"','style="width:20px;height:20px;color:#fff"')}</div>
+      <div class="row" style="margin-top:10px"><div class="nt-art">${fishPlate(next,{k:'nt',sil:true})}</div><div class="grow"><b style="font-size:var(--fs-lg);color:#fff">${esc(next.n)}</b><div class="muted small" style="font-style:italic">${esc(next.sci)}</div><div class="small" style="margin-top:4px;color:#5cf0a0;font-weight:600">+${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[next.r-1]].xp).toLocaleString()} XP for the discovery</div></div>${I.chev.replace('class="chev"','style="width:20px;height:20px;color:#fff"')}</div>
     </div>`:''}
     ${chal?`<div class="card" data-go="challenges" aria-label="Current challenge: ${esc(chal.ch.n)}, ${chal.p} of ${chal.ch.sp.length}" style="cursor:pointer">
       <div class="split"><span class="eyebrow">Current challenge</span><span class="small b" style="color:#fff">${chal.p} / ${chal.ch.sp.length}</span></div>
-      <b style="display:block;font-size:18px;color:#fff;margin-top:8px">${esc(chal.ch.n)}</b>
+      <b style="display:block;font-size:var(--fs-lg);color:#fff;margin-top:8px">${esc(chal.ch.n)}</b>
       <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${chal.ch.sp.map(id=>`<span class="pill" style="${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.7'}">${have.has(id)?'✓ ':''}${esc(SP[id].n.replace(' Salmon','').replace(' Trout',''))}</span>`).join('')}</div>
       <div class="prog green" style="margin-top:12px"><i style="width:${Math.round(chal.p/chal.ch.sp.length*100)}%"></i></div>
     </div>`:''}
     ${recent?`<div class="card th-card" data-go="catch/${recent.id}" aria-label="Recent trophy: ${esc(SP[recent.sp].n)}, ${TIERS[recent.tier].n}${recent.len?', '+num(recent.len)+' inches':''}${recent.pb?', personal best':''}" style="cursor:pointer">
       <div class="th-img"><span data-photo="${recent.id}"></span><span class="tiertag">${tierTag(recent.tier)}</span>${recent.pb?'<span class="th-pb">Personal best</span>':''}</div>
       <div class="th-body"><span class="eyebrow">Recent trophy</span><div class="th-name">${esc(SP[recent.sp].n)}</div><div class="mm">${recent.len?`<span>${I.ruler.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.len)} in</span>`:''}${recent.wt?`<span>${I.scale.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(recent.wt)} lb</span>`:''}<span>${fmtDate(recent.ts)}</span></div><div class="loc">${esc(locLine(recent))}</div></div>
-    </div>`:`<div class="card" style="text-align:center;padding:26px 16px"><div style="width:64px;height:64px;margin:0 auto 10px;color:#fff">${I.cam}</div><b style="font-size:18px;color:#fff">Record your first catch</b><p class="muted" style="margin:6px 0 14px">Take a photo. Get the verdict. Start the collection.</p><button class="btn" data-nav="capture">${I.cam} Open camera</button></div>`}
+    </div>`:`<div class="card" style="text-align:center;padding:26px 16px"><div style="width:64px;height:64px;margin:0 auto 10px;color:#fff">${I.cam}</div><b style="font-size:var(--fs-lg);color:#fff">Record your first catch</b><p class="muted" style="margin:6px 0 14px">Take a photo. Get the verdict. Start the collection.</p><button class="btn" data-nav="capture">${I.cam} Open camera</button></div>`}
     <div class="card level-card" data-go="profile" aria-label="Level ${li.L}, ${esc(li.title)}, ${li.cur.toLocaleString()} of ${li.need.toLocaleString()} XP" style="cursor:pointer">
       ${hexBadge(li.L)}
       <div class="lvl"><div class="eyebrow">Personal progress</div><h3 style="margin-top:4px">Level ${li.L}</h3><div class="title">${esc(li.title)}</div><div class="xp"><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span><span class="muted">${S.xp.toLocaleString()} total</span></div><div class="prog"><i style="width:${li.pct}%"></i></div></div>
@@ -1144,7 +1165,7 @@ ROUTES.collections = ()=>{
   const have=speciesCaught();
   const groups=[['Salmon',s=>s.g==='salmon'],['Trout & Char',s=>['trout','char'].includes(s.g)],['Bass & Panfish',s=>['bass','panfish','walleye'].includes(s.g)],['Freshwater',s=>s.w==='fresh'],['Saltwater',s=>s.w==='salt'],['Anadromous',s=>s.w==='anadromous'],['Native species',s=>s.tags.includes('native')],['Trophy species',s=>s.tags.includes('trophy')]];
   return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Collections</h1><p>Complete a set. Earn the badge.</p></div>
-  <div class="stack">${groups.map(([n,f])=>{const all=SPECIES.filter(f);const got=all.filter(s=>have.has(s.id)).length;return `<div class="card" data-go="registry" style="cursor:pointer"><div class="split"><b style="color:#fff;font-size:16px">${n}</b><span class="small b" style="color:#fff">${got} / ${all.length}</span></div><div class="prog${got===all.length?' gold':''}" style="margin-top:10px"><i style="width:${Math.round(got/all.length*100)}%"></i></div></div>`}).join('')}</div>`;
+  <div class="stack">${groups.map(([n,f])=>{const all=SPECIES.filter(f);const got=all.filter(s=>have.has(s.id)).length;return `<div class="card" data-go="registry" style="cursor:pointer"><div class="split"><b style="color:#fff;font-size:var(--fs-lg)">${n}</b><span class="small b" style="color:#fff">${got} / ${all.length}</span></div><div class="prog${got===all.length?' gold':''}" style="margin-top:10px"><i style="width:${Math.round(got/all.length*100)}%"></i></div></div>`}).join('')}</div>`;
 };
 
 /* ---------- Registry ---------- */
@@ -1157,9 +1178,9 @@ ROUTES.registry = ()=>{
   if(regSort==='az')list=[...list].sort((a,b)=>a.n.localeCompare(b.n));
   if(regSort==='rarity')list=[...list].sort((a,b)=>b.r-a.r);
   const pct=Math.round(have.size/SPECIES.length*100);
-  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Species Registry</h1><p>Track your catches. Complete the collection.</p><button class="right ico" id="regSort" aria-label="Sort species: ${({default:'Registry order',az:'A to Z',rarity:'Rarity'})[regSort]}" style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
+  return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Species Registry</h1><p>Track your catches. Complete the collection.</p><button id="regSort" aria-label="Sort species: ${({default:'Registry order',az:'A to Z',rarity:'Rarity'})[regSort]}" class="right hbtn">${I.sort.replace('<svg','<svg style="width:20px;height:20px"')}</button></div>
   <div class="card reg-head">
-    <div><div class="big">${have.size}<small> / ${SPECIES.length}</small></div><div class="lbl">discovered</div><div class="row" style="margin-top:12px"><div class="prog grow"><i style="width:${pct}%"></i></div><span class="small b" style="color:#fff">${pct}%</span></div><div class="script" style="font-size:18px;color:var(--ice);margin-top:10px">“Different waters. A bigger story.”</div></div>
+    <div><div class="big">${have.size}<small> / ${SPECIES.length}</small></div><div class="lbl">discovered</div><div class="row" style="margin-top:12px"><div class="prog grow"><i style="width:${pct}%"></i></div><span class="small b" style="color:#fff">${pct}%</span></div><div class="script" style="font-size:var(--fs-xl);color:var(--ice);margin-top:10px">“Different waters. A bigger story.”</div></div>
     <div class="chal" data-go="challenges" aria-label="${esc(chal.ch.n)}, ${chal.p} of ${chal.ch.sp.length}" style="cursor:pointer"><svg class="hexi" aria-hidden="true" viewBox="0 0 56 62"><path d="M28 2 L53 16 L53 46 L28 60 L3 46 L3 16Z" fill="#12283d" stroke="#3b8bff" stroke-width="2.5"/><g transform="translate(14 17) scale(1.2)" style="color:#fff">${sized(I.mtn)}</g></svg><b>${esc(chal.ch.n)}</b><span>${chal.p} / ${chal.ch.sp.length}</span>${I.chev}</div>
   </div>
   <div class="chips" style="margin-top:12px">${filters.map(([k,n])=>`<button class="chip ${regFilter===k?'on':''}" data-rf="${k}">${n}</button>`).join('')}</div>
@@ -1185,10 +1206,10 @@ ROUTES.species = ({id})=>{
     <div style="padding:14px 16px"><div class="split"><span class="eyebrow">Status</span>${got?`<span class="pill" style="border-color:rgba(61,220,132,.6);color:#5cf0a0">${I.check} Discovered</span>`:`<span class="pill" style="opacity:.8">${I.lock} Not yet caught</span>`}</div>
     <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="pill">${GROUP_LABEL[s.g]}</span><span class="pill">${s.w==='fresh'?'Freshwater':s.w==='salt'?'Saltwater':'Anadromous'}</span>${tierTag(TIER_ORDER[s.r-1])}${s.tags.includes('protected')?'<span class="pill" style="border-color:rgba(255,93,108,.5);color:#ff8c98">Release only</span>':''}${s.tags.includes('native')?'<span class="pill">Native</span>':''}</div>
     <p class="muted small" style="margin:12px 0 0">Typical ${s.typ} in · Trophy ${s.tro}+ in. ${s.r>=4?'A hard-to-find species — any verified catch starts at Rare or better.':'Size drives the tier: a fish past the trophy mark can reach Epic or Legendary.'}</p></div></div>
-  ${got?`<div class="kv" style="margin-top:12px"><div><div class="k">Personal best</div><div class="v">${pb?num(pb.len)+' in':'—'}</div></div><div><div class="k">Total caught</div><div class="v">${mine.length}</div></div><div><div class="k">First caught</div><div class="v" style="font-size:14px">${fmtDateLong(first.ts)}</div></div><div><div class="k">Best catch tier</div><div class="v">${tierTag(bestTier)}</div></div></div>
+  ${got?`<div class="kv" style="margin-top:12px"><div><div class="k">Personal best</div><div class="v">${pb?num(pb.len)+' in':'—'}</div></div><div><div class="k">Total caught</div><div class="v">${mine.length}</div></div><div><div class="k">First caught</div><div class="v" style="font-size:var(--fs-md)">${fmtDateLong(first.ts)}</div></div><div><div class="k">Best catch tier</div><div class="v">${tierTag(bestTier)}</div></div></div>
   <div class="sub-h"><h2 class="sans">Your catch history</h2></div>
   <div class="stack">${mine.map(c=>catchRow(c)).join('')}</div>`:
-  `<div class="card" style="margin-top:12px;text-align:center"><b style="color:#fff;font-size:17px">Worth ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[s.r-1]].xp).toLocaleString()}+ XP</b><p class="muted small" style="margin:6px 0 12px">Discovering a new species pays out on top of the catch itself.</p><button class="btn" data-nav="capture">${I.cam} Record a catch</button></div>`}
+  `<div class="card" style="margin-top:12px;text-align:center"><b style="color:#fff;font-size:var(--fs-lg)">Worth ${(XP.catch+XP.newSpecies+TIERS[TIER_ORDER[s.r-1]].xp).toLocaleString()}+ XP</b><p class="muted small" style="margin:6px 0 12px">Discovering a new species pays out on top of the catch itself.</p><button class="btn" data-nav="capture">${I.cam} Record a catch</button></div>`}
   ${inCh.length?`<div class="sub-h"><h2 class="sans">Part of</h2></div><div class="stack">${inCh.map(ch=>`<div class="card" data-go="challenges" style="cursor:pointer;padding:12px 16px"><div class="split"><b style="color:#fff">${esc(ch.n)}</b><span class="small b" style="color:#fff">${challengeProgress(ch)} / ${ch.sp.length}</span></div></div>`).join('')}</div>`:''}`;
 };
 function catchRow(c){const s=SP[c.sp];return `<div class="catchrow" data-go="catch/${c.id}" aria-label="${esc(s.n)}, ${TIERS[c.tier].n}, ${esc(c.water||c.region||'unknown water')}${c.len?', '+num(c.len)+' inches':''}, ${ago(c.ts)}" style="cursor:pointer"><div class="im" data-photo="${c.id}"></div><div><div class="w"><span>${esc(c.water||c.region||'Unknown water')}</span><small>${ago(c.ts)}</small></div><div class="loc">${I.pin.replace('<svg','<svg style="width:12px;height:12px;vertical-align:-2px"')} ${esc(c.region||'—')}</div><div class="sp">${esc(s.n)}</div><div class="mm">${c.len?`<span>${I.ruler.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(c.len)} in</span>`:''}${c.wt?`<span>${I.scale.replace('<svg','<svg style="width:14px;height:14px;vertical-align:-2px"')} ${num(c.wt)} lb</span>`:''}${tierTag(c.tier)}</div></div><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#fff">${I.chev}</span></div>`}
@@ -1200,9 +1221,9 @@ ROUTES.trophy = ()=>{
   const filters=[['all','All'],['salmon','Salmon'],['trout','Trout'],['fresh','Freshwater'],['salt','Saltwater'],['fav','Favorites']];
   const list=S.catches.filter(c=>{const s=SP[c.sp];switch(trFilter){case 'salmon':return s.g==='salmon';case 'trout':return ['trout','char'].includes(s.g);case 'fresh':return s.w!=='salt';case 'salt':return s.w==='salt';case 'fav':return c.fav;default:return true}});
   return `${pageH('Trophy Room','Your catches. Your story.')}
-  <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species</span></div><div>${I.trophy.replace('<svg','<svg style="color:var(--gold)"')}<b>${pbs(S)}</b><span>Personal Bests</span></div><div style="padding:14px 10px"><div class="row" style="justify-content:center;gap:6px"><span class="xpc" style="color:#5cf0a0">XP</span><b style="font-size:20px">Lv ${li.L}</b></div><div class="prog green" style="margin:8px 0 5px;height:6px"><i style="width:${li.pct}%"></i></div><span style="white-space:nowrap">${li.cur.toLocaleString()} / ${li.need.toLocaleString()}</span></div></div>
+  <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species</span></div><div>${I.trophy.replace('<svg','<svg style="color:var(--gold)"')}<b>${pbs(S)}</b><span>Personal Bests</span></div><div style="padding:14px 10px"><div class="row" style="justify-content:center;gap:6px"><span class="xpc" style="color:#5cf0a0">XP</span><b style="font-size:var(--fs-xl)">Lv ${li.L}</b></div><div class="prog green" style="margin:8px 0 5px;height:6px"><i style="width:${li.pct}%"></i></div><span style="white-space:nowrap">${li.cur.toLocaleString()} / ${li.need.toLocaleString()}</span></div></div>
   <div class="chips" style="margin-top:12px">${filters.map(([k,n])=>`<button class="chip ${trFilter===k?'on':''}" data-tf="${k}">${k==='fav'?I.heart:k==='all'?'':I.fish}${n}</button>`).join('')}</div>
-  ${list.length?`<div class="grid2">${list.map(c=>trophyCard(c)).join('')}</div>`:`<div class="card" style="text-align:center;padding:30px 16px"><b style="color:#fff;font-size:17px">${S.catches.length?'Nothing here yet':'Your trophy room is empty'}</b><p class="muted" style="margin:6px 0 14px">${S.catches.length?'Try another filter.':'The first fish you record lands here.'}</p>${S.catches.length?'':`<button class="btn" data-nav="capture">${I.cam} Record a catch</button>`}</div>`}`;
+  ${list.length?`<div class="grid2">${list.map(c=>trophyCard(c)).join('')}</div>`:`<div class="card" style="text-align:center;padding:30px 16px"><b style="color:#fff;font-size:var(--fs-lg)">${S.catches.length?'Nothing here yet':'Your trophy room is empty'}</b><p class="muted" style="margin:6px 0 14px">${S.catches.length?'Try another filter.':'The first fish you record lands here.'}</p>${S.catches.length?'':`<button class="btn" data-nav="capture">${I.cam} Record a catch</button>`}</div>`}`;
 };
 function trophyCard(c){const s=SP[c.sp];return `<div class="fwrap"><div class="fcard" data-go="catch/${c.id}" aria-label="${esc(s.n)}, ${TIERS[c.tier].n}${c.len?', '+num(c.len)+' inches':''}, ${fmtDate(c.ts)}${c.fav?', favorite':''}"><div class="art" data-photo="${c.id}"></div><span class="tiertag" style="position:absolute;top:8px;left:8px">${tierTag(c.tier)}</span><div class="body"><div class="name caps">${esc(s.n)}</div><div class="meta"><span>${c.len?num(c.len)+' in':'—'}</span><span>•</span><span>${fmtDate(c.ts)}</span></div></div><span class="arrow">${I.chev}</span></div><button class="fav ${c.fav?'on':''}" data-fav="${c.id}" aria-label="Favorite ${esc(s.n)}" style="position:absolute;top:8px;right:8px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(7,17,29,.55);display:grid;place-items:center;color:${c.fav?'#ff4d5e':'#fff'}">${c.fav?I.heart.replace('fill="none"','fill="#ff4d5e"'):I.heart}</button></div>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-tf]');if(b){trFilter=b.dataset.tf;render();return}const f=e.target.closest('[data-fav]');if(f){e.stopPropagation();e.preventDefault();const c=S.catches.find(x=>x.id===f.dataset.fav);if(c){c.fav=!c.fav;save();render()}}},true);
@@ -1216,7 +1237,7 @@ ROUTES.catch = ({id})=>{
   <div class="shot-photo"><span data-photo="${c.id}" style="display:block;width:100%;height:100%"></span><span class="tiertag">${tierTag(c.tier)}</span><button class="fav ${c.fav?'on':''}" data-fav="${c.id}" aria-label="Favorite ${esc(s.n)}">${I.heart}</button></div>
   <div class="v-stats" style="margin-top:12px"><div><div class="k">${I.ruler} LENGTH</div><div class="v">${c.len?num(c.len)+' in':'—'}</div></div><div><div class="k">${I.scale} WEIGHT</div><div class="v">${c.wt?num(c.wt)+' lb':'—'}</div></div><div><div class="k">${I.chart} PERCENTILE</div><div class="v">${c.pct?'Top '+c.pct+'%':'—'}</div><div class="s">of registered ${esc(s.n.split(' ')[0])}</div></div></div>
   <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px">${c.pb?`<span class="banner gold">${I.trophy} Personal best</span>`:''}<span class="banner xp"><span class="xpc">XP</span> +${(c.xp||0).toLocaleString()} XP</span>${c.released?`<span class="pill">${I.release} Released</span>`:'<span class="pill">Kept</span>'}</div>
-  <div class="card" style="margin-top:12px"><div class="split"><span class="eyebrow">Location</span><span class="pill">${I.lock} ${PRIVACY[c.privacy]||'Private'}</span></div><b style="display:block;color:#fff;font-size:16px;margin-top:8px">${esc(c.water||'Water not set')}</b><div class="muted small">${esc(c.region||'Region not set')}${c.lat!=null?` · ${c.lat.toFixed(3)}, ${c.lng.toFixed(3)} <span class="faint">(only you see this)</span>`:''}</div><div class="small muted" style="margin-top:8px">Others see: <b style="color:#fff">${esc(locLine(c,false))}</b></div><div class="seg" style="margin-top:10px" aria-label="Location privacy for this catch">${Object.entries(PRIVACY).map(([k,n])=>`<button data-priv="${c.id}:${k}" class="${c.privacy===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div></div>
+  <div class="card" style="margin-top:12px"><div class="split"><span class="eyebrow">Location</span><span class="pill">${I.lock} ${PRIVACY[c.privacy]||'Private'}</span></div><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:8px">${esc(c.water||'Water not set')}</b><div class="muted small">${esc(c.region||'Region not set')}${c.lat!=null?` · ${c.lat.toFixed(3)}, ${c.lng.toFixed(3)} <span class="faint">(only you see this)</span>`:''}</div><div class="small muted" style="margin-top:8px">Others see: <b style="color:#fff">${esc(locLine(c,false))}</b></div><div class="seg" style="margin-top:10px" aria-label="Location privacy for this catch">${Object.entries(PRIVACY).map(([k,n])=>`<button data-priv="${c.id}:${k}" class="${c.privacy===k?'on':''}">${n.replace(' location','').replace(' only','')}</button>`).join('')}</div></div>
   ${c.caption?`<div class="card" style="margin-top:12px"><span class="eyebrow">Caption</span><p style="margin:6px 0 0;color:#fff">${esc(c.caption)}</p></div>`:''}
   <div class="card" style="margin-top:12px"><span class="eyebrow">Verification</span><div class="verify" style="margin-top:8px">${vrows.map(([k,n])=>`<div class="${v[k]?'':'no'}">${v[k]?I.check:I.circle}${n}</div>`).join('')}</div>${c.aiConf!=null?`<div class="faint small" style="margin-top:8px">AI confidence ${Math.round(c.aiConf*100)}%${c.method==='ai'?' · length estimated from photo':''}</div>`:''}</div>
   <div class="grid2" style="margin-top:12px"><button class="btn ghost" data-share="${c.id}">${I.share} Share</button><button class="btn ghost" data-go="species/${c.sp}">${I.book} Species page</button></div>
@@ -1232,7 +1253,7 @@ document.addEventListener('click',async e=>{
 ROUTES.challenges = ()=>{
   const have=speciesCaught();
   return `<div class="centerh"><button class="back" data-go="explore">${I.back}</button><h1>Challenges</h1><p>A reason to go back out.</p></div>
-  <div class="stack">${CHALLENGES.map(ch=>{const p=challengeProgress(ch);const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}</span><b style="display:block;color:#fff;font-size:18px;margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:20px">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600;white-space:nowrap">+${ch.xp.toLocaleString()} XP</div></div></div>
+  <div class="stack">${CHALLENGES.map(ch=>{const p=challengeProgress(ch);const done=!!S.challengesDone[ch.id];return `<div class="card ${done?'solid':''}" style="${done?'border-color:rgba(242,182,74,.5)':''}"><div class="split"><div><span class="eyebrow">${esc(ch.region)}</span><b style="display:block;color:#fff;font-size:var(--fs-lg);margin-top:2px">${esc(ch.n)}</b></div><div style="text-align:right"><b style="color:#fff;font-size:var(--fs-xl)">${p} / ${ch.sp.length}</b><div class="small" style="color:#5cf0a0;font-weight:600;white-space:nowrap">+${ch.xp.toLocaleString()} XP</div></div></div>
   <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${ch.sp.map(id=>`<span class="pill" data-go="species/${id}" aria-label="${esc(SP[id].n)}, ${have.has(id)?'caught':'not yet caught'}" style="cursor:pointer;${have.has(id)?'border-color:rgba(61,220,132,.6);color:#5cf0a0':'opacity:.65'}">${have.has(id)?'✓ ':''}${esc(SP[id].n)}</span>`).join('')}</div>
   <div class="prog ${done?'gold':'green'}" style="margin-top:12px"><i style="width:${Math.round(p/ch.sp.length*100)}%"></i></div>
   <div class="split" style="margin-top:8px"><span class="small muted">Reward: ${esc(ch.badge)} badge</span>${done?`<span class="pill" style="border-color:rgba(242,182,74,.6);color:#ffd985">${I.trophy} Complete</span>`:''}</div></div>`}).join('')}</div>`;
@@ -1254,7 +1275,7 @@ ROUTES.feed = ()=>{
   <p class="faint tiny" style="text-align:center;padding:8px 0 0">Community posts are a local preview. Your own catches appear here only when their privacy is set above Private.</p></div>`;
 };
 function post(p){const s=SP[p.sp];const liked=!!S.likes[p.id];const fol=!!S.follows[p.user];return `<article class="post"><div class="ph"><div class="av">${p.mine?avatarLetter():esc(p.user[0])}</div><div class="grow"><b>${esc(p.user)}</b><small>${esc(p.ago)} • ${I.pin.replace('<svg','<svg style="width:11px;height:11px;vertical-align:-1px"')} ${esc(p.region)}</small></div>${p.mine?'':`<button class="follow ${fol?'on':''}" data-follow="${esc(p.user)}" aria-label="${fol?'Following':'Follow'} ${esc(p.user)}">${fol?'Following':'Follow'}</button>`}</div>
-  <div class="pic">${p.mine?`<span data-photo="${p.cid}" style="display:block;width:100%;height:100%"></span>`:fishScene(s,'f'+p.id)}<span class="scrim" aria-hidden="true"></span><span class="tiertag" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;border-radius:12px;background:rgba(7,17,29,.75);border:1px solid var(--line-2)">${tierTag(p.tier)}<span style="color:var(--gold);font-size:12px;letter-spacing:1px">${'★'.repeat(TIERS[p.tier].stars)}</span></span><div class="pic-foot"><div class="cap"><b>${esc(s.n.toUpperCase())}</b><i>${esc(s.sci)}</i></div><div class="mm">${p.len?`<span>${num(p.len)} in</span>`:''}${p.wt?`<span>${num(p.wt)} lb</span>`:''}</div></div></div>
+  <div class="pic">${p.mine?`<span data-photo="${p.cid}" style="display:block;width:100%;height:100%"></span>`:fishScene(s,'f'+p.id)}<span class="scrim" aria-hidden="true"></span><span class="tiertag" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;border-radius:12px;background:rgba(7,17,29,.75);border:1px solid var(--line-2)">${tierTag(p.tier)}<span style="color:var(--gold);font-size:var(--fs-sm);letter-spacing:1px">${'★'.repeat(TIERS[p.tier].stars)}</span></span><div class="pic-foot"><div class="cap"><b>${esc(s.n.toUpperCase())}</b><i>${esc(s.sci)}</i></div><div class="mm">${p.len?`<span>${num(p.len)} in</span>`:''}${p.wt?`<span>${num(p.wt)} lb</span>`:''}</div></div></div>
   ${p.txt||p.tags.length?`<div class="txt">${esc(p.txt)}${p.tags.length?`<div class="h">${p.tags.map(t=>'#'+esc(t)).join(' ')}</div>`:''}</div>`:''}
   <div class="acts"><button class="${liked?'liked':''}" data-like="${p.id}" aria-pressed="${liked}" aria-label="Like, ${p.likes+(liked?1:0)} likes">${I.heart} ${p.likes+(liked?1:0)}</button><button data-cmt aria-label="Comments, ${p.comments}">${I.comment} ${p.comments}</button><button class="share" ${p.mine?`data-share="${p.cid}"`:'data-cmt'}>${I.share} Share</button></div></article>`}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-ft]');if(t){feedTab=t.dataset.ft;render();return}const l=e.target.closest('[data-like]');if(l){S.likes[l.dataset.like]=!S.likes[l.dataset.like];save();render();return}const f=e.target.closest('[data-follow]');if(f){S.follows[f.dataset.follow]=!S.follows[f.dataset.follow];save();render();return}if(e.target.closest('[data-cmt]')){toast('Comments arrive with the community release')}});
@@ -1264,7 +1285,7 @@ ROUTES.more = ()=>{
   const li=levelInfo();
   const rows=[['profile','Profile',`Level ${li.L} · ${li.title}`,I.medal],['achievements','Achievements',`${Object.keys(S.achievements).length} / ${ACHIEVEMENTS.length} unlocked`,I.trophy],['inbox','Notifications',S.inbox.length?`${S.inbox.filter(i=>!i.read).length} unread`:'Nothing new',I.bell],['settings','Settings & privacy',PRIVACY[S.privacy]+' by default',I.settings]];
   return `${pageH('More','')}
-  <div class="card" data-go="profile" aria-label="Profile: ${esc(S.name||'Angler')}, level ${li.L}" style="cursor:pointer"><div class="row"><div class="avatar" style="width:56px;height:56px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-weight:700;font-size:22px;border:2px solid rgba(255,255,255,.6)">${avatarLetter()}</div><div class="grow"><b style="color:#fff;font-size:20px">${esc(S.name||'Angler')}</b><div class="muted small">${esc(S.homeRegion)} · Level ${li.L}</div></div>${I.chev}</div></div>
+  <div class="card" data-go="profile" aria-label="Profile: ${esc(S.name||'Angler')}, level ${li.L}" style="cursor:pointer"><div class="row"><div class="avatar" style="width:56px;height:56px;border-radius:50%;background:var(--navy-600);display:grid;place-items:center;font-weight:700;font-size:var(--fs-2xl);border:2px solid rgba(255,255,255,.6)">${avatarLetter()}</div><div class="grow"><b style="color:#fff;font-size:var(--fs-xl)">${esc(S.name||'Angler')}</b><div class="muted small">${esc(S.homeRegion)} · Level ${li.L}</div></div>${I.chev}</div></div>
   <div class="card" style="margin-top:12px;padding:4px 16px">${rows.map(([r,t,s,ic])=>`<div class="listrow" data-go="${r}" style="cursor:pointer"><div class="ic">${ic}</div><div class="grow"><div class="t">${t}</div><div class="s">${s}</div></div>${I.chev}</div>`).join('')}</div>
   <p class="faint tiny" style="text-align:center;margin-top:18px">Fish Hunt MVP prototype · catch · explore · collect</p>`;
 };
@@ -1274,13 +1295,13 @@ ROUTES.profile = ()=>{
   const lb=(DEMO_LEADERS[profLB]||DEMO_LEADERS.Washington);const rows=[...lb.map(([n,x])=>({n,x})),{n:'You',x:S.xp,me:true}].sort((a,b)=>b.x-a.x);const meIdx=rows.findIndex(r=>r.me);
   const show=[...rows.slice(0,3)];if(meIdx>2)show.push(rows[meIdx]);
   const unlocked=ACHIEVEMENTS.filter(a=>S.achievements[a.id]).slice(-3);
-  return `<div class="page-h"><div><h1>Profile</h1></div><button class="sub-h lnk" data-go="settings" style="padding:0;color:#fff;font-size:14px;display:inline-flex;gap:6px;align-items:center">${I.edit.replace('<svg','<svg style="width:18px;height:18px"')} Edit Profile</button></div>
-  <div class="row" style="gap:16px;padding:4px 2px 14px"><div style="width:96px;height:96px;border-radius:50%;background:var(--navy-600);border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-family:var(--serif);font-size:40px;font-weight:700;color:#fff;flex:none">${avatarLetter()}</div><div class="grow"><div class="serif" style="font-size:30px;font-weight:700;color:#fff;line-height:1">${esc(S.name||'Angler')}</div><div class="row small" style="margin-top:6px;color:#fff;gap:6px">${I.pin.replace('<svg','<svg style="width:15px;height:15px"')} ${esc(S.homeRegion)}, WA</div><div class="muted small" style="font-style:italic;margin-top:4px">“Chasing fish and good days.”</div></div><div class="tag script" style="font-size:18px;color:#fff;transform:rotate(-4deg);text-align:right">More fish.<br>Brighter days.</div></div>
+  return `<div class="page-h"><div><h1>Profile</h1></div><button class="sub-h lnk" data-go="settings" style="padding:0;font-size:var(--fs-md);display:inline-flex;gap:6px;align-items:center">${I.edit.replace('<svg','<svg style="width:18px;height:18px"')} Edit Profile</button></div>
+  <div class="row pf-id" style="gap:16px;padding:4px 2px 14px"><div class="pf-avatar">${avatarLetter()}</div><div class="grow"><div class="pf-name">${esc(S.name||'Angler')}</div><div class="row small pf-loc" style="margin-top:6px;gap:6px">${I.pin.replace('<svg','<svg style="width:15px;height:15px"')} ${esc(S.homeRegion)}, WA</div><div class="small pf-quote" style="margin-top:4px">“Chasing fish and good days.”</div></div><div class="pf-tag">More fish.<br>Brighter days.</div></div>
   <div class="card"><span class="eyebrow">Angler level</span><div class="level-card" style="margin-top:6px">${hexBadge(li.L)}<div class="lvl"><h3>Level ${li.L}</h3><div class="title">${esc(li.title)}</div><div class="xp"><span></span><span>${li.cur.toLocaleString()} / ${li.need.toLocaleString()} XP</span></div><div class="prog"><i style="width:${li.pct}%"></i></div></div></div>
     <div class="grid2 tiles" style="margin-top:12px"><div class="tile"><div class="ic">${I.mtn}</div><div><b>Pacific Northwest</b><span>Region</span></div></div><div class="tile" data-go="settings" style="cursor:pointer"><div class="ic">${I.tree}</div><div class="grow"><b>${esc(S.homeWaters||S.homeRegion)}</b><span>Home waters</span></div>${I.chev}</div></div></div>
   <div class="sub-h"><h2>My Stats</h2><a data-go="trophy" href="#trophy">View All Stats ${I.arrow.replace('<svg','<svg style="width:15px;height:15px"')}</a></div>
   <div class="stats"><div>${I.fish}<b>${S.catches.length}</b><span>Total Catches</span></div><div>${I.book}<b>${have.size}</b><span>Species Discovered</span></div><div>${I.ruler}<b>${longest?num(longest)+' in':'—'}</b><span>Longest Fish</span></div><div>${I.trophy}<b>${pbs(S)}</b><span>Personal Bests</span></div></div>
-  <div class="card" style="margin-top:14px"><div class="split"><h2 class="serif" style="font-size:22px;color:#fff">Standing</h2><span class="small b" style="color:#fff">${profLB} leaderboard</span></div>
+  <div class="card" style="margin-top:14px"><div class="split"><h2 class="serif" style="font-size:var(--fs-2xl);color:#fff">Standing</h2><span class="small b" style="color:#fff">${profLB} leaderboard</span></div>
     <div class="standing" style="margin-top:10px"><div><div class="medal"><svg aria-hidden="true" viewBox="0 0 64 76"><defs><linearGradient id="md" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6d284"/><stop offset="1" stop-color="#b8792a"/></linearGradient></defs><path d="M20 2h10l6 22h-10zM34 2h10l-6 22h-10z" fill="#c9302f"/><circle cx="32" cy="48" r="22" fill="url(#md)"/><circle cx="32" cy="48" r="16" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/><path d="M32 36l3.5 7.5 8 1-6 5.5 1.7 8L32 54l-7.2 4 1.7-8-6-5.5 8-1z" fill="#8a5a1a"/></svg><div class="pct">Top ${pct}%<small>in Washington</small></div></div><p class="muted small" style="margin:10px 0 0">You're in the top ${pct}% of anglers in Washington by XP.</p></div>
     <div class="lb"><div class="seg" aria-label="Leaderboard scope"><button class="${profLB==='Washington'?'on':''}" data-lb="Washington">Washington</button><button class="${profLB==='Global'?'on':''}" data-lb="Global">Global</button></div>${show.map(r=>`<div class="r ${r.me?'me':''}"><span>${rows.indexOf(r)+1}</span><span class="av">${esc(r.n[0])}</span><span>${esc(r.n)}</span><span>${r.x.toLocaleString()} XP</span></div>`).join('')}</div></div></div>
   <div class="sub-h"><h2>Achievements</h2><a data-go="achievements" href="#achievements">View All ${I.arrow.replace('<svg','<svg style="width:15px;height:15px"')}</a></div>
@@ -1359,14 +1380,14 @@ ROUTES.capture = ()=>{
     <div class="cam-frame"><i></i><i></i><i></i><i></i></div>
     <div class="cam-top"><button class="back" data-go="home" style="color:#fff">${I.back}</button><div class="brand">${logo}<div><b>Fish Hunt</b><small style="display:block;font-size:9px;letter-spacing:.22em;color:var(--ice)">CATCH · EXPLORE · COLLECT</small></div></div><button class="x" data-go="home" aria-label="Close">${I.x}</button></div>
     <div class="cam-title"><h1 id="camTitle">Record Catch</h1><p>Take a clear photo of your catch</p></div>
-    <button type="button" class="cam-match" id="camMatch"><span class="mini">${fishSVG(SP.coho,{k:'m'})}</span><span class="cm-txt"><small>${S.apiKey?'AI species ID after the shot':'Demo mode — confirm the species after the shot'}</small><b id="camMatchName">Choose species</b></span>${I.chev}</button>
+    <button type="button" class="cam-match" id="camMatch"><span class="mini">${fishSVG(SP.coho,{k:'m'})}</span><span class="cm-txt"><small>${S.apiKey?'AI species ID after the shot':'Demo mode — you pick the species after the shot'}</small><b id="camMatchName">Choose species</b></span>${I.chev}</button>
     <div class="cam-hint">${I.target}<div><b>Align fish within the frame</b><span>Best results in good light</span></div>${I.info.replace('<svg','<svg style="width:18px;height:18px;color:var(--mist)"')}</div>
     <div class="cam-bottom">
       <div class="cam-opts"><button type="button" id="optAuto" data-copt="auto">${I.scan}<div><b>Auto size</b><span id="optAutoLbl"></span></div></button><button type="button" id="optLen" data-copt="len">${I.ruler}<div><b>Add length</b><span id="optLenLbl">Optional</span></div></button><button type="button" id="optWt" data-copt="wt">${I.scale}<div><b>Add weight</b><span id="optWtLbl">Optional</span></div></button></div>
       <div class="cam-ctl"><button class="ib" id="btnGallery"><span class="sq">${I.image}</span>Gallery</button><button type="button" class="ib" id="btnFlash" disabled aria-pressed="false"><span class="sq">${I.bolt}</span>Flash<small id="flashLbl">Checking…</small></button><button class="shutter" id="btnShutter" aria-label="Take photo"><i></i></button><span></span><button class="ib" data-go="registry"><span class="sq">${I.book}</span>Species Guide</button></div>
       <div class="cam-mode" aria-hidden="true"><div><span class="on">PHOTO</span><span class="off" title="Video capture is not available yet">VIDEO</span></div></div>
     </div>
-    <div id="camFallback" class="hide" style="position:absolute;inset:0;display:grid;place-items:start center;background:linear-gradient(180deg,#1b4468,#0d2238);z-index:1;text-align:center;padding:calc(240px + var(--safe-t)) 24px 24px"><div><div style="width:64px;height:64px;margin:0 auto 12px;color:#fff">${I.cam}</div><b style="color:#fff;font-size:18px">Camera not available here</b><p class="muted" style="margin:6px 0 0">Use Gallery to import a photo, or open Fish Hunt on your phone.</p></div></div>
+    <div id="camFallback" class="hide" style="position:absolute;inset:0;display:grid;place-items:start center;background:linear-gradient(180deg,#1b4468,#0d2238);z-index:1;text-align:center;padding:calc(240px + var(--safe-t)) 24px 24px"><div><div style="width:64px;height:64px;margin:0 auto 12px;color:#fff">${I.cam}</div><b style="color:#fff;font-size:var(--fs-lg)">Camera not available here</b><p class="muted" style="margin:6px 0 0">Use Gallery to import a photo, or open Fish Hunt on your phone.</p></div></div>
   </div>`;
 };
 async function startCamera(){
@@ -1436,10 +1457,12 @@ async function gotPhoto(blob){
 /* ---------- Species identification ---------- */
 function blobToB64(blob){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.readAsDataURL(blob)})}
 async function identify(blob){
-  if(!S.apiKey){ // demo: offer a short list the user confirms
-    const pool=SPECIES.filter(s=>s.r<=2&&(S.homeRegion.includes('Coast')||S.homeRegion.includes('Sound')?true:s.w!=='salt'));
-    const pick=pool[Math.floor(Math.random()*pool.length)];
-    return {demo:true,species:pick.id,confidence:null,alternates:pool.filter(s=>s.id!==pick.id).slice(0,3).map(s=>s.id),length:null};
+  if(!S.apiKey){ // demo: never guess. The angler picks; quick picks come from their own history, then common local species.
+    const counts={};for(const c of S.catches)counts[c.sp]=(counts[c.sp]||0)+1;
+    const mine=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
+    const salty=/Coast|Sound|Olympic/.test(S.homeRegion);
+    const common=SPECIES.filter(s=>s.r<=2&&(salty||s.w!=='salt')).sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n)).map(s=>s.id);
+    return {demo:true,species:null,confidence:null,alternates:[...new Set([...mine,...common])].slice(0,4),length:null};
   }
   const b64=await blobToB64(blob);
   const list=SPECIES.map(s=>`${s.id}: ${s.n} (${s.sci})`).join('\n');
@@ -1467,7 +1490,7 @@ ROUTES.review = ()=>{
     if(d.idDone||d.idBusy)return; // re-renders while identifying must not start another (paid) request
     d.idBusy=true;
     try{const r=await identify(d.blob||await DB.get(d.id));d.idDone=true;d.id_=r;if(r.species&&!d.sp){d.sp=r.species;d.aiConf=r.confidence}if(r.length&&!d.len&&S.autoSize!==false){d.len=Math.round(r.length*10)/10;d.method='ai'}
-      announce(d.sp?`Species: ${SP[d.sp].n}${d.aiConf!=null?', '+Math.round(d.aiConf*100)+' percent match':''}`:'Species not identified. Choose it from the list.')}
+      announce(d.sp?`Species: ${SP[d.sp].n}${d.aiConf!=null?', '+Math.round(d.aiConf*100)+' percent match':''}`:r.demo?'Demo mode. Choose the species yourself.':'Species not identified. Choose it from the list.')}
     catch(e){d.idDone=true;d.id_={error:e.message};toast(e.message,3500)}
     finally{d.idBusy=false}
     if(CUR.route==='review'&&CUR.draft===d){readReview();render()}
@@ -1476,9 +1499,9 @@ ROUTES.review = ()=>{
   return `<div class="centerh"><button class="back" id="revBack">${I.back}</button><h1>Catch Review</h1><p>Confirm the details, then get your verdict.</p></div>
   <div class="review-photo" id="revPhoto"></div>
   <div class="card" style="margin-top:12px">
-    <div class="split"><span class="eyebrow">Species</span>${!d.idDone?`<span class="row small muted"><span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Identifying…</span>`:r?.demo?'<span class="pill">Demo ID</span>':r?.error?'<span class="pill" style="color:#ff8c98">ID unavailable</span>':d.aiConf!=null?`<span class="pill" style="color:#8ec6ff">AI match ${Math.round(d.aiConf*100)}%</span>`:''}</div>
-    <button class="row" id="pickSpecies" style="width:100%;margin-top:8px;text-align:left"><div style="width:84px;height:52px;border-radius:10px;overflow:hidden;background:#0d2238;flex:none">${sp?fishSVG(sp,{k:'rv'}):''}</div><div class="grow"><b style="font-size:19px;color:#fff">${sp?esc(sp.n):'Choose species'}</b><div class="muted small" style="font-style:italic">${sp?esc(sp.sci):(d.idDone?'Tap to search the registry':'Waiting for the identifier')}</div></div>${I.chev}</button>
-    ${r&&r.alternates?.length?`<div class="row small" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="muted">Or:</span>${r.alternates.filter(a=>a!==d.sp).slice(0,3).map(a=>`<button class="pill" data-alt="${a}">${esc(SP[a]?.n||a)}</button>`).join('')}</div>`:''}
+    <div class="split"><span class="eyebrow">Species</span>${!d.idDone?`<span class="row small muted"><span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Identifying…</span>`:r?.demo?'<span class="pill">Demo mode</span>':r?.error?'<span class="pill" style="color:#ff8c98">ID unavailable</span>':d.aiConf!=null?`<span class="pill" style="color:#8ec6ff">AI match ${Math.round(d.aiConf*100)}%</span>`:''}</div>
+    <button class="row" id="pickSpecies" style="width:100%;margin-top:8px;text-align:left"><div style="width:84px;height:52px;border-radius:10px;overflow:hidden;background:#0d2238;flex:none">${sp?fishSVG(sp,{k:'rv'}):''}</div><div class="grow"><b style="font-size:var(--fs-xl);color:#fff">${sp?esc(sp.n):'Choose species'}</b><div class="muted small" style="font-style:italic">${sp?esc(sp.sci):(!d.idDone?'Waiting for the identifier':r?.demo?'Demo mode does not identify photos. Tap to pick.':'Tap to search the registry')}</div></div>${I.chev}</button>
+    ${r&&r.alternates?.length?`<div class="row small" style="margin-top:10px;flex-wrap:wrap;gap:6px"><span class="muted">${d.sp?'Or:':'Quick picks:'}</span>${r.alternates.filter(a=>a!==d.sp).slice(0,d.sp?3:4).map(a=>`<button class="pill" data-alt="${a}">${esc(SP[a]?.n||a)}</button>`).join('')}</div>`:''}
     ${r?.note?`<div class="faint small" style="margin-top:8px">${esc(r.note)}</div>`:''}
   </div>
   <div class="card stack" style="margin-top:12px">
@@ -1514,12 +1537,12 @@ function speciesPicker(cb){
 /* ---------- Verdict ---------- */
 ROUTES.verdict = ({id})=>{
   let V=CUR.verdict;
-  if(!V&&id){const c=S.catches.find(x=>x.id===id);if(c){V={c,sp:SP[c.sp],newSpecies:false,pb:c.pb,tier:c.tier,pct:c.pct,parts:[['XP earned',c.xp||0]],xp:c.xp||0,newAch:[],chDone:[],chal:CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,c.sp)),registry:[speciesCaught().size,SPECIES.length],replay:true}}}
+  if(!V&&id){const c=id==='latest'?S.catches[0]:S.catches.find(x=>x.id===id);if(c){V={c,sp:SP[c.sp],newSpecies:false,pb:c.pb,tier:c.tier,pct:c.pct,parts:[['XP earned',c.xp||0]],xp:c.xp||0,newAch:[],chDone:[],chal:CHALLENGES.map(ch=>({ch,p:challengeProgress(ch)})).filter(x=>ch_has(x.ch,c.sp)),registry:[speciesCaught().size,SPECIES.length],replay:true}}}
   if(!V)return ROUTES.home();
   const {c,sp,tier,pct}=V;const T=TIERS[tier];const reg=V.registry;const have=speciesCaught();const spIdx=SPECIES.findIndex(s=>s.id===sp.id)+1;
   CUR.after=()=>{revealSequence(V);};
   return `<div class="verdict">
-  <div class="centerh"><button class="back" data-go="home">${I.back}</button><h1>Verdict</h1><p>Here's what you caught!</p><span class="right small muted" style="top:14px">1 / 1</span></div>
+  <div class="centerh"><button class="back" data-go="home">${I.back}</button><h1>Verdict</h1><p>Here's what you caught!</p></div>
   <div class="hero v-reveal t-${tier}" id="vr0"><span data-photo="${c.id}" style="display:block;width:100%;height:100%"></span><button class="pill vp" data-go="catch/${c.id}">${I.image} View Photo</button></div>
   <div class="v-species"><div class="v-reveal" id="vr1"><span class="eyebrow">Species</span><h2>${esc(sp.n)}</h2><div class="sci">${esc(sp.sci)}</div><div style="margin-top:8px"><span class="pill">${I.fish} ${GROUP_LABEL[sp.g]}${sp.tags.includes('game')?' · Game fish':''}</span></div></div>
     <div class="v-tier ${tier} v-reveal" id="vr2"><div class="nm tc-${tier}">${T.ico}${T.n.toUpperCase()}</div><div class="stars">${'★'.repeat(T.stars)}</div><div class="why">${T.why}</div></div></div>
@@ -1635,16 +1658,19 @@ function seedDemo(){
     ['rainbow',60,22.4,4.6,'Rocky Ford Creek','Columbia Basin',47.3,-119.4,true,'region','Spring creek pig.'],
     ['bcrappie',95,12.1,1.1,'Potholes Reservoir','Columbia Basin',46.98,-119.32,false,'waterbody','']
   ].sort((a,b)=>b[1]-a[1]); // oldest first so PB detection and XP accrue naturally
+  const inbox0=S.inbox.length;
   for(const r of rows){const [sp,daysAgo,len,wt,water,region,lat,lng,released,privacy,caption]=r;const dd=new Date();dd.setHours(6+daysAgo%11,(daysAgo*7)%60,0,0);const ts=dd.getTime()-daysAgo*86400e3;const V=commitCatch({id:'demo-'+uid(),sp,ts,len,wt,water,region,lat,lng,released,privacy,caption,hasPhoto:true,art:true,aiConf:.86+(daysAgo%12)/100,method:'manual'});V.c.demo=true}
   S.catches.filter(c=>c.demo).forEach((c,i)=>{if(i%5===0)c.fav=true});
   S.catches.sort((a,b)=>b.ts-a.ts);
+  S.inbox.splice(0,S.inbox.length-inbox0); // sample data must not arrive as 17 unread notifications
   S.demo=true;S.inbox.unshift({id:uid(),ts:Date.now(),k:'sys',t:'Sample catches loaded',s:'Remove them anytime in Settings → Data.'});save();
 }
-function removeDemo(){const gone=S.catches.filter(c=>c.demo);S.catches=S.catches.filter(c=>!c.demo);S.xp=S.catches.reduce((a,c)=>a+(c.xp||0),0);S.achievements={};S.challengesDone={};for(const a of ACHIEVEMENTS)if(a.test(S))S.achievements[a.id]=Date.now();for(const ch of CHALLENGES)if(challengeProgress(ch)===ch.sp.length)S.challengesDone[ch.id]=Date.now();S.demo=false;save()}
+function removeDemo(){const gone=S.catches.filter(c=>c.demo);S.catches=S.catches.filter(c=>!c.demo);S.xp=S.catches.reduce((a,c)=>a+(c.xp||0),0);S.achievements={};S.challengesDone={};for(const a of ACHIEVEMENTS)if(a.test(S))S.achievements[a.id]=Date.now();for(const ch of CHALLENGES)if(challengeProgress(ch)===ch.sp.length)S.challengesDone[ch.id]=Date.now();S.inbox=S.inbox.filter(i=>!(i.k==='sys'&&/^Sample catches/.test(i.t)));S.demo=false;save()}
 
 /* ---------- Boot ---------- */
 (function boot(){
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+  if(new URLSearchParams(location.search).get('demo')==='1'&&!S.demo){S.name=S.name||'Drew';S.onboarded=true;seedDemo()}
   const [r,id]=location.hash.slice(1).split('/');
   if(!S.onboarded){CUR.route='onboarding'}else{CUR.route=ROUTES[r]?r:'home';CUR.params=id?{id}:{}}
   if(CUR.route==='review'||CUR.route==='verdict'&&!id)CUR.route='home';
